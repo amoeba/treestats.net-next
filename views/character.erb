@@ -1,0 +1,10 @@
+<h2>Character</h2>
+
+<%= @character[:name] %>
+
+<h3>Skills</h3>
+<ul>
+  <% @skills.each do |skill| %>
+  <li>id: <%= skill[:skill_id] %>, training: <%= skill[:training_id] %></li>
+  <% end %>
+</ul>
