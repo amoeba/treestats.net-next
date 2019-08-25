@@ -1,0 +1,9 @@
+<h2>Ranking</h2>
+
+Ranking is <%= @ranking %>
+
+<ul>
+<% @characters.each do |character| %>
+  <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a> => <%= character[@ranking.to_sym] %></li>
+<% end %>
+</ul>

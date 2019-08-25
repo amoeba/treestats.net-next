@@ -1,3 +1,9 @@
 <h2>Index</h2>
 
 Hi!
+
+<h3>Characters</h3>
+
+<% @characters.each do |character| %>
+<%= character.name %> has <%= character.skills.length %> skill(s)
+<% end %>
