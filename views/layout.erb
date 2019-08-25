@@ -4,6 +4,11 @@
     <a href="/servers">Servers</a>
     <a href="/characters">Characters</a>
     <a href="/rankings">Rankings</a>
+    <form action="/search">
+      <label for="query">Search:</label>
+      <input type="text" id="query" name="query">
+      <input type="submit">
+    </form>
   </header>
   <content>
     <%= yield %>

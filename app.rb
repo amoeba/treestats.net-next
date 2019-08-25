@@ -21,6 +21,15 @@ get "/" do
   erb :index
 end
 
+get "/search" do
+  # Sanitize input first
+  @query = params[:query].gsub(/[^a-zA-Z' ]/, "")
+  
+  @characters = Character.where(Sequel.lit("name LIKE ?", "%#{@query}%"))
+
+  erb :search
+end
+
 get "/servers/?" do  
   erb :servers
 end
