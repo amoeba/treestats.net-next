@@ -9,6 +9,7 @@ set :database, 'sqlite://db/treestats.db'
 # Models
 require_relative 'models/character.rb'
 require_relative 'models/skill.rb'
+require_relative 'models/title.rb'
 
 # Helpers
 require_relative 'helpers/rankings_helper.rb'
@@ -18,6 +19,10 @@ get "/" do
   @characters = Character.limit(10)
 
   erb :index
+end
+
+get "/servers/?" do  
+  erb :servers
 end
 
 get "/characters/?" do
@@ -40,6 +45,16 @@ get "/rankings/:ranking" do
 
   erb :ranking
 end
+
+get '/:server' do
+  @server = params[:server]
+  @characters = Character
+    .filter(:server => params[:server])
+    .limit(10)
+
+  erb :server
+end
+
 
 get '/:server/:name' do
   @character = Character

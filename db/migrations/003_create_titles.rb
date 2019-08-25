@@ -3,7 +3,7 @@ Sequel.migration do
     create_table(:titles) do
       primary_key :id
       foreign_key :character_id, :characters
-      id :title_id
+      id :title_id, null: false
     end
   end
 

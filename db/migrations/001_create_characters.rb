@@ -8,8 +8,8 @@ Sequel.migration do
       String :account_name
       FalseClass :archived, default: false
 
-      Integer :race_id
-      Integer :gender_id
+      Integer :race_id, null: false
+      Integer :gender_id, null: false
       Integer :level
       Integer :current_title
       DateTime :birth

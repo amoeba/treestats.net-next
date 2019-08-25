@@ -3,13 +3,58 @@
 <%= @character[:name] %>
 
 <h3>Skills</h3>
+<h4>Specialized</h4>
 <ul>
-  <% @character.skills.each do |skill| %>
+  <% @character.skills.filter { |s| s.training_id == 3 }.each do |skill| %>
   <li>id: <%= skill[:skill_id] %>, training: <%= skill[:training_id] %></li>
   <% end %>
 </ul>
 
-<h3>Vassals</h3>
+<h4>Trained</h4>
+<ul>
+  <% @character.skills.filter { |s| s.training_id == 2 }.each do |skill| %>
+  <li>id: <%= skill[:skill_id] %>, training: <%= skill[:training_id] %></li>
+  <% end %>
+</ul>
+
+<h4>Untrained</h4>
+<ul>
+  <% @character.skills.filter { |s| s.training_id == 1 }.each do |skill| %>
+  <li>id: <%= skill[:skill_id] %>, training: <%= skill[:training_id] %></li>
+  <% end %>
+</ul>
+
+<h4>Unusable</h4>
+<ul>
+  <% @character.skills.filter { |s| s.training_id == 0 }.each do |skill| %>
+  <li>id: <%= skill[:skill_id] %>, training: <%= skill[:training_id] %></li>
+  <% end %>
+</ul>
+
+<h3>Titles</h3>
+<ul>
+<% @character.titles.each do |title| %>
+<li><%= title.id %></li>
+<% end %>
+</ul>
+
+<h3>Allegiance</h3>
+
+<% if @character.monarch %>
+Monarch: <li><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a></li>
+<% else %> 
+Monarch: No Monarch
+<% end%>
+<br />
+
+<% if @character.patron %>
+Patron: <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= @character.patron[:server] %>/<%= @character.patron[:name] %></a>
+<% else %> 
+Patron: No Patron
+<% end%>
+<br />
+
+<h4>Vassals</h4>
 <ul>
   <% @character.vassals.each do |vassal| %>
   <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= vassal[:server] %>/<%= vassal[:name] %></a></li>
