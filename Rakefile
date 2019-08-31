@@ -47,7 +47,7 @@ namespace :db do
       kolth = Character.new(
         server: "WintersEbb", 
         name: "Kolth", 
-        patron_id: kolthar.id,
+        patron: "Kolthar",
         race_id: 0,
         gender_id: 0).save
 
