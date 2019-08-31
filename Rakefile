@@ -30,6 +30,7 @@ namespace :db do
         name: "Kolthar",
         race_id: 0,
         gender_id: 0,
+        level: 275,
         monarch_id: 1).save
 
       (1..20).each do |i|
@@ -51,6 +52,7 @@ namespace :db do
         monarch_id: kolthar.id,
         patron_id: kolthar.id,
         race_id: 0,
+        level: 126,
         gender_id: 0).save
 
       (1..20).each do |i|
