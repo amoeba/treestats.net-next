@@ -26,14 +26,15 @@ namespace :db do
 
       # Kolthar
       kolthar = Character.new(
-        server: "WintersEbb", 
+        server: "WintersEbb",
         name: "Kolthar",
         race_id: 0,
-        gender_id: 0).save
+        gender_id: 0,
+        monarch_id: 1).save
 
       (1..20).each do |i|
-        Skill.new(character_id: kolthar.id, 
-          skill_id: i, 
+        Skill.new(character_id: kolthar.id,
+          skill_id: i,
           training_id: (0..3).to_a.sample).save
         end
 
@@ -45,15 +46,16 @@ namespace :db do
 
       # Kolth
       kolth = Character.new(
-        server: "WintersEbb", 
-        name: "Kolth", 
-        patron: "Kolthar",
+        server: "WintersEbb",
+        name: "Kolth",
+        monarch_id: kolthar.id,
+        patron_id: kolthar.id,
         race_id: 0,
         gender_id: 0).save
 
       (1..20).each do |i|
-        Skill.new(character_id: kolth.id, 
-          skill_id: i, 
+        Skill.new(character_id: kolth.id,
+          skill_id: i,
           training_id: (0..3).to_a.sample).save
         end
 

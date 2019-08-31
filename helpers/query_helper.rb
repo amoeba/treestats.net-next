@@ -2,18 +2,17 @@
 
 module Sinatra
   module RankingsHelper
-    def ultimate_patron(server, name)
+    def ultimate_patron(id)
       patron_query = <<-QUERY
         WITH RECURSIVE
         children(n) AS (
-        VALUES ('#{name}')
-        UNION
-        SELECT patron FROM characters, children
-        WHERE characters.name = children.n
+          VALUES (#{id})
+          UNION
+          SELECT patron_id FROM characters, children
+          WHERE characters.id = children.n
         )
-        SELECT name, patron FROM characters
-        WHERE characters.name
-          IN children AND characters.server = '#{server}';
+        SELECT id, name, patron_id FROM characters
+        WHERE characters.id IN children;
       QUERY
 
       patron_result = database.fetch(patron_query).to_a
@@ -22,21 +21,20 @@ module Sinatra
         raise Exception("TODO")
       end
 
-      patron_result.first[:name]
+      patron_result.first[:id]
     end
 
-    def chain(server, root)
+    def chain(id)
       query = <<-QUERY
         WITH RECURSIVE
-        children(n) AS (
-            VALUES ('#{root}')
+        children(x) AS (
+          VALUES (#{id})
           UNION
-            SELECT name FROM characters, children
-            WHERE characters.patron = children.n
-          )
-          SELECT name, patron FROM characters
-          WHERE characters.name
-            IN children AND characters.server = '#{server}';
+          SELECT id FROM characters, children
+          WHERE characters.patron_id = children.x
+        )
+        SELECT id, name, patron_id FROM characters
+        WHERE characters.id IN children;
       QUERY
 
       database.fetch(query).to_a

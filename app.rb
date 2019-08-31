@@ -72,15 +72,15 @@ get '/:server/:name/chain' do
   name = params[:name].gsub(/[^a-zA-Z' ]/, "")
   server = params[:server]
 
-  ultimate = ultimate_patron(server, name)
-  chain(server, ultimate).to_json
+  character = Character.filter(:server => server, :name => name).first
+  ultimate = ultimate_patron(character.id)
+  chain(ultimate).to_json
 end
 
 get '/:server/:name' do
   @character = Character
     .filter(:name => params[:name], :server => params[:server])
     .first
-  @vassals = Character.filter(:patron => params[:name], :server => params[:server])
 
   erb :character
 end

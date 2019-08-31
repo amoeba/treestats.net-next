@@ -24,8 +24,8 @@ Sequel.migration do
       String :allegiance_name
       Integer :rank
       Integer :followers
-      String :monarch
-      String :patron
+      Integer :monarch_id
+      Integer :patron_id
 
       # Attributes
       Integer :strength_creation

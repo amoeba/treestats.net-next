@@ -41,14 +41,14 @@
 <h3>Allegiance</h3>
 
 <% if @character.monarch %>
-Monarch: <li><a href="/<%= @character.server %>/<%= @character.monarch %>"><%= @character.server %>/<%= @character.monarch %></a></li>
+Monarch: <li><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a></li>
 <% else %>
 Monarch: No Monarch
 <% end%>
 <br />
 
 <% if @character.patron %>
-Patron: <a href="/<%= @character.server %>/<%= @character.patron %>"><%= @character.server %>/<%= @character.patron %></a>
+Patron: <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= @character.patron[:server] %>/<%= @character.patron[:name] %></a>
 <% else %>
 Patron: No Patron
 <% end%>
@@ -56,7 +56,7 @@ Patron: No Patron
 
 <h4>Vassals</h4>
 <ul>
-  <% @vassals.each do |vassal| %>
+  <% @character.vassals.each do |vassal| %>
   <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= vassal[:server] %>/<%= vassal[:name] %></a></li>
   <% end %>
 </ul>
@@ -80,8 +80,8 @@ Patron: No Patron
     var height = 400;
 
     var tree_data = d3.stratify()
-      .id(function(d) { return d.name; })
-      .parentId(function(d) { return d.patron; })
+      .id(function(d) { return d.id; })
+      .parentId(function(d) { return d.patron_id; })
       (data);
 
     var tree = tree_data => {
