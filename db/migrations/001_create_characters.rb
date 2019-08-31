@@ -44,7 +44,7 @@ Sequel.migration do
       # Vitals
       Integer :health_base
       Integer :stamina_base
-      Integer :manaa_base
+      Integer :mana_base
 
       timestamp :created_at
       timestamp :updated_at
