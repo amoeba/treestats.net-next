@@ -1,0 +1,28 @@
+body {
+  font: 16px sans-serif;
+}
+
+header {
+  margin-bottom: 1.5rem;
+}
+
+header a,
+header a:visited {
+  color: blue;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+nav a {
+  display: inline-block;
+  margin: 0 1rem;
+}
+
+/* General styles */
+input {
+  font-size: inherit;
+}
