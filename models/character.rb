@@ -3,6 +3,7 @@
 class Character < Sequel::Model
   one_to_many :skills
   one_to_many :titles
+  one_to_many :properties
 
   # Allegiance relationships
   many_to_one :patron, class: self
