@@ -4,7 +4,7 @@ require 'sinatra'
 require 'sinatra/sequel'
 
 # Database
-set :database, 'sqlite://db/treestats.db'
+set :database, ENV["DATABASE_URL"] || 'sqlite://db/treestats.db'
 
 # Models
 require_relative 'models/character.rb'
