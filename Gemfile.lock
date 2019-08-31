@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:amoeba/sinatra-sequel.git
+  remote: https://github.com/amoeba/sinatra-sequel
   revision: 3bbf5cad3881247328922475128916223dd0d287
   specs:
     sinatra-sequel (0.9.0)
