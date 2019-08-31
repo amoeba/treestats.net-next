@@ -15,6 +15,7 @@ require_relative 'models/property.rb'
 # Helpers
 require_relative 'helpers/rankings_helper.rb'
 require_relative 'helpers/query_helper.rb'
+require_relative 'helpers/enum_helper.rb'
 
 # Routes
 get "/" do
