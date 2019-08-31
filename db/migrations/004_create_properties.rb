@@ -4,7 +4,7 @@ Sequel.migration do
       primary_key :id
       foreign_key :character_id, :characters
 
-      id :property_id, null: false
+      Integer :property_id, null: false
       Integer :value
     end
   end

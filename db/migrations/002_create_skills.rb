@@ -4,8 +4,8 @@ Sequel.migration do
       primary_key :id
       foreign_key :character_id, :characters
 
-      id :skill_id, null: false
-      id :training_id, null: false
+      Integer :skill_id, null: false
+      Integer :training_id, null: false
       Integer :base
     end
   end
