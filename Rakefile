@@ -182,6 +182,54 @@ namespace :db do
         patron_id: kol_thar.id,
       ).save
 
+      # Make a deep chain
+      top = Character.new(
+        server: "WintersEbb",
+        name: "TopTen",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        followers: 0
+      ).save
+      parent = top
+
+      (1..10).each do |i|
+        parent = Character.new(
+          server: "WintersEbb",
+          name: "TopTen",
+          race_id: 0,
+          gender_id: 0,
+          rank: 0,
+          followers: 0,
+          patron_id: parent.id,
+          monarch_id: top.id
+        ).save
+      end
+
+      # Make a deeper chain
+      top = Character.new(
+        server: "WintersEbb",
+        name: "TopThousand",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        followers: 0
+      ).save
+      parent = top
+
+      (1..10000).each do |i|
+        parent = Character.new(
+          server: "WintersEbb",
+          name: "TopThousand",
+          race_id: 0,
+          gender_id: 0,
+          rank: 0,
+          followers: 0,
+          patron_id: parent.id,
+          monarch_id: top.id
+        ).save
+      end
+
       puts Character.count
       puts Skill.count
       puts Title.count
