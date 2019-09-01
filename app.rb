@@ -75,6 +75,20 @@ get '/:server/:name/chain' do
   server = params[:server]
 
   character = Character.filter(:server => server, :name => name).first
+
+  if character.nil?
+    message = {
+      :errors => [
+        {
+          :status => 404,
+          :title => "Character not found.",
+          :description => "The character #{server}/#{name} could not be found."
+        }
+    ]}
+
+    halt(404, JSON.pretty_generate(message))
+  end
+
   ultimate = ultimate_patron(character.id)
   chain(ultimate).to_json
 end
