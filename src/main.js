@@ -1,7 +1,6 @@
 import chain from "./chain.js";
 
-console.log("main.js");
-
+// Chain
 const chainEl = document.getElementById("chain");
 
 if (chainEl) {
