@@ -54,7 +54,7 @@
 <h3>Allegiance</h3>
 
 <% if @character.monarch %>
-Monarch: <li><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a></li>
+Monarch: <a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a>
 <% else %>
 Monarch: No Monarch
 <% end%>
