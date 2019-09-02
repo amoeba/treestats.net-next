@@ -1,5 +1,6 @@
-const chain = function (selector, data) {
+const chain = function (selector, server, character, data) {
   const width = 600;
+  const height = 400;
 
   const tree_data = d3.stratify()
     .id(function (d) { return d.id; })
@@ -14,38 +15,31 @@ const chain = function (selector, data) {
   }
 
   const root = tree(tree_data);
-
-  let x0 = Infinity;
-  let x1 = -x0;
-
-  root.each(d => {
-    if (d.x > x1) x1 = d.x;
-    if (d.x < x0) x0 = d.x;
-  });
-
   const chart = d3.select(selector);
 
   d3.select(window)
     .on("resize", function () {
-      console.log("resize");
-
       var targetWidth = chart.node().getBoundingClientRect().width;
       chart.attr("width", targetWidth);
-    })
+    });
+
+  const zoom = d3.zoom()
+    .extent([[0, 0], [width, height]])
+    .scaleExtent([0.5, 5])
+    .on("zoom", function () {
+      g.attr("transform", d3.event.transform);
+    });
 
   const svg = chart.append("svg")
-    .attr("viewBox", [0, 0, width, x1 - x0 + root.dx * 2]);
+    .attr("viewBox", [0, 0, width, height])
+    .call(zoom);
 
   const g = svg.append("g")
-    .attr("font-family", "sans-serif")
-    .attr("font-size", 10)
-    .attr("transform", `translate(${root.dy / 3},${root.dx - x0})`);
+    .attr("font-size", 10);
 
   const link = g.append("g")
     .attr("fill", "none")
-    .attr("stroke", "#555")
-    .attr("stroke-opacity", 0.4)
-    .attr("stroke-width", 1.5)
+    .attr("stroke", "#000")
     .selectAll("path")
     .data(root.links())
     .join("path")
@@ -54,22 +48,44 @@ const chain = function (selector, data) {
       .y(d => d.x));
 
   const node = g.append("g")
-    .attr("stroke-linejoin", "round")
-    .attr("stroke-width", 3)
     .selectAll("g")
     .data(root.descendants())
     .join("g")
     .attr("transform", d => `translate(${d.y},${d.x})`);
 
-  node.append("circle")
-    .attr("fill", d => d.children ? "#555" : "#999")
+  node.append("svg:a")
+    .attr("xlink:href", function (d) {
+      return ["/", server, "/", d.data.data.name].join("");
+    })
+    .append("circle")
+    .attr("fill", "#000")
     .attr("r", 2.5);
 
-  node.append("text")
+  node.append("svg:a")
+    .attr("xlink:href", function (d) {
+      return ["/", server, "/", d.data.data.name].join("");
+    })
+    .append("text")
     .attr("dy", "0.31em")
     .attr("x", d => d.children ? -6 : 6)
     .attr("text-anchor", d => d.children ? "end" : "start")
     .text(d => d.data.data.name)
     .clone(true).lower()
     .attr("stroke", "white");
+
+  // Find and zoom to current character
+  zoomX = root.x;
+  zoomY = root.y;
+
+  root.each(d => {
+    if (d.data.data.name === character) {
+      zoomX = d.x;
+      zoomY = d.y;
+    }
+  });
+
+  svg.transition().duration(1000).call(
+    zoom.transform,
+    d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(zoomX, zoomY)
+  );
 }

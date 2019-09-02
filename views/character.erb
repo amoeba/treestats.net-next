@@ -19,15 +19,15 @@
 <script src="/javascript/chain.js"></script>
 <script>
   var tokens = window.location.href.split("/");
-  var server_name = tokens.length == 5 ? tokens[tokens.length - 2] : null;
-  var player_name = tokens.length == 5 ? decodeURIComponent(tokens[tokens.length - 1]) : null;
+  var server = tokens.length == 5 ? tokens[tokens.length - 2] : null;
+  var character = tokens.length == 5 ? decodeURIComponent(tokens[tokens.length - 1]) : null;
   var request_url =
         "/" +
-        server_name + "/" +
-        player_name + "/" +
+        server + "/" +
+        character + "/" +
         "chain";
 
   d3.json(request_url).then(function(data) {
-    chain("#chain", data);
+    chain("#chain", server, character, data);
   });
 </script>

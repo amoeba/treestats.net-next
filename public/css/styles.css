@@ -26,3 +26,8 @@ nav a {
 input {
   font-size: inherit;
 }
+
+/* Specific stuff */
+#chain {
+  border: 1px solid black;
+}

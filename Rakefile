@@ -217,7 +217,7 @@ namespace :db do
       ).save
       parent = top
 
-      (1..10000).each do |i|
+      (1..1000).each do |i|
         parent = Character.new(
           server: "WintersEbb",
           name: "TopThousand",
@@ -229,6 +229,142 @@ namespace :db do
           monarch_id: top.id
         ).save
       end
+
+      # Make a pretty tree
+      a = Character.new(
+        server: "WintersEbb",
+        name: "A",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0
+      ).save
+
+      b1 = Character.new(
+        server: "WintersEbb",
+        name: "B1",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: a.id
+      ).save
+
+      b2 = Character.new(
+        server: "WintersEbb",
+        name: "B2",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: a.id
+      ).save
+
+      c1 = Character.new(
+        server: "WintersEbb",
+        name: "C1",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: b1.id
+      ).save
+
+      c2 = Character.new(
+        server: "WintersEbb",
+        name: "C2",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: b1.id
+      ).save
+
+      c3 = Character.new(
+        server: "WintersEbb",
+        name: "C3",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: b2.id
+      ).save
+
+      c4 = Character.new(
+        server: "WintersEbb",
+        name: "C4",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: b2.id
+      ).save
+
+      d1 = Character.new(
+        server: "WintersEbb",
+        name: "D1",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c1.id
+      ).save
+
+      d2 = Character.new(
+        server: "WintersEbb",
+        name: "D2",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c1.id
+      ).save
+
+      d3 = Character.new(
+        server: "WintersEbb",
+        name: "D3",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c2.id
+      ).save
+
+      d4 = Character.new(
+        server: "WintersEbb",
+        name: "D4",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c2.id
+      ).save
+
+      d5 = Character.new(
+        server: "WintersEbb",
+        name: "D5",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c3.id
+      ).save
+
+      d6 = Character.new(
+        server: "WintersEbb",
+        name: "D6",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c3.id
+      ).save
+
+      d7 = Character.new(
+        server: "WintersEbb",
+        name: "D7",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c4.id
+      ).save
+
+      d8 = Character.new(
+        server: "WintersEbb",
+        name: "D8",
+        race_id: 0,
+        gender_id: 0,
+        rank: 0,
+        patron_id: c4.id
+      ).save
+
 
       puts Character.count
       puts Skill.count
