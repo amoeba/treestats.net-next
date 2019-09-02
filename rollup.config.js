@@ -1,6 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
+import minify from 'rollup-plugin-babel-minify';
 
 // `npm run build` -> `production` is true
 // `npm run dev` -> `production` is false
@@ -16,6 +17,7 @@ export default {
 	plugins: [
 		resolve(), // tells Rollup how to find date-fns in node_modules
 		commonjs(), // converts date-fns to ES modules
+		minify(),
 		production && terser() // minify, but only in production
 	]
 };
