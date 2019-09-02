@@ -84,8 +84,8 @@ const chain = function (selector, server, character, data) {
     }
   });
 
-  svg.transition().duration(1000).call(
+  svg.transition().duration(250).call(
     zoom.transform,
-    d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(zoomX, zoomY)
+    d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(-zoomY, -zoomX)
   );
 }
