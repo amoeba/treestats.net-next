@@ -28,7 +28,7 @@ module Sinatra
 
     @@genders = [
       "Male",
-      "Female"
+      "Female",
     ]
 
     @@races = [
@@ -44,7 +44,7 @@ module Sinatra
       "Penumbraen",
       "Undead",
       "Olthoi",
-      "OlthoiAcid"
+      "OlthoiAcid",
     ]
 
     @@ranks = [
@@ -60,7 +60,7 @@ module Sinatra
           "Duke",
           "Aethling",
           "King",
-          "High King"
+          "High King",
         ],
         [
           "",
@@ -73,8 +73,8 @@ module Sinatra
           "Duchess",
           "Aethling",
           "Queen",
-          "High Queen"
-        ]
+          "High Queen",
+        ],
       ],
       [ # Gharu'ndim
         [
@@ -88,7 +88,7 @@ module Sinatra
           "Mushir",
           "Amir",
           "Malik",
-          "Sultan"
+          "Sultan",
         ],
         [
           "",
@@ -101,8 +101,8 @@ module Sinatra
           "Mushira",
           "Amira",
           "Malika",
-          "Sultana"
-        ]
+          "Sultana",
+        ],
       ],
       [ # Sho
         [
@@ -116,7 +116,7 @@ module Sinatra
           "Kou",
           "Taikou",
           "Ou",
-          "Koutei"
+          "Koutei",
         ],
         [
           "",
@@ -129,8 +129,8 @@ module Sinatra
           "Kou",
           "Taikou",
           "Jo-Ou",
-          "Koutei"
-        ]
+          "Koutei",
+        ],
       ],
       [ # Viamontian
         [
@@ -144,7 +144,7 @@ module Sinatra
           "Duke",
           "Grand Duke",
           "King",
-          "High King"
+          "High King",
         ],
         [
           "",
@@ -157,8 +157,8 @@ module Sinatra
           "Duchess",
           "Grand Duchess",
           "Queen",
-          "High Queen"
-        ]
+          "High Queen",
+        ],
       ],
       [ # Shadowbound
         [
@@ -172,7 +172,7 @@ module Sinatra
           "Duke",
           "Archduke",
           "Highborn",
-          "King"
+          "King",
         ],
         [
           "",
@@ -185,7 +185,7 @@ module Sinatra
           "Duchess",
           "Archduchess",
           "Highborn",
-          "Queen"
+          "Queen",
         ],
       ],
       [ # Gearknight
@@ -200,7 +200,7 @@ module Sinatra
           "Consul",
           "Dux",
           "Secondus",
-          "Primus"
+          "Primus",
         ],
         [
           "",
@@ -213,8 +213,8 @@ module Sinatra
           "Consul",
           "Dux",
           "Secondus",
-          "Primus"
-        ]
+          "Primus",
+        ],
       ],
       [ # Tumerok
         [
@@ -228,7 +228,7 @@ module Sinatra
           "Nurea",
           "Kauh",
           "Sutah",
-          "Tah"
+          "Tah",
         ],
         [
           "",
@@ -241,7 +241,7 @@ module Sinatra
           "Nurea",
           "Kauh",
           "Sutah",
-          "Tah"
+          "Tah",
         ],
       ],
       [ # Lugian
@@ -256,7 +256,7 @@ module Sinatra
           "Kantos",
           "Gigas",
           "Extas",
-          "Tiatus"
+          "Tiatus",
         ],
         [
           "",
@@ -269,8 +269,8 @@ module Sinatra
           "Kantos",
           "Gigas",
           "Extas",
-          "Tiatus"
-        ]
+          "Tiatus",
+        ],
       ],
       [ # Empyrean
         [
@@ -284,7 +284,7 @@ module Sinatra
           "Commodore",
           "Warlord",
           "Ipharsin",
-          "Aulin"
+          "Aulin",
         ],
         [
           "",
@@ -297,8 +297,8 @@ module Sinatra
           "Admiral",
           "Warlord",
           "Ipharsia",
-          "Aulia"
-        ]
+          "Aulia",
+        ],
       ],
       [ # Penumbrean
         [
@@ -312,7 +312,7 @@ module Sinatra
           "Duke",
           "Archduke",
           "Highborn",
-          "King"
+          "King",
         ],
         [
           "",
@@ -325,7 +325,7 @@ module Sinatra
           "Duchess",
           "Archduchess",
           "Highborn",
-          "Queen"
+          "Queen",
         ],
       ],
       [ # Undead
@@ -340,7 +340,7 @@ module Sinatra
           "Count",
           "Viscount",
           "Highness",
-          "Annointed"
+          "Annointed",
         ],
         [
           "",
@@ -353,9 +353,9 @@ module Sinatra
           "Countess",
           "Viscountess",
           "Highness",
-          "Annointed"
-        ]
-      ]
+          "Annointed",
+        ],
+      ],
     ]
 
     @@skills = [
@@ -396,14 +396,14 @@ module Sinatra
       "Summoning",
       "Void Magic",
       "War Magic",
-      "Weapon Tinkering"
+      "Weapon Tinkering",
     ]
 
     @@training = [
       "Unusable",
       "Untrained",
       "Trained",
-      "Specialized"
+      "Specialized",
     ]
 
     @@titles = {
@@ -1279,7 +1279,7 @@ module Sinatra
       891 => "Illuminated",
       892 => "Transcended",
       893 => "Cosmic Conscious",
-      894 => "Last Man Standing"
+      894 => "Last Man Standing",
     }
   end
 

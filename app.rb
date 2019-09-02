@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'sinatra'
-require 'sinatra/sequel'
+require "sinatra"
+require "sinatra/sequel"
 
 # Database
-set :database, ENV["DATABASE_URL"] || 'sqlite://db/treestats.db'
+set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
 
 # Models
-require_relative 'models/character.rb'
-require_relative 'models/skill.rb'
-require_relative 'models/title.rb'
-require_relative 'models/property.rb'
+require_relative "models/character.rb"
+require_relative "models/skill.rb"
+require_relative "models/title.rb"
+require_relative "models/property.rb"
 
 # Helpers
-require_relative 'helpers/rankings_helper.rb'
-require_relative 'helpers/query_helper.rb'
-require_relative 'helpers/enum_helper.rb'
+require_relative "helpers/rankings_helper.rb"
+require_relative "helpers/query_helper.rb"
+require_relative "helpers/enum_helper.rb"
 
 # Routes
 get "/" do
@@ -57,16 +57,16 @@ get "/rankings/:ranking" do
   erb :ranking
 end
 
-get '/:server' do
+get "/:server" do
   @server = params[:server]
   @characters = Character
-    .filter(:server => params[:server])
+    .filter(server: params[:server])
     .limit(10)
 
   erb :server
 end
 
-get '/:server/:name/chain' do
+get "/:server/:name/chain" do
   content_type :json
 
   # TODO: Validate server name
@@ -74,17 +74,18 @@ get '/:server/:name/chain' do
   name = params[:name].gsub(/[^a-zA-Z' ]/, "")
   server = params[:server]
 
-  character = Character.filter(:server => server, :name => name).first
+  character = Character.filter(server: server, name: name).first
 
   if character.nil?
     message = {
-      :errors => [
+      errors: [
         {
-          :status => 404,
-          :title => "Character not found.",
-          :description => "The character #{server}/#{name} could not be found."
-        }
-    ]}
+          status: 404,
+          title: "Character not found.",
+          description: "The character #{server}/#{name} could not be found.",
+        },
+      ],
+    }
 
     halt(404, JSON.pretty_generate(message))
   end
@@ -93,9 +94,9 @@ get '/:server/:name/chain' do
   chain(ultimate).to_json
 end
 
-get '/:server/:name' do
+get "/:server/:name" do
   @character = Character
-    .filter(:name => params[:name], :server => params[:server])
+    .filter(name: params[:name], server: params[:server])
     .first
 
   erb :character

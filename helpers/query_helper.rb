@@ -17,7 +17,7 @@ module Sinatra
 
       patron_result = database.fetch(patron_query).to_a
 
-      if (patron_result.length <= 0)
+      if patron_result.length <= 0
         raise Exception("TODO")
       end
 
