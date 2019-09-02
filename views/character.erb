@@ -13,21 +13,14 @@
 <%= erb :_full_character if @character.strength_base %>
 
 <h3>Chain</h3>
-<div id="chain"></div>
+<div id="chain" data-server=<%= @character.server %> data-character=<%= @character.name %>></div>
 
-<script src="/javascript/d3.min.js"></script>
-<script src="/javascript/chain.js"></script>
 <script>
-  var tokens = window.location.href.split("/");
-  var server = tokens.length == 5 ? tokens[tokens.length - 2] : null;
-  var character = tokens.length == 5 ? decodeURIComponent(tokens[tokens.length - 1]) : null;
-  var request_url =
-        "/" +
-        server + "/" +
-        character + "/" +
-        "chain";
+  const chainEl = document.getElementById("chain");
 
-  d3.json(request_url).then(function(data) {
-    chain("#chain", server, character, data);
-  });
+  console.log(chainEl)
+  if (chainEl) {
+    console.log(chainEl)
+    chain(chainEl, "WintersEbb", "Kolthar")
+  }
 </script>
