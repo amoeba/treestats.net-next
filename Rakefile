@@ -241,7 +241,7 @@ namespace :db do
 
       b1 = Character.new(
         server: "WintersEbb",
-        name: "B1",
+        name: "BA",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -250,7 +250,7 @@ namespace :db do
 
       b2 = Character.new(
         server: "WintersEbb",
-        name: "B2",
+        name: "BB",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -259,7 +259,7 @@ namespace :db do
 
       c1 = Character.new(
         server: "WintersEbb",
-        name: "C1",
+        name: "CA",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -268,7 +268,7 @@ namespace :db do
 
       c2 = Character.new(
         server: "WintersEbb",
-        name: "C2",
+        name: "CB",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -277,7 +277,7 @@ namespace :db do
 
       c3 = Character.new(
         server: "WintersEbb",
-        name: "C3",
+        name: "CC",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -286,7 +286,7 @@ namespace :db do
 
       c4 = Character.new(
         server: "WintersEbb",
-        name: "C4",
+        name: "CD",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -295,7 +295,7 @@ namespace :db do
 
       d1 = Character.new(
         server: "WintersEbb",
-        name: "D1",
+        name: "DA",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -304,7 +304,7 @@ namespace :db do
 
       d2 = Character.new(
         server: "WintersEbb",
-        name: "D2",
+        name: "DB",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -313,7 +313,7 @@ namespace :db do
 
       d3 = Character.new(
         server: "WintersEbb",
-        name: "D3",
+        name: "DC",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -322,7 +322,7 @@ namespace :db do
 
       d4 = Character.new(
         server: "WintersEbb",
-        name: "D4",
+        name: "DD",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -331,7 +331,7 @@ namespace :db do
 
       d5 = Character.new(
         server: "WintersEbb",
-        name: "D5",
+        name: "DE",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -340,7 +340,7 @@ namespace :db do
 
       d6 = Character.new(
         server: "WintersEbb",
-        name: "D6",
+        name: "DF",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -349,7 +349,7 @@ namespace :db do
 
       d7 = Character.new(
         server: "WintersEbb",
-        name: "D7",
+        name: "DG",
         race_id: 0,
         gender_id: 0,
         rank: 0,
@@ -358,7 +358,7 @@ namespace :db do
 
       d8 = Character.new(
         server: "WintersEbb",
-        name: "D8",
+        name: "DH",
         race_id: 0,
         gender_id: 0,
         rank: 0,
