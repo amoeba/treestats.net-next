@@ -296,7 +296,7 @@ namespace :db do
         patron_id: b2.id
       ).save
 
-      d1 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DA",
         race_id: 0,
@@ -305,7 +305,7 @@ namespace :db do
         patron_id: c1.id
       ).save
 
-      d2 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DB",
         race_id: 0,
@@ -314,7 +314,7 @@ namespace :db do
         patron_id: c1.id
       ).save
 
-      d3 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DC",
         race_id: 0,
@@ -323,7 +323,7 @@ namespace :db do
         patron_id: c2.id
       ).save
 
-      d4 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DD",
         race_id: 0,
@@ -332,7 +332,7 @@ namespace :db do
         patron_id: c2.id
       ).save
 
-      d5 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DE",
         race_id: 0,
@@ -341,7 +341,7 @@ namespace :db do
         patron_id: c3.id
       ).save
 
-      d6 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DF",
         race_id: 0,
@@ -350,7 +350,7 @@ namespace :db do
         patron_id: c3.id
       ).save
 
-      d7 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DG",
         race_id: 0,
@@ -359,7 +359,7 @@ namespace :db do
         patron_id: c4.id
       ).save
 
-      d8 = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "DH",
         race_id: 0,
