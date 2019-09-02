@@ -1,8 +1,7 @@
 import * as d3 from "d3";
 
 export default function (selector, server, character) {
-  console.log("chain")
-  d3.json(request_url).then(function (data) {
+  d3.json("/" + server + "/" + character + "/chain").then(function (data) {
     const width = 600;
     const height = 400;
 
@@ -79,8 +78,8 @@ export default function (selector, server, character) {
       .attr("stroke", "white");
 
     // Find and zoom to current character
-    zoomX = root.x;
-    zoomY = root.y;
+    let zoomX = root.x;
+    let zoomY = root.y;
 
     root.each(d => {
       if (d.data.data.name === character) {

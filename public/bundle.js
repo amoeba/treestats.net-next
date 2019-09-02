@@ -1,7 +1,5 @@
-(function (factory) {
-  typeof define === 'function' && define.amd ? define(factory) :
-  factory();
-}(function () { 'use strict';
+(function () {
+  'use strict';
 
   function ascending(a, b) {
     return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -805,6 +803,8 @@
 
   var filterEvents = {};
 
+  var event = null;
+
   if (typeof document !== "undefined") {
     var element = document.documentElement;
     if (!("onmouseenter" in element)) {
@@ -824,9 +824,12 @@
 
   function contextListener(listener, index, group) {
     return function(event1) {
+      var event0 = event; // Events can be reentrant (e.g., focus).
+      event = event1;
       try {
         listener.call(this, this.__data__, index, group);
       } finally {
+        event = event0;
       }
     };
   }
@@ -893,6 +896,17 @@
     if (capture == null) capture = false;
     for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
     return this;
+  }
+
+  function customEvent(event1, listener, that, args) {
+    var event0 = event;
+    event1.sourceEvent = event;
+    event = event1;
+    try {
+      return listener.apply(that, args);
+    } finally {
+      event = event0;
+    }
   }
 
   function dispatchEvent(node, type, params) {
@@ -973,6 +987,81 @@
     on: selection_on,
     dispatch: selection_dispatch
   };
+
+  function select(selector) {
+    return typeof selector === "string"
+        ? new Selection([[document.querySelector(selector)]], [document.documentElement])
+        : new Selection([[selector]], root);
+  }
+
+  function sourceEvent() {
+    var current = event, source;
+    while (source = current.sourceEvent) current = source;
+    return current;
+  }
+
+  function point(node, event) {
+    var svg = node.ownerSVGElement || node;
+
+    if (svg.createSVGPoint) {
+      var point = svg.createSVGPoint();
+      point.x = event.clientX, point.y = event.clientY;
+      point = point.matrixTransform(node.getScreenCTM().inverse());
+      return [point.x, point.y];
+    }
+
+    var rect = node.getBoundingClientRect();
+    return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+  }
+
+  function mouse(node) {
+    var event = sourceEvent();
+    if (event.changedTouches) event = event.changedTouches[0];
+    return point(node, event);
+  }
+
+  function touch(node, touches, identifier) {
+    if (arguments.length < 3) identifier = touches, touches = sourceEvent().changedTouches;
+
+    for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
+      if ((touch = touches[i]).identifier === identifier) {
+        return point(node, touch);
+      }
+    }
+
+    return null;
+  }
+
+  function noevent() {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+
+  function dragDisable(view) {
+    var root = view.document.documentElement,
+        selection = select(view).on("dragstart.drag", noevent, true);
+    if ("onselectstart" in root) {
+      selection.on("selectstart.drag", noevent, true);
+    } else {
+      root.__noselect = root.style.MozUserSelect;
+      root.style.MozUserSelect = "none";
+    }
+  }
+
+  function yesdrag(view, noclick) {
+    var root = view.document.documentElement,
+        selection = select(view).on("dragstart.drag", null);
+    if (noclick) {
+      selection.on("click.drag", noevent, true);
+      setTimeout(function() { selection.on("click.drag", null); }, 0);
+    }
+    if ("onselectstart" in root) {
+      selection.on("selectstart.drag", null);
+    } else {
+      root.style.MozUserSelect = root.__noselect;
+      delete root.__noselect;
+    }
+  }
 
   function define(constructor, factory, prototype) {
     constructor.prototype = factory.prototype = prototype;
@@ -1758,7 +1847,70 @@
   var interpolateTransformCss = interpolateTransform(parseCss, "px, ", "px)", "deg)");
   var interpolateTransformSvg = interpolateTransform(parseSvg, ", ", ")", ")");
 
-  var rho = Math.SQRT2;
+  var rho = Math.SQRT2,
+      rho2 = 2,
+      rho4 = 4,
+      epsilon2 = 1e-12;
+
+  function cosh(x) {
+    return ((x = Math.exp(x)) + 1 / x) / 2;
+  }
+
+  function sinh(x) {
+    return ((x = Math.exp(x)) - 1 / x) / 2;
+  }
+
+  function tanh(x) {
+    return ((x = Math.exp(2 * x)) - 1) / (x + 1);
+  }
+
+  // p0 = [ux0, uy0, w0]
+  // p1 = [ux1, uy1, w1]
+  function interpolateZoom(p0, p1) {
+    var ux0 = p0[0], uy0 = p0[1], w0 = p0[2],
+        ux1 = p1[0], uy1 = p1[1], w1 = p1[2],
+        dx = ux1 - ux0,
+        dy = uy1 - uy0,
+        d2 = dx * dx + dy * dy,
+        i,
+        S;
+
+    // Special case for u0 ≅ u1.
+    if (d2 < epsilon2) {
+      S = Math.log(w1 / w0) / rho;
+      i = function(t) {
+        return [
+          ux0 + t * dx,
+          uy0 + t * dy,
+          w0 * Math.exp(rho * t * S)
+        ];
+      };
+    }
+
+    // General case.
+    else {
+      var d1 = Math.sqrt(d2),
+          b0 = (w1 * w1 - w0 * w0 + rho4 * d2) / (2 * w0 * rho2 * d1),
+          b1 = (w1 * w1 - w0 * w0 - rho4 * d2) / (2 * w1 * rho2 * d1),
+          r0 = Math.log(Math.sqrt(b0 * b0 + 1) - b0),
+          r1 = Math.log(Math.sqrt(b1 * b1 + 1) - b1);
+      S = (r1 - r0) / rho;
+      i = function(t) {
+        var s = t * S,
+            coshr0 = cosh(r0),
+            u = w0 / (rho2 * d1) * (coshr0 * tanh(rho * s + r0) - sinh(r0));
+        return [
+          ux0 + u * dx,
+          uy0 + u * dy,
+          w0 * coshr0 / cosh(rho * s + r0)
+        ];
+      };
+    }
+
+    i.duration = S * 1000;
+
+    return i;
+  }
 
   var frame = 0, // is an animation frame pending?
       timeout = 0, // is a timeout pending?
@@ -2712,7 +2864,134 @@
 
   var pi$1 = Math.PI;
 
-  var pi$2 = Math.PI;
+  var pi$2 = Math.PI,
+      tau$1 = 2 * pi$2,
+      epsilon = 1e-6,
+      tauEpsilon = tau$1 - epsilon;
+
+  function Path() {
+    this._x0 = this._y0 = // start of current subpath
+    this._x1 = this._y1 = null; // end of current subpath
+    this._ = "";
+  }
+
+  function path() {
+    return new Path;
+  }
+
+  Path.prototype = path.prototype = {
+    constructor: Path,
+    moveTo: function(x, y) {
+      this._ += "M" + (this._x0 = this._x1 = +x) + "," + (this._y0 = this._y1 = +y);
+    },
+    closePath: function() {
+      if (this._x1 !== null) {
+        this._x1 = this._x0, this._y1 = this._y0;
+        this._ += "Z";
+      }
+    },
+    lineTo: function(x, y) {
+      this._ += "L" + (this._x1 = +x) + "," + (this._y1 = +y);
+    },
+    quadraticCurveTo: function(x1, y1, x, y) {
+      this._ += "Q" + (+x1) + "," + (+y1) + "," + (this._x1 = +x) + "," + (this._y1 = +y);
+    },
+    bezierCurveTo: function(x1, y1, x2, y2, x, y) {
+      this._ += "C" + (+x1) + "," + (+y1) + "," + (+x2) + "," + (+y2) + "," + (this._x1 = +x) + "," + (this._y1 = +y);
+    },
+    arcTo: function(x1, y1, x2, y2, r) {
+      x1 = +x1, y1 = +y1, x2 = +x2, y2 = +y2, r = +r;
+      var x0 = this._x1,
+          y0 = this._y1,
+          x21 = x2 - x1,
+          y21 = y2 - y1,
+          x01 = x0 - x1,
+          y01 = y0 - y1,
+          l01_2 = x01 * x01 + y01 * y01;
+
+      // Is the radius negative? Error.
+      if (r < 0) throw new Error("negative radius: " + r);
+
+      // Is this path empty? Move to (x1,y1).
+      if (this._x1 === null) {
+        this._ += "M" + (this._x1 = x1) + "," + (this._y1 = y1);
+      }
+
+      // Or, is (x1,y1) coincident with (x0,y0)? Do nothing.
+      else if (!(l01_2 > epsilon));
+
+      // Or, are (x0,y0), (x1,y1) and (x2,y2) collinear?
+      // Equivalently, is (x1,y1) coincident with (x2,y2)?
+      // Or, is the radius zero? Line to (x1,y1).
+      else if (!(Math.abs(y01 * x21 - y21 * x01) > epsilon) || !r) {
+        this._ += "L" + (this._x1 = x1) + "," + (this._y1 = y1);
+      }
+
+      // Otherwise, draw an arc!
+      else {
+        var x20 = x2 - x0,
+            y20 = y2 - y0,
+            l21_2 = x21 * x21 + y21 * y21,
+            l20_2 = x20 * x20 + y20 * y20,
+            l21 = Math.sqrt(l21_2),
+            l01 = Math.sqrt(l01_2),
+            l = r * Math.tan((pi$2 - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2),
+            t01 = l / l01,
+            t21 = l / l21;
+
+        // If the start tangent is not coincident with (x0,y0), line to.
+        if (Math.abs(t01 - 1) > epsilon) {
+          this._ += "L" + (x1 + t01 * x01) + "," + (y1 + t01 * y01);
+        }
+
+        this._ += "A" + r + "," + r + ",0,0," + (+(y01 * x20 > x01 * y20)) + "," + (this._x1 = x1 + t21 * x21) + "," + (this._y1 = y1 + t21 * y21);
+      }
+    },
+    arc: function(x, y, r, a0, a1, ccw) {
+      x = +x, y = +y, r = +r, ccw = !!ccw;
+      var dx = r * Math.cos(a0),
+          dy = r * Math.sin(a0),
+          x0 = x + dx,
+          y0 = y + dy,
+          cw = 1 ^ ccw,
+          da = ccw ? a0 - a1 : a1 - a0;
+
+      // Is the radius negative? Error.
+      if (r < 0) throw new Error("negative radius: " + r);
+
+      // Is this path empty? Move to (x0,y0).
+      if (this._x1 === null) {
+        this._ += "M" + x0 + "," + y0;
+      }
+
+      // Or, is (x0,y0) not coincident with the previous point? Line to (x0,y0).
+      else if (Math.abs(this._x1 - x0) > epsilon || Math.abs(this._y1 - y0) > epsilon) {
+        this._ += "L" + x0 + "," + y0;
+      }
+
+      // Is this arc empty? We’re done.
+      if (!r) return;
+
+      // Does the angle go the wrong way? Flip the direction.
+      if (da < 0) da = da % tau$1 + tau$1;
+
+      // Is this a complete circle? Draw two arcs to complete the circle.
+      if (da > tauEpsilon) {
+        this._ += "A" + r + "," + r + ",0,1," + cw + "," + (x - dx) + "," + (y - dy) + "A" + r + "," + r + ",0,1," + cw + "," + (this._x1 = x0) + "," + (this._y1 = y0);
+      }
+
+      // Is this arc non-empty? Draw an arc!
+      else if (da > epsilon) {
+        this._ += "A" + r + "," + r + ",0," + (+(da >= pi$2)) + "," + cw + "," + (this._x1 = x + r * Math.cos(a1)) + "," + (this._y1 = y + r * Math.sin(a1));
+      }
+    },
+    rect: function(x, y, w, h) {
+      this._ += "M" + (this._x0 = this._x1 = +x) + "," + (this._y0 = this._y1 = +y) + "h" + (+w) + "v" + (+h) + "h" + (-w) + "Z";
+    },
+    toString: function() {
+      return this._;
+    }
+  };
 
   var prefix = "$";
 
@@ -2990,6 +3269,15 @@
   var csv = dsvFormat(",");
 
   var tsv = dsvFormat("\t");
+
+  function responseJson(response) {
+    if (!response.ok) throw new Error(response.status + " " + response.statusText);
+    return response.json();
+  }
+
+  function json(input, init) {
+    return fetch(input, init).then(responseJson);
+  }
 
   function tree_add(d) {
     var x = +this._x.call(null, d),
@@ -3749,6 +4037,523 @@
       areaRingSum$1 = adder();
 
   var lengthSum$1 = adder();
+
+  function count(node) {
+    var sum = 0,
+        children = node.children,
+        i = children && children.length;
+    if (!i) sum = 1;
+    else while (--i >= 0) sum += children[i].value;
+    node.value = sum;
+  }
+
+  function node_count() {
+    return this.eachAfter(count);
+  }
+
+  function node_each(callback) {
+    var node = this, current, next = [node], children, i, n;
+    do {
+      current = next.reverse(), next = [];
+      while (node = current.pop()) {
+        callback(node), children = node.children;
+        if (children) for (i = 0, n = children.length; i < n; ++i) {
+          next.push(children[i]);
+        }
+      }
+    } while (next.length);
+    return this;
+  }
+
+  function node_eachBefore(callback) {
+    var node = this, nodes = [node], children, i;
+    while (node = nodes.pop()) {
+      callback(node), children = node.children;
+      if (children) for (i = children.length - 1; i >= 0; --i) {
+        nodes.push(children[i]);
+      }
+    }
+    return this;
+  }
+
+  function node_eachAfter(callback) {
+    var node = this, nodes = [node], next = [], children, i, n;
+    while (node = nodes.pop()) {
+      next.push(node), children = node.children;
+      if (children) for (i = 0, n = children.length; i < n; ++i) {
+        nodes.push(children[i]);
+      }
+    }
+    while (node = next.pop()) {
+      callback(node);
+    }
+    return this;
+  }
+
+  function node_sum(value) {
+    return this.eachAfter(function(node) {
+      var sum = +value(node.data) || 0,
+          children = node.children,
+          i = children && children.length;
+      while (--i >= 0) sum += children[i].value;
+      node.value = sum;
+    });
+  }
+
+  function node_sort(compare) {
+    return this.eachBefore(function(node) {
+      if (node.children) {
+        node.children.sort(compare);
+      }
+    });
+  }
+
+  function node_path(end) {
+    var start = this,
+        ancestor = leastCommonAncestor(start, end),
+        nodes = [start];
+    while (start !== ancestor) {
+      start = start.parent;
+      nodes.push(start);
+    }
+    var k = nodes.length;
+    while (end !== ancestor) {
+      nodes.splice(k, 0, end);
+      end = end.parent;
+    }
+    return nodes;
+  }
+
+  function leastCommonAncestor(a, b) {
+    if (a === b) return a;
+    var aNodes = a.ancestors(),
+        bNodes = b.ancestors(),
+        c = null;
+    a = aNodes.pop();
+    b = bNodes.pop();
+    while (a === b) {
+      c = a;
+      a = aNodes.pop();
+      b = bNodes.pop();
+    }
+    return c;
+  }
+
+  function node_ancestors() {
+    var node = this, nodes = [node];
+    while (node = node.parent) {
+      nodes.push(node);
+    }
+    return nodes;
+  }
+
+  function node_descendants() {
+    var nodes = [];
+    this.each(function(node) {
+      nodes.push(node);
+    });
+    return nodes;
+  }
+
+  function node_leaves() {
+    var leaves = [];
+    this.eachBefore(function(node) {
+      if (!node.children) {
+        leaves.push(node);
+      }
+    });
+    return leaves;
+  }
+
+  function node_links() {
+    var root = this, links = [];
+    root.each(function(node) {
+      if (node !== root) { // Don’t include the root’s parent, if any.
+        links.push({source: node.parent, target: node});
+      }
+    });
+    return links;
+  }
+
+  function hierarchy(data, children) {
+    var root = new Node(data),
+        valued = +data.value && (root.value = data.value),
+        node,
+        nodes = [root],
+        child,
+        childs,
+        i,
+        n;
+
+    if (children == null) children = defaultChildren;
+
+    while (node = nodes.pop()) {
+      if (valued) node.value = +node.data.value;
+      if ((childs = children(node.data)) && (n = childs.length)) {
+        node.children = new Array(n);
+        for (i = n - 1; i >= 0; --i) {
+          nodes.push(child = node.children[i] = new Node(childs[i]));
+          child.parent = node;
+          child.depth = node.depth + 1;
+        }
+      }
+    }
+
+    return root.eachBefore(computeHeight);
+  }
+
+  function node_copy() {
+    return hierarchy(this).eachBefore(copyData);
+  }
+
+  function defaultChildren(d) {
+    return d.children;
+  }
+
+  function copyData(node) {
+    node.data = node.data.data;
+  }
+
+  function computeHeight(node) {
+    var height = 0;
+    do node.height = height;
+    while ((node = node.parent) && (node.height < ++height));
+  }
+
+  function Node(data) {
+    this.data = data;
+    this.depth =
+    this.height = 0;
+    this.parent = null;
+  }
+
+  Node.prototype = hierarchy.prototype = {
+    constructor: Node,
+    count: node_count,
+    each: node_each,
+    eachAfter: node_eachAfter,
+    eachBefore: node_eachBefore,
+    sum: node_sum,
+    sort: node_sort,
+    path: node_path,
+    ancestors: node_ancestors,
+    descendants: node_descendants,
+    leaves: node_leaves,
+    links: node_links,
+    copy: node_copy
+  };
+
+  function required(f) {
+    if (typeof f !== "function") throw new Error;
+    return f;
+  }
+
+  var keyPrefix$1 = "$", // Protect against keys like “__proto__”.
+      preroot = {depth: -1},
+      ambiguous = {};
+
+  function defaultId(d) {
+    return d.id;
+  }
+
+  function defaultParentId(d) {
+    return d.parentId;
+  }
+
+  function stratify() {
+    var id = defaultId,
+        parentId = defaultParentId;
+
+    function stratify(data) {
+      var d,
+          i,
+          n = data.length,
+          root,
+          parent,
+          node,
+          nodes = new Array(n),
+          nodeId,
+          nodeKey,
+          nodeByKey = {};
+
+      for (i = 0; i < n; ++i) {
+        d = data[i], node = nodes[i] = new Node(d);
+        if ((nodeId = id(d, i, data)) != null && (nodeId += "")) {
+          nodeKey = keyPrefix$1 + (node.id = nodeId);
+          nodeByKey[nodeKey] = nodeKey in nodeByKey ? ambiguous : node;
+        }
+      }
+
+      for (i = 0; i < n; ++i) {
+        node = nodes[i], nodeId = parentId(data[i], i, data);
+        if (nodeId == null || !(nodeId += "")) {
+          if (root) throw new Error("multiple roots");
+          root = node;
+        } else {
+          parent = nodeByKey[keyPrefix$1 + nodeId];
+          if (!parent) throw new Error("missing: " + nodeId);
+          if (parent === ambiguous) throw new Error("ambiguous: " + nodeId);
+          if (parent.children) parent.children.push(node);
+          else parent.children = [node];
+          node.parent = parent;
+        }
+      }
+
+      if (!root) throw new Error("no root");
+      root.parent = preroot;
+      root.eachBefore(function(node) { node.depth = node.parent.depth + 1; --n; }).eachBefore(computeHeight);
+      root.parent = null;
+      if (n > 0) throw new Error("cycle");
+
+      return root;
+    }
+
+    stratify.id = function(x) {
+      return arguments.length ? (id = required(x), stratify) : id;
+    };
+
+    stratify.parentId = function(x) {
+      return arguments.length ? (parentId = required(x), stratify) : parentId;
+    };
+
+    return stratify;
+  }
+
+  function defaultSeparation(a, b) {
+    return a.parent === b.parent ? 1 : 2;
+  }
+
+  // function radialSeparation(a, b) {
+  //   return (a.parent === b.parent ? 1 : 2) / a.depth;
+  // }
+
+  // This function is used to traverse the left contour of a subtree (or
+  // subforest). It returns the successor of v on this contour. This successor is
+  // either given by the leftmost child of v or by the thread of v. The function
+  // returns null if and only if v is on the highest level of its subtree.
+  function nextLeft(v) {
+    var children = v.children;
+    return children ? children[0] : v.t;
+  }
+
+  // This function works analogously to nextLeft.
+  function nextRight(v) {
+    var children = v.children;
+    return children ? children[children.length - 1] : v.t;
+  }
+
+  // Shifts the current subtree rooted at w+. This is done by increasing
+  // prelim(w+) and mod(w+) by shift.
+  function moveSubtree(wm, wp, shift) {
+    var change = shift / (wp.i - wm.i);
+    wp.c -= change;
+    wp.s += shift;
+    wm.c += change;
+    wp.z += shift;
+    wp.m += shift;
+  }
+
+  // All other shifts, applied to the smaller subtrees between w- and w+, are
+  // performed by this function. To prepare the shifts, we have to adjust
+  // change(w+), shift(w+), and change(w-).
+  function executeShifts(v) {
+    var shift = 0,
+        change = 0,
+        children = v.children,
+        i = children.length,
+        w;
+    while (--i >= 0) {
+      w = children[i];
+      w.z += shift;
+      w.m += shift;
+      shift += w.s + (change += w.c);
+    }
+  }
+
+  // If vi-’s ancestor is a sibling of v, returns vi-’s ancestor. Otherwise,
+  // returns the specified (default) ancestor.
+  function nextAncestor(vim, v, ancestor) {
+    return vim.a.parent === v.parent ? vim.a : ancestor;
+  }
+
+  function TreeNode(node, i) {
+    this._ = node;
+    this.parent = null;
+    this.children = null;
+    this.A = null; // default ancestor
+    this.a = this; // ancestor
+    this.z = 0; // prelim
+    this.m = 0; // mod
+    this.c = 0; // change
+    this.s = 0; // shift
+    this.t = null; // thread
+    this.i = i; // number
+  }
+
+  TreeNode.prototype = Object.create(Node.prototype);
+
+  function treeRoot(root) {
+    var tree = new TreeNode(root, 0),
+        node,
+        nodes = [tree],
+        child,
+        children,
+        i,
+        n;
+
+    while (node = nodes.pop()) {
+      if (children = node._.children) {
+        node.children = new Array(n = children.length);
+        for (i = n - 1; i >= 0; --i) {
+          nodes.push(child = node.children[i] = new TreeNode(children[i], i));
+          child.parent = node;
+        }
+      }
+    }
+
+    (tree.parent = new TreeNode(null, 0)).children = [tree];
+    return tree;
+  }
+
+  // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
+  function tree() {
+    var separation = defaultSeparation,
+        dx = 1,
+        dy = 1,
+        nodeSize = null;
+
+    function tree(root) {
+      var t = treeRoot(root);
+
+      // Compute the layout using Buchheim et al.’s algorithm.
+      t.eachAfter(firstWalk), t.parent.m = -t.z;
+      t.eachBefore(secondWalk);
+
+      // If a fixed node size is specified, scale x and y.
+      if (nodeSize) root.eachBefore(sizeNode);
+
+      // If a fixed tree size is specified, scale x and y based on the extent.
+      // Compute the left-most, right-most, and depth-most nodes for extents.
+      else {
+        var left = root,
+            right = root,
+            bottom = root;
+        root.eachBefore(function(node) {
+          if (node.x < left.x) left = node;
+          if (node.x > right.x) right = node;
+          if (node.depth > bottom.depth) bottom = node;
+        });
+        var s = left === right ? 1 : separation(left, right) / 2,
+            tx = s - left.x,
+            kx = dx / (right.x + s + tx),
+            ky = dy / (bottom.depth || 1);
+        root.eachBefore(function(node) {
+          node.x = (node.x + tx) * kx;
+          node.y = node.depth * ky;
+        });
+      }
+
+      return root;
+    }
+
+    // Computes a preliminary x-coordinate for v. Before that, FIRST WALK is
+    // applied recursively to the children of v, as well as the function
+    // APPORTION. After spacing out the children by calling EXECUTE SHIFTS, the
+    // node v is placed to the midpoint of its outermost children.
+    function firstWalk(v) {
+      var children = v.children,
+          siblings = v.parent.children,
+          w = v.i ? siblings[v.i - 1] : null;
+      if (children) {
+        executeShifts(v);
+        var midpoint = (children[0].z + children[children.length - 1].z) / 2;
+        if (w) {
+          v.z = w.z + separation(v._, w._);
+          v.m = v.z - midpoint;
+        } else {
+          v.z = midpoint;
+        }
+      } else if (w) {
+        v.z = w.z + separation(v._, w._);
+      }
+      v.parent.A = apportion(v, w, v.parent.A || siblings[0]);
+    }
+
+    // Computes all real x-coordinates by summing up the modifiers recursively.
+    function secondWalk(v) {
+      v._.x = v.z + v.parent.m;
+      v.m += v.parent.m;
+    }
+
+    // The core of the algorithm. Here, a new subtree is combined with the
+    // previous subtrees. Threads are used to traverse the inside and outside
+    // contours of the left and right subtree up to the highest common level. The
+    // vertices used for the traversals are vi+, vi-, vo-, and vo+, where the
+    // superscript o means outside and i means inside, the subscript - means left
+    // subtree and + means right subtree. For summing up the modifiers along the
+    // contour, we use respective variables si+, si-, so-, and so+. Whenever two
+    // nodes of the inside contours conflict, we compute the left one of the
+    // greatest uncommon ancestors using the function ANCESTOR and call MOVE
+    // SUBTREE to shift the subtree and prepare the shifts of smaller subtrees.
+    // Finally, we add a new thread (if necessary).
+    function apportion(v, w, ancestor) {
+      if (w) {
+        var vip = v,
+            vop = v,
+            vim = w,
+            vom = vip.parent.children[0],
+            sip = vip.m,
+            sop = vop.m,
+            sim = vim.m,
+            som = vom.m,
+            shift;
+        while (vim = nextRight(vim), vip = nextLeft(vip), vim && vip) {
+          vom = nextLeft(vom);
+          vop = nextRight(vop);
+          vop.a = v;
+          shift = vim.z + sim - vip.z - sip + separation(vim._, vip._);
+          if (shift > 0) {
+            moveSubtree(nextAncestor(vim, v, ancestor), v, shift);
+            sip += shift;
+            sop += shift;
+          }
+          sim += vim.m;
+          sip += vip.m;
+          som += vom.m;
+          sop += vop.m;
+        }
+        if (vim && !nextRight(vop)) {
+          vop.t = vim;
+          vop.m += sim - sop;
+        }
+        if (vip && !nextLeft(vom)) {
+          vom.t = vip;
+          vom.m += sip - som;
+          ancestor = v;
+        }
+      }
+      return ancestor;
+    }
+
+    function sizeNode(node) {
+      node.x *= dx;
+      node.y = node.depth * dy;
+    }
+
+    tree.separation = function(x) {
+      return arguments.length ? (separation = x, tree) : separation;
+    };
+
+    tree.size = function(x) {
+      return arguments.length ? (nodeSize = false, dx = +x[0], dy = +x[1], tree) : (nodeSize ? null : [dx, dy]);
+    };
+
+    tree.nodeSize = function(x) {
+      return arguments.length ? (nodeSize = true, dx = +x[0], dy = +x[1], tree) : (nodeSize ? [dx, dy] : null);
+    };
+
+    return tree;
+  }
 
   var t0$1 = new Date,
       t1$1 = new Date;
@@ -4694,7 +5499,77 @@
       ? parseIsoNative
       : utcParse(isoSpecifier);
 
+  function constant$2(x) {
+    return function constant() {
+      return x;
+    };
+  }
+
   var pi$4 = Math.PI;
+
+  function x(p) {
+    return p[0];
+  }
+
+  function y(p) {
+    return p[1];
+  }
+
+  var slice = Array.prototype.slice;
+
+  function linkSource(d) {
+    return d.source;
+  }
+
+  function linkTarget(d) {
+    return d.target;
+  }
+
+  function link(curve) {
+    var source = linkSource,
+        target = linkTarget,
+        x$1 = x,
+        y$1 = y,
+        context = null;
+
+    function link() {
+      var buffer, argv = slice.call(arguments), s = source.apply(this, argv), t = target.apply(this, argv);
+      if (!context) context = buffer = path();
+      curve(context, +x$1.apply(this, (argv[0] = s, argv)), +y$1.apply(this, argv), +x$1.apply(this, (argv[0] = t, argv)), +y$1.apply(this, argv));
+      if (buffer) return context = null, buffer + "" || null;
+    }
+
+    link.source = function(_) {
+      return arguments.length ? (source = _, link) : source;
+    };
+
+    link.target = function(_) {
+      return arguments.length ? (target = _, link) : target;
+    };
+
+    link.x = function(_) {
+      return arguments.length ? (x$1 = typeof _ === "function" ? _ : constant$2(+_), link) : x$1;
+    };
+
+    link.y = function(_) {
+      return arguments.length ? (y$1 = typeof _ === "function" ? _ : constant$2(+_), link) : y$1;
+    };
+
+    link.context = function(_) {
+      return arguments.length ? ((context = _ == null ? null : _), link) : context;
+    };
+
+    return link;
+  }
+
+  function curveHorizontal(context, x0, y0, x1, y1) {
+    context.moveTo(x0, y0);
+    context.bezierCurveTo(x0 = (x0 + x1) / 2, y0, x0, y1, x1, y1);
+  }
+
+  function linkHorizontal() {
+    return link(curveHorizontal);
+  }
 
   function sign(x) {
     return x < 0 ? -1 : 1;
@@ -4722,7 +5597,7 @@
   // According to https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Representations
   // "you can express cubic Hermite interpolation in terms of cubic Bézier curves
   // with respect to the four values p0, p0 + m0 / 3, p1 - m1 / 3, p1".
-  function point(that, t0, t1) {
+  function point$1(that, t0, t1) {
     var x0 = that._x0,
         y0 = that._y0,
         x1 = that._x1,
@@ -4751,7 +5626,7 @@
     lineEnd: function() {
       switch (this._point) {
         case 2: this._context.lineTo(this._x1, this._y1); break;
-        case 3: point(this, this._t0, slope2(this, this._t0)); break;
+        case 3: point$1(this, this._t0, slope2(this, this._t0)); break;
       }
       if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
       this._line = 1 - this._line;
@@ -4764,8 +5639,8 @@
       switch (this._point) {
         case 0: this._point = 1; this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y); break;
         case 1: this._point = 2; break;
-        case 2: this._point = 3; point(this, slope2(this, t1 = slope3(this, x, y)), t1); break;
-        default: point(this, this._t0, t1 = slope3(this, x, y)); break;
+        case 2: this._point = 3; point$1(this, slope2(this, t1 = slope3(this, x, y)), t1); break;
+        default: point$1(this, this._t0, t1 = slope3(this, x, y)); break;
       }
 
       this._x0 = this._x1, this._x1 = x;
@@ -4793,7 +5668,584 @@
     bezierCurveTo: function(x1, y1, x2, y2, x, y) { this._context.bezierCurveTo(y1, x1, y2, x2, y, x); }
   };
 
+  function constant$3(x) {
+    return function() {
+      return x;
+    };
+  }
+
+  function ZoomEvent(target, type, transform) {
+    this.target = target;
+    this.type = type;
+    this.transform = transform;
+  }
+
+  function Transform(k, x, y) {
+    this.k = k;
+    this.x = x;
+    this.y = y;
+  }
+
+  Transform.prototype = {
+    constructor: Transform,
+    scale: function(k) {
+      return k === 1 ? this : new Transform(this.k * k, this.x, this.y);
+    },
+    translate: function(x, y) {
+      return x === 0 & y === 0 ? this : new Transform(this.k, this.x + this.k * x, this.y + this.k * y);
+    },
+    apply: function(point) {
+      return [point[0] * this.k + this.x, point[1] * this.k + this.y];
+    },
+    applyX: function(x) {
+      return x * this.k + this.x;
+    },
+    applyY: function(y) {
+      return y * this.k + this.y;
+    },
+    invert: function(location) {
+      return [(location[0] - this.x) / this.k, (location[1] - this.y) / this.k];
+    },
+    invertX: function(x) {
+      return (x - this.x) / this.k;
+    },
+    invertY: function(y) {
+      return (y - this.y) / this.k;
+    },
+    rescaleX: function(x) {
+      return x.copy().domain(x.range().map(this.invertX, this).map(x.invert, x));
+    },
+    rescaleY: function(y) {
+      return y.copy().domain(y.range().map(this.invertY, this).map(y.invert, y));
+    },
+    toString: function() {
+      return "translate(" + this.x + "," + this.y + ") scale(" + this.k + ")";
+    }
+  };
+
+  var identity$2 = new Transform(1, 0, 0);
+
+  function nopropagation() {
+    event.stopImmediatePropagation();
+  }
+
+  function noevent$1() {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+
+  // Ignore right-click, since that should open the context menu.
+  function defaultFilter() {
+    return !event.ctrlKey && !event.button;
+  }
+
+  function defaultExtent() {
+    var e = this;
+    if (e instanceof SVGElement) {
+      e = e.ownerSVGElement || e;
+      if (e.hasAttribute("viewBox")) {
+        e = e.viewBox.baseVal;
+        return [[e.x, e.y], [e.x + e.width, e.y + e.height]];
+      }
+      return [[0, 0], [e.width.baseVal.value, e.height.baseVal.value]];
+    }
+    return [[0, 0], [e.clientWidth, e.clientHeight]];
+  }
+
+  function defaultTransform() {
+    return this.__zoom || identity$2;
+  }
+
+  function defaultWheelDelta() {
+    return -event.deltaY * (event.deltaMode === 1 ? 0.05 : event.deltaMode ? 1 : 0.002);
+  }
+
+  function defaultTouchable() {
+    return navigator.maxTouchPoints || ("ontouchstart" in this);
+  }
+
+  function defaultConstrain(transform, extent, translateExtent) {
+    var dx0 = transform.invertX(extent[0][0]) - translateExtent[0][0],
+        dx1 = transform.invertX(extent[1][0]) - translateExtent[1][0],
+        dy0 = transform.invertY(extent[0][1]) - translateExtent[0][1],
+        dy1 = transform.invertY(extent[1][1]) - translateExtent[1][1];
+    return transform.translate(
+      dx1 > dx0 ? (dx0 + dx1) / 2 : Math.min(0, dx0) || Math.max(0, dx1),
+      dy1 > dy0 ? (dy0 + dy1) / 2 : Math.min(0, dy0) || Math.max(0, dy1)
+    );
+  }
+
+  function zoom() {
+    var filter = defaultFilter,
+        extent = defaultExtent,
+        constrain = defaultConstrain,
+        wheelDelta = defaultWheelDelta,
+        touchable = defaultTouchable,
+        scaleExtent = [0, Infinity],
+        translateExtent = [[-Infinity, -Infinity], [Infinity, Infinity]],
+        duration = 250,
+        interpolate = interpolateZoom,
+        listeners = dispatch("start", "zoom", "end"),
+        touchstarting,
+        touchending,
+        touchDelay = 500,
+        wheelDelay = 150,
+        clickDistance2 = 0;
+
+    function zoom(selection) {
+      selection
+          .property("__zoom", defaultTransform)
+          .on("wheel.zoom", wheeled)
+          .on("mousedown.zoom", mousedowned)
+          .on("dblclick.zoom", dblclicked)
+        .filter(touchable)
+          .on("touchstart.zoom", touchstarted)
+          .on("touchmove.zoom", touchmoved)
+          .on("touchend.zoom touchcancel.zoom", touchended)
+          .style("touch-action", "none")
+          .style("-webkit-tap-highlight-color", "rgba(0,0,0,0)");
+    }
+
+    zoom.transform = function(collection, transform, point) {
+      var selection = collection.selection ? collection.selection() : collection;
+      selection.property("__zoom", defaultTransform);
+      if (collection !== selection) {
+        schedule(collection, transform, point);
+      } else {
+        selection.interrupt().each(function() {
+          gesture(this, arguments)
+              .start()
+              .zoom(null, typeof transform === "function" ? transform.apply(this, arguments) : transform)
+              .end();
+        });
+      }
+    };
+
+    zoom.scaleBy = function(selection, k, p) {
+      zoom.scaleTo(selection, function() {
+        var k0 = this.__zoom.k,
+            k1 = typeof k === "function" ? k.apply(this, arguments) : k;
+        return k0 * k1;
+      }, p);
+    };
+
+    zoom.scaleTo = function(selection, k, p) {
+      zoom.transform(selection, function() {
+        var e = extent.apply(this, arguments),
+            t0 = this.__zoom,
+            p0 = p == null ? centroid(e) : typeof p === "function" ? p.apply(this, arguments) : p,
+            p1 = t0.invert(p0),
+            k1 = typeof k === "function" ? k.apply(this, arguments) : k;
+        return constrain(translate(scale(t0, k1), p0, p1), e, translateExtent);
+      }, p);
+    };
+
+    zoom.translateBy = function(selection, x, y) {
+      zoom.transform(selection, function() {
+        return constrain(this.__zoom.translate(
+          typeof x === "function" ? x.apply(this, arguments) : x,
+          typeof y === "function" ? y.apply(this, arguments) : y
+        ), extent.apply(this, arguments), translateExtent);
+      });
+    };
+
+    zoom.translateTo = function(selection, x, y, p) {
+      zoom.transform(selection, function() {
+        var e = extent.apply(this, arguments),
+            t = this.__zoom,
+            p0 = p == null ? centroid(e) : typeof p === "function" ? p.apply(this, arguments) : p;
+        return constrain(identity$2.translate(p0[0], p0[1]).scale(t.k).translate(
+          typeof x === "function" ? -x.apply(this, arguments) : -x,
+          typeof y === "function" ? -y.apply(this, arguments) : -y
+        ), e, translateExtent);
+      }, p);
+    };
+
+    function scale(transform, k) {
+      k = Math.max(scaleExtent[0], Math.min(scaleExtent[1], k));
+      return k === transform.k ? transform : new Transform(k, transform.x, transform.y);
+    }
+
+    function translate(transform, p0, p1) {
+      var x = p0[0] - p1[0] * transform.k, y = p0[1] - p1[1] * transform.k;
+      return x === transform.x && y === transform.y ? transform : new Transform(transform.k, x, y);
+    }
+
+    function centroid(extent) {
+      return [(+extent[0][0] + +extent[1][0]) / 2, (+extent[0][1] + +extent[1][1]) / 2];
+    }
+
+    function schedule(transition, transform, point) {
+      transition
+          .on("start.zoom", function() { gesture(this, arguments).start(); })
+          .on("interrupt.zoom end.zoom", function() { gesture(this, arguments).end(); })
+          .tween("zoom", function() {
+            var that = this,
+                args = arguments,
+                g = gesture(that, args),
+                e = extent.apply(that, args),
+                p = point == null ? centroid(e) : typeof point === "function" ? point.apply(that, args) : point,
+                w = Math.max(e[1][0] - e[0][0], e[1][1] - e[0][1]),
+                a = that.__zoom,
+                b = typeof transform === "function" ? transform.apply(that, args) : transform,
+                i = interpolate(a.invert(p).concat(w / a.k), b.invert(p).concat(w / b.k));
+            return function(t) {
+              if (t === 1) t = b; // Avoid rounding error on end.
+              else { var l = i(t), k = w / l[2]; t = new Transform(k, p[0] - l[0] * k, p[1] - l[1] * k); }
+              g.zoom(null, t);
+            };
+          });
+    }
+
+    function gesture(that, args, clean) {
+      return (!clean && that.__zooming) || new Gesture(that, args);
+    }
+
+    function Gesture(that, args) {
+      this.that = that;
+      this.args = args;
+      this.active = 0;
+      this.extent = extent.apply(that, args);
+      this.taps = 0;
+    }
+
+    Gesture.prototype = {
+      start: function() {
+        if (++this.active === 1) {
+          this.that.__zooming = this;
+          this.emit("start");
+        }
+        return this;
+      },
+      zoom: function(key, transform) {
+        if (this.mouse && key !== "mouse") this.mouse[1] = transform.invert(this.mouse[0]);
+        if (this.touch0 && key !== "touch") this.touch0[1] = transform.invert(this.touch0[0]);
+        if (this.touch1 && key !== "touch") this.touch1[1] = transform.invert(this.touch1[0]);
+        this.that.__zoom = transform;
+        this.emit("zoom");
+        return this;
+      },
+      end: function() {
+        if (--this.active === 0) {
+          delete this.that.__zooming;
+          this.emit("end");
+        }
+        return this;
+      },
+      emit: function(type) {
+        customEvent(new ZoomEvent(zoom, type, this.that.__zoom), listeners.apply, listeners, [type, this.that, this.args]);
+      }
+    };
+
+    function wheeled() {
+      if (!filter.apply(this, arguments)) return;
+      var g = gesture(this, arguments),
+          t = this.__zoom,
+          k = Math.max(scaleExtent[0], Math.min(scaleExtent[1], t.k * Math.pow(2, wheelDelta.apply(this, arguments)))),
+          p = mouse(this);
+
+      // If the mouse is in the same location as before, reuse it.
+      // If there were recent wheel events, reset the wheel idle timeout.
+      if (g.wheel) {
+        if (g.mouse[0][0] !== p[0] || g.mouse[0][1] !== p[1]) {
+          g.mouse[1] = t.invert(g.mouse[0] = p);
+        }
+        clearTimeout(g.wheel);
+      }
+
+      // If this wheel event won’t trigger a transform change, ignore it.
+      else if (t.k === k) return;
+
+      // Otherwise, capture the mouse point and location at the start.
+      else {
+        g.mouse = [p, t.invert(p)];
+        interrupt(this);
+        g.start();
+      }
+
+      noevent$1();
+      g.wheel = setTimeout(wheelidled, wheelDelay);
+      g.zoom("mouse", constrain(translate(scale(t, k), g.mouse[0], g.mouse[1]), g.extent, translateExtent));
+
+      function wheelidled() {
+        g.wheel = null;
+        g.end();
+      }
+    }
+
+    function mousedowned() {
+      if (touchending || !filter.apply(this, arguments)) return;
+      var g = gesture(this, arguments, true),
+          v = select(event.view).on("mousemove.zoom", mousemoved, true).on("mouseup.zoom", mouseupped, true),
+          p = mouse(this),
+          x0 = event.clientX,
+          y0 = event.clientY;
+
+      dragDisable(event.view);
+      nopropagation();
+      g.mouse = [p, this.__zoom.invert(p)];
+      interrupt(this);
+      g.start();
+
+      function mousemoved() {
+        noevent$1();
+        if (!g.moved) {
+          var dx = event.clientX - x0, dy = event.clientY - y0;
+          g.moved = dx * dx + dy * dy > clickDistance2;
+        }
+        g.zoom("mouse", constrain(translate(g.that.__zoom, g.mouse[0] = mouse(g.that), g.mouse[1]), g.extent, translateExtent));
+      }
+
+      function mouseupped() {
+        v.on("mousemove.zoom mouseup.zoom", null);
+        yesdrag(event.view, g.moved);
+        noevent$1();
+        g.end();
+      }
+    }
+
+    function dblclicked() {
+      if (!filter.apply(this, arguments)) return;
+      var t0 = this.__zoom,
+          p0 = mouse(this),
+          p1 = t0.invert(p0),
+          k1 = t0.k * (event.shiftKey ? 0.5 : 2),
+          t1 = constrain(translate(scale(t0, k1), p0, p1), extent.apply(this, arguments), translateExtent);
+
+      noevent$1();
+      if (duration > 0) select(this).transition().duration(duration).call(schedule, t1, p0);
+      else select(this).call(zoom.transform, t1);
+    }
+
+    function touchstarted() {
+      if (!filter.apply(this, arguments)) return;
+      var touches = event.touches,
+          n = touches.length,
+          g = gesture(this, arguments, event.changedTouches.length === n),
+          started, i, t, p;
+
+      nopropagation();
+      for (i = 0; i < n; ++i) {
+        t = touches[i], p = touch(this, touches, t.identifier);
+        p = [p, this.__zoom.invert(p), t.identifier];
+        if (!g.touch0) g.touch0 = p, started = true, g.taps = 1 + !!touchstarting;
+        else if (!g.touch1 && g.touch0[2] !== p[2]) g.touch1 = p, g.taps = 0;
+      }
+
+      if (touchstarting) touchstarting = clearTimeout(touchstarting);
+
+      if (started) {
+        if (g.taps < 2) touchstarting = setTimeout(function() { touchstarting = null; }, touchDelay);
+        interrupt(this);
+        g.start();
+      }
+    }
+
+    function touchmoved() {
+      if (!this.__zooming) return;
+      var g = gesture(this, arguments),
+          touches = event.changedTouches,
+          n = touches.length, i, t, p, l;
+
+      noevent$1();
+      if (touchstarting) touchstarting = clearTimeout(touchstarting);
+      g.taps = 0;
+      for (i = 0; i < n; ++i) {
+        t = touches[i], p = touch(this, touches, t.identifier);
+        if (g.touch0 && g.touch0[2] === t.identifier) g.touch0[0] = p;
+        else if (g.touch1 && g.touch1[2] === t.identifier) g.touch1[0] = p;
+      }
+      t = g.that.__zoom;
+      if (g.touch1) {
+        var p0 = g.touch0[0], l0 = g.touch0[1],
+            p1 = g.touch1[0], l1 = g.touch1[1],
+            dp = (dp = p1[0] - p0[0]) * dp + (dp = p1[1] - p0[1]) * dp,
+            dl = (dl = l1[0] - l0[0]) * dl + (dl = l1[1] - l0[1]) * dl;
+        t = scale(t, Math.sqrt(dp / dl));
+        p = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
+        l = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
+      }
+      else if (g.touch0) p = g.touch0[0], l = g.touch0[1];
+      else return;
+      g.zoom("touch", constrain(translate(t, p, l), g.extent, translateExtent));
+    }
+
+    function touchended() {
+      if (!this.__zooming) return;
+      var g = gesture(this, arguments),
+          touches = event.changedTouches,
+          n = touches.length, i, t;
+
+      nopropagation();
+      if (touchending) clearTimeout(touchending);
+      touchending = setTimeout(function() { touchending = null; }, touchDelay);
+      for (i = 0; i < n; ++i) {
+        t = touches[i];
+        if (g.touch0 && g.touch0[2] === t.identifier) delete g.touch0;
+        else if (g.touch1 && g.touch1[2] === t.identifier) delete g.touch1;
+      }
+      if (g.touch1 && !g.touch0) g.touch0 = g.touch1, delete g.touch1;
+      if (g.touch0) g.touch0[1] = this.__zoom.invert(g.touch0[0]);
+      else {
+        g.end();
+        // If this was a dbltap, reroute to the (optional) dblclick.zoom handler.
+        if (g.taps === 2) {
+          var p = select(this).on("dblclick.zoom");
+          if (p) p.apply(this, arguments);
+        }
+      }
+    }
+
+    zoom.wheelDelta = function(_) {
+      return arguments.length ? (wheelDelta = typeof _ === "function" ? _ : constant$3(+_), zoom) : wheelDelta;
+    };
+
+    zoom.filter = function(_) {
+      return arguments.length ? (filter = typeof _ === "function" ? _ : constant$3(!!_), zoom) : filter;
+    };
+
+    zoom.touchable = function(_) {
+      return arguments.length ? (touchable = typeof _ === "function" ? _ : constant$3(!!_), zoom) : touchable;
+    };
+
+    zoom.extent = function(_) {
+      return arguments.length ? (extent = typeof _ === "function" ? _ : constant$3([[+_[0][0], +_[0][1]], [+_[1][0], +_[1][1]]]), zoom) : extent;
+    };
+
+    zoom.scaleExtent = function(_) {
+      return arguments.length ? (scaleExtent[0] = +_[0], scaleExtent[1] = +_[1], zoom) : [scaleExtent[0], scaleExtent[1]];
+    };
+
+    zoom.translateExtent = function(_) {
+      return arguments.length ? (translateExtent[0][0] = +_[0][0], translateExtent[1][0] = +_[1][0], translateExtent[0][1] = +_[0][1], translateExtent[1][1] = +_[1][1], zoom) : [[translateExtent[0][0], translateExtent[0][1]], [translateExtent[1][0], translateExtent[1][1]]];
+    };
+
+    zoom.constrain = function(_) {
+      return arguments.length ? (constrain = _, zoom) : constrain;
+    };
+
+    zoom.duration = function(_) {
+      return arguments.length ? (duration = +_, zoom) : duration;
+    };
+
+    zoom.interpolate = function(_) {
+      return arguments.length ? (interpolate = _, zoom) : interpolate;
+    };
+
+    zoom.on = function() {
+      var value = listeners.on.apply(listeners, arguments);
+      return value === listeners ? zoom : value;
+    };
+
+    zoom.clickDistance = function(_) {
+      return arguments.length ? (clickDistance2 = (_ = +_) * _, zoom) : Math.sqrt(clickDistance2);
+    };
+
+    return zoom;
+  }
+
+  function chain (selector, server, character) {
+    json("/" + server + "/" + character + "/chain").then(function (data) {
+      const width = 600;
+      const height = 400;
+
+      const tree_data = stratify()
+        .id(function (d) { return d.id; })
+        .parentId(function (d) { return d.patron_id; })
+        (data);
+
+      const tree$1 = tree_data => {
+        const root = hierarchy(tree_data);
+        root.dx = 10;
+        root.dy = width / (root.height + 1);
+        return tree().nodeSize([root.dx, root.dy])(root);
+      };
+
+      const root = tree$1(tree_data);
+      const chart = select(selector);
+
+      select(window)
+        .on("resize", function () {
+          var targetWidth = chart.node().getBoundingClientRect().width;
+          chart.attr("width", targetWidth);
+        });
+
+      const zoom$1 = zoom()
+        .extent([[0, 0], [width, height]])
+        .scaleExtent([0.5, 5])
+        .on("zoom", function () {
+          g.attr("transform", event.transform);
+        });
+
+      const svg = chart.append("svg")
+        .attr("viewBox", [0, 0, width, height])
+        .call(zoom$1);
+
+      const g = svg.append("g")
+        .attr("font-size", 10);
+
+      const link = g.append("g")
+        .attr("fill", "none")
+        .attr("stroke", "#000")
+        .selectAll("path")
+        .data(root.links())
+        .join("path")
+        .attr("d", linkHorizontal()
+          .x(d => d.y)
+          .y(d => d.x));
+
+      const node = g.append("g")
+        .selectAll("g")
+        .data(root.descendants())
+        .join("g")
+        .attr("transform", d => `translate(${d.y},${d.x})`);
+
+      node.append("svg:a")
+        .attr("xlink:href", function (d) {
+          return ["/", server, "/", d.data.data.name].join("");
+        })
+        .append("circle")
+        .attr("fill", "#000")
+        .attr("r", 2.5);
+
+      node.append("svg:a")
+        .attr("xlink:href", function (d) {
+          return ["/", server, "/", d.data.data.name].join("");
+        })
+        .append("text")
+        .attr("dy", "0.31em")
+        .attr("x", d => d.children ? -6 : 6)
+        .attr("text-anchor", d => d.children ? "end" : "start")
+        .attr("style", d => d.data.data.name === character ? "font-weight: bold" : "font-weight: normal")
+        .text(d => d.data.data.name)
+        .clone(true).lower()
+        .attr("stroke", "white");
+
+      // Find and zoom to current character
+      let zoomX = root.x;
+      let zoomY = root.y;
+
+      root.each(d => {
+        if (d.data.data.name === character) {
+          zoomX = d.x;
+          zoomY = d.y;
+        }
+      });
+
+      svg.transition().duration(250).call(
+        zoom$1.transform,
+        identity$2.translate(width / 2, height / 2).scale(1).translate(-zoomY, -zoomX)
+      );
+    });
+  }
+
   console.log("main.js");
 
-}));
+  const chainEl = document.getElementById("chain");
+
+  if (chainEl) {
+    chain(chainEl, chainEl.dataset.server, chainEl.dataset.character);
+  }
+
+}());
 //# sourceMappingURL=bundle.js.map
