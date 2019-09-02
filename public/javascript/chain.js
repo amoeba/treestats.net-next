@@ -69,6 +69,7 @@ const chain = function (selector, server, character, data) {
     .attr("dy", "0.31em")
     .attr("x", d => d.children ? -6 : 6)
     .attr("text-anchor", d => d.children ? "end" : "start")
+    .attr("style", d => d.data.data.name === character ? "font-weight: bold" : "font-weight: normal")
     .text(d => d.data.data.name)
     .clone(true).lower()
     .attr("stroke", "white");
