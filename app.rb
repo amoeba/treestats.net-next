@@ -13,6 +13,7 @@ require_relative "models/title.rb"
 require_relative "models/property.rb"
 
 # Helpers
+require_relative "helpers/app_helper.rb"
 require_relative "helpers/rankings_helper.rb"
 require_relative "helpers/query_helper.rb"
 require_relative "helpers/enum_helper.rb"
@@ -25,11 +26,13 @@ end
 get "/search" do
   # Sanitize input first
   @query = params[:query].gsub(/[^a-zA-Z' ]/, "")
-  @page = params[:page].nil? ? 1 : params[:page].to_i
-  @page = 1 if @page <= 0
 
+  @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
+
+  @prev = { :query => @query, :page => @page - 1 }
+  @next = { :query => @query, :page => @page + 1 }
 
   @characters = Character
     .where(Sequel.lit("name LIKE ?", "%#{@query}%"))
@@ -46,8 +49,16 @@ get "/servers/?" do
 end
 
 get "/characters/?" do
+  @page = get_page(params)
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @prev = { :page => @page - 1 }
+  @next = { :page => @page + 1 }
+
   @characters = Character
-    .limit(25)
+    .limit(limit)
+    .offset(offset)
     .select(:server, :name)
     .order(:updated_at)
     .reverse

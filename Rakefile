@@ -1,4 +1,12 @@
 require "date"
+require 'bundler/setup'
+Bundler.require(:default)
+
+task default: :test
+
+task :test do
+  Dir['./test/*_test.rb'].each { |f| load f }
+end
 
 namespace :db do
   desc "Run migrations"

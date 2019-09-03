@@ -4,16 +4,8 @@
   Query is: '<%= @query %>'
 </div>
 
-<div>
-  <% if @page > 1 %>
-  <a href="/search?query=<%= @query %>&page=<%= @page - 1 %>">Prev</a>
-  <% else %>
-  Prev
-  <% end %>
+<%= erb :_page_controls %>
 
-  | Page <%= @page %> |
-  <a href="/search?query=<%= @query %>&page=<%= @page + 1 %>">Next</a>
-</div>
 <div>
   <% if @characters.count == 0 %>
   No characters to show.
@@ -25,12 +17,5 @@
   </ul>
   <% end %>
 </div>
-<div>
-  <% if @page > 1 %>
-  <a href="/search?query=<%= @query %>&page=<%= @page - 1 %>">Prev</a>
-  <% else %>
-  Prev
-  <% end %>
-  | Page <%= @page %> |
-  <a href="/search?query=<%= @query %>&page=<%= @page + 1 %>">Next</a>
-</div>
+
+<%= erb :_page_controls %>

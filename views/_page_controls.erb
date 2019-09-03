@@ -1,0 +1,10 @@
+<div>
+  <% if @page > 1 %>
+  <a href="<%= to_params(@prev) %>">Prev</a>
+  <% else %>
+  Prev
+  <% end %>
+
+  | Page <%= @page %> |
+  <a href="<%= to_params(@next) %>">Next</a>
+</div>
