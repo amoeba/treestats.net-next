@@ -71,7 +71,18 @@ get "/rankings/?" do
 end
 
 get "/rankings/:ranking" do
+  @page = get_page(params)
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @prev = { :page => @page - 1 }
+  @next = { :page => @page + 1 }
+
   @ranking = params[:ranking]
+  params[:page] = @page
+  params[:offset] = offset
+  params[:limit] = limit
+
   @characters = get_ranking(params)
 
   if @characters.nil?

@@ -3,14 +3,18 @@
 module Sinatra
   module RankingsHelper
     def get_ranking(params)
-      Rankings.send(params[:ranking])
+      Rankings.send(params[:ranking], params)
     end
 
     class Rankings
-      def self.level
+      def self.level(*args)
+        params = args[0]
+
         Character
-          .order(Sequel.desc(:level))
-          .limit(25)
+          .order(params[:ranking])
+          .reverse
+          .limit(params[:limit])
+          .offset(params[:offset])
       end
     end
   end

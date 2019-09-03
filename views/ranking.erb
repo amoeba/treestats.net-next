@@ -2,8 +2,12 @@
 
 Ranking is <%= @ranking %>
 
+<%= erb :_page_controls %>
+
 <ul>
 <% @characters.each do |character| %>
   <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a> => <%= character[@ranking.to_sym] %></li>
 <% end %>
 </ul>
+
+<%= erb :_page_controls %>
