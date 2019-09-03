@@ -1,6 +1,6 @@
 require "./test/test_helper"
 
-class AppHelperTest < MiniTest::Unit::TestCase
+class AppHelperTest < MiniTest::Test
   include Sinatra::AppHelper
 
   def test_get_page
