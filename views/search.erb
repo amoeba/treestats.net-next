@@ -2,6 +2,15 @@
 
 Query is: '<%= @query %>'
 
+<% if @page > 1 %>
+<a href="/search?query=<%= @query %>&page=<%= @page - 1 %>">Prev</a>
+<% else %>
+Prev
+<% end %>
+
+| Page <%= @page %> |
+<a href="/search?query=<%= @query %>&page=<%= @page + 1 %>">Next</a>
+
 <% if @characters.count == 0 %>
 No characters to show.
 <% else %>
@@ -11,3 +20,11 @@ No characters to show.
 <% end%>
 </ul>
 <% end %>
+
+<% if @page > 1 %>
+<a href="/search?query=<%= @query %>&page=<%= @page - 1 %>">Prev</a>
+<% else %>
+Prev
+<% end %>
+| Page <%= @page %> |
+<a href="/search?query=<%= @query %>&page=<%= @page + 1 %>">Next</a>

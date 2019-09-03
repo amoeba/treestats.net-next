@@ -27,7 +27,13 @@ end
 get "/search" do
   # Sanitize input first
   @query = params[:query].gsub(/[^a-zA-Z' ]/, "")
-  @characters = Character.where(Sequel.lit("name LIKE ?", "%#{@query}%"))
+  @page = params[:page].nil? ? 1 : params[:page].to_i
+  @page = 1 if @page <= 0
+
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @characters = Character.where(Sequel.lit("name LIKE ?", "%#{@query}%")).limit(limit).offset(offset).select(:name, :server).order(:name)
 
   erb :search
 end
