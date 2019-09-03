@@ -1,19 +1,18 @@
 module ImportHelper
   RACE_ID = {
-    "Aluvian" => 1,
-    "Gharundim" => 2,
-    "Gharu'ndim" => 2,
-    "Sho" => 3,
-    "Viamontian" => 4,
-    "Shadowbound" => 5,
-    "Gearknight" => 6,
-    "Tumerok" => 7,
-    "Lugian" => 8,
-    "Empyrean" => 9,
-    "Penumbraen" => 10,
-    "Undead" => 11,
-    "Olthoi" => 12,
-    "OlthoiAcid"  => 13
+    "Aluvian" => 0,
+    "Gharu'ndim" => 1,
+    "Sho" => 2,
+    "Viamontian" => 3,
+    "Shadowbound" => 4,
+    "Gearknight" => 5,
+    "Tumerok" => 6,
+    "Lugian" => 7,
+    "Empyrean" => 8,
+    "Penumbraen" => 9,
+    "Undead" => 10,
+    "Olthoi" => 11,
+    "OlthoiAcid"  => 12
   }
 
   def self.race_id(name)
@@ -21,8 +20,8 @@ module ImportHelper
   end
 
   GENDER_ID = {
-    "Male" => 1,
-    "Female" => 2
+    "Male" => 0,
+    "Female" => 1
   }
 
   def self.gender_id(name)

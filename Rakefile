@@ -48,38 +48,75 @@ namespace :db do
         data = JSON.parse(contents)
         puts "#{data["server"]}/#{data["name"]}"
 
-        char = Character.new(
-          server: data["server"],
-          name: data["name"],
-          race_id: ImportHelper::race_id(data["race"]),
-          gender_id: ImportHelper::gender_id(data["gender"]),
-          level: data["level"],
-          rank: data["rank"],
-          allegiance_name: data["allegiance_name"],
-          deaths: data["deaths"],
-          followers: data["followers"],
-          strength_creation: data["attribs"]["strength"]["creation"],
-          strength_base: data["attribs"]["strength"]["base"],
-          endurance_creation: data["attribs"]["endurance"]["creation"],
-          endurance_base: data["attribs"]["endurance"]["base"],
-          coordination_creation: data["attribs"]["coordination"]["creation"],
-          coordination_base: data["attribs"]["coordination"]["base"],
-          quickness_creation: data["attribs"]["quickness"]["creation"],
-          quickness_base: data["attribs"]["quickness"]["base"],
-          focus_creation: data["attribs"]["focus"]["creation"],
-          focus_base: data["attribs"]["focus"]["base"],
-          self_creation: data["attribs"]["self"]["creation"],
-          self_base: data["attribs"]["self"]["base"],
-          health_base: data["vitals"]["health"]["base"],
-          stamina_base: data["vitals"]["stamina"]["base"],
-          mana_base: data["vitals"]["mana"]["base"],
-          current_title: data["current_title"],
-          total_xp: data["total_xp"],
-          unassigned_xp: data["unassigned_xp"],
-          skill_credits: data["skill_credits"],
-          luminance_total: data["luminance_total"],
-          luminance_earned: data["rank"],
-        ).save
+        char = Character.update_or_create(server: data["server"], name: data["name"]) do |char|
+          # Update monarch, patron before
+          monarch = nil
+
+          if data["monarch"]
+            monarch = Character.update_or_create(server: data["server"], name: data["monarch"]["name"]) do |m|
+              m.rank = data["monarch"]["rank"]
+              m.race_id = data["monarch"]["race"].to_i - 1
+              m.gender_id = data["monarch"]["gender"].to_i - 1
+              m.followers = data["monarch"]["followers"]
+            end
+          end
+
+          patron = nil
+
+          if data["patron"]
+            patron = Character.update_or_create(server: data["server"], name: data["patron"]["name"]) do |p|
+              p.rank = data["patron"]["rank"]
+              p.race_id = data["patron"]["race"].to_i - 1
+              p.gender_id = data["patron"]["gender"].to_i - 1
+              p.followers = data["patron"]["followers"]
+            end
+          end
+
+          char.server = data["server"]
+          char.name = data["name"]
+          char.race_id = ImportHelper::race_id(data["race"])
+          char.gender_id = ImportHelper::gender_id(data["gender"])
+          char.level = data["level"]
+          char.rank = data["rank"]
+          char.allegiance_name = data["allegiance_name"]
+          char.deaths = data["deaths"]
+          char.birth = data["birth"] # TODO: Handle right
+          char.created_at = data["created_at"]
+          char.updated_at = data["updated_at"]
+          char.followers = data["followers"]
+          char.strength_creation = data["attribs"]["strength"]["creation"]
+          char.strength_base = data["attribs"]["strength"]["base"]
+          char.endurance_creation = data["attribs"]["endurance"]["creation"]
+          char.endurance_base = data["attribs"]["endurance"]["base"]
+          char.coordination_creation = data["attribs"]["coordination"]["creation"]
+          char.coordination_base = data["attribs"]["coordination"]["base"]
+          char.quickness_creation = data["attribs"]["quickness"]["creation"]
+          char.quickness_base = data["attribs"]["quickness"]["base"]
+          char.focus_creation = data["attribs"]["focus"]["creation"]
+          char.focus_base = data["attribs"]["focus"]["base"]
+          char.self_creation = data["attribs"]["self"]["creation"]
+          char.self_base = data["attribs"]["self"]["base"]
+          char.health_base = data["vitals"]["health"]["base"]
+          char.stamina_base = data["vitals"]["stamina"]["base"]
+          char.mana_base = data["vitals"]["mana"]["base"]
+          char.current_title = data["current_title"]
+          char.total_xp = data["total_xp"]
+          char.unassigned_xp = data["unassigned_xp"]
+          char.skill_credits = data["skill_credits"]
+          char.luminance_total = data["luminance_total"]
+          char.luminance_earned = data["rank"]
+
+          if monarch
+            puts "Setting #{data["name"]}'s monarch to #{monarch.name}."
+            char.monarch_id = monarch.id
+          end
+
+          if patron
+            puts "Setting #{data["name"]}'s patron to #{patron.name}."
+            char.patron_id = patron.id
+          end
+      end
+
 
         data["skills"].each do |k,v|
           Skill.new(

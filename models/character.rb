@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Character < Sequel::Model
+  plugin :update_or_create
+
   one_to_many :skills
   one_to_many :titles
   one_to_many :properties
