@@ -19,8 +19,6 @@ require_relative "helpers/enum_helper.rb"
 
 # Routes
 get "/" do
-  @characters = Character.limit(10)
-
   erb :index
 end
 
