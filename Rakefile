@@ -2,6 +2,8 @@ require "date"
 require 'bundler/setup'
 Bundler.require(:default)
 
+require "./etc/import_helper"
+
 task default: :test
 
 task :test do
@@ -23,6 +25,87 @@ namespace :db do
 
   task :drop do
     `rm db/treestats.db`
+  end
+
+  task :import, [:path] do |t, args|
+    require "json"
+    files = Dir.glob("#{args[:path]}/*.json")
+
+    if files.length <= 0
+      raise("No files found at path #{args[:path]}.")
+    end
+
+    require "sequel"
+
+    Sequel.connect("sqlite://db/treestats.db") do |db|
+      require_relative "models/character"
+      require_relative "models/skill"
+      require_relative "models/title"
+      require_relative "models/property"
+
+      files.each do |file|
+        contents = File.read(file)
+        data = JSON.parse(contents)
+        puts "#{data["server"]}/#{data["name"]}"
+
+        char = Character.new(
+          server: data["server"],
+          name: data["name"],
+          race_id: ImportHelper::race_id(data["race"]),
+          gender_id: ImportHelper::gender_id(data["gender"]),
+          level: data["level"],
+          rank: data["rank"],
+          allegiance_name: data["allegiance_name"],
+          deaths: data["deaths"],
+          followers: data["followers"],
+          strength_creation: data["attribs"]["strength"]["creation"],
+          strength_base: data["attribs"]["strength"]["base"],
+          endurance_creation: data["attribs"]["endurance"]["creation"],
+          endurance_base: data["attribs"]["endurance"]["base"],
+          coordination_creation: data["attribs"]["coordination"]["creation"],
+          coordination_base: data["attribs"]["coordination"]["base"],
+          quickness_creation: data["attribs"]["quickness"]["creation"],
+          quickness_base: data["attribs"]["quickness"]["base"],
+          focus_creation: data["attribs"]["focus"]["creation"],
+          focus_base: data["attribs"]["focus"]["base"],
+          self_creation: data["attribs"]["self"]["creation"],
+          self_base: data["attribs"]["self"]["base"],
+          health_base: data["vitals"]["health"]["base"],
+          stamina_base: data["vitals"]["stamina"]["base"],
+          mana_base: data["vitals"]["mana"]["base"],
+          current_title: data["current_title"],
+          total_xp: data["total_xp"],
+          unassigned_xp: data["unassigned_xp"],
+          skill_credits: data["skill_credits"],
+          luminance_total: data["luminance_total"],
+          luminance_earned: data["rank"],
+        ).save
+
+        data["skills"].each do |k,v|
+          Skill.new(
+            character_id: char.id,
+            skill_id: ImportHelper::skill_id(v["name"]),
+            training_id: ImportHelper::training_id(v["training"]),
+            base: v["base"]
+          ).save
+        end
+
+        data["titles"].each do |t|
+          Title.new(
+            character_id: char.id,
+            title_id: t
+          ).save
+        end
+
+        data["properties"].each do |k,v|
+          Property.new(
+            character_id: char.id,
+            property_id: k.to_i,
+            value: v.to_i
+          ).save
+        end
+      end
+    end
   end
 
   task :seed do
