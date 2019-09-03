@@ -50,6 +50,7 @@ get "/characters/?" do
     .limit(25)
     .select(:server, :name)
     .order(:updated_at)
+    .reverse
 
   erb :characters
 end
@@ -75,6 +76,7 @@ get "/:server" do
     .filter(server: params[:server])
     .select(:server, :name)
     .order(:updated_at)
+    .reverse
     .limit(25)
 
   erb :server
