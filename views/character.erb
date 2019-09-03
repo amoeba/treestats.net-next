@@ -1,16 +1,12 @@
-<h2>Character</h2>
-
-<%= @character[:name] %>
-
-<ul>
-  <li>Created: <%= @character[:created_at] %></li>
-  <li>Updated: <%= @character[:updated_at] %></li>
-  <li>Gender: <%= gender(@character[:gender_id]) %></li>
-  <li>Race: <%= race(@character[:race_id]) %></li>
-  <li>Rank: <%= rank_name(@character[:race_id], @character[:gender_id], @character[:rank]) %> (<%= @character[:rank] %>)</li>
-</ul>
+<h2><%= @character[:name] %> (<%= @character[:server] %>)</h2>
 
 <%= erb :_full_character if @character.strength_base %>
 
-<h3>Chain</h3>
-<div id="chain" data-server=<%= @character.server %> data-character=<%= @character.name %>></div>
+<div class="tabcontainer">
+  <div class="tabbar">
+    <div class="tab active">Chain</div>
+  </div>
+  <div class="box active">
+    <div id="chain" data-server=<%= @character.server %> data-character=<%= @character.name %>></div>
+  </div>
+</div>
