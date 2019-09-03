@@ -31,7 +31,12 @@ get "/search" do
   limit = 25
   offset = (@page - 1) * limit
 
-  @characters = Character.where(Sequel.lit("name LIKE ?", "%#{@query}%")).limit(limit).offset(offset).select(:name, :server).order(:name)
+  @characters = Character
+    .where(Sequel.lit("name LIKE ?", "%#{@query}%"))
+    .limit(limit)
+    .offset(offset)
+    .select(:name, :server)
+    .order(:name)
 
   erb :search
 end
@@ -41,7 +46,10 @@ get "/servers/?" do
 end
 
 get "/characters/?" do
-  @characters = Character.limit(10)
+  @characters = Character
+    .limit(25)
+    .select(:server, :name)
+    .order(:updated_at)
 
   erb :characters
 end
@@ -52,7 +60,7 @@ end
 
 get "/rankings/:ranking" do
   @ranking = params[:ranking]
-  @characters = get_ranking(params[:ranking])
+  @characters = get_ranking(params)
 
   if @characters.nil?
     not_found
@@ -65,7 +73,9 @@ get "/:server" do
   @server = params[:server]
   @characters = Character
     .filter(server: params[:server])
-    .limit(10)
+    .select(:server, :name)
+    .order(:updated_at)
+    .limit(25)
 
   erb :server
 end
@@ -78,7 +88,9 @@ get "/:server/:name/chain" do
   name = params[:name].gsub(/[^a-zA-Z' ]/, "")
   server = params[:server]
 
-  character = Character.filter(server: server, name: name).first
+  character = Character
+    .filter(server: server, name: name)
+    .first
 
   if character.nil?
     message = {

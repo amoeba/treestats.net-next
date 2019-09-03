@@ -2,13 +2,15 @@
 
 module Sinatra
   module RankingsHelper
-    def get_ranking(ranking)
-      Rankings.send(ranking)
+    def get_ranking(params)
+      Rankings.send(params[:ranking])
     end
 
     class Rankings
       def self.level
-        Character.order(Sequel.desc(:level)).limit(10)
+        Character
+          .order(Sequel.desc(:level))
+          .limit(25)
       end
     end
   end
