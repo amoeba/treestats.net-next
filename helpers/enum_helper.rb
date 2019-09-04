@@ -36,15 +36,14 @@ module Sinatra
       "Gharu'ndim",
       "Sho",
       "Viamontian",
-      "Shadowbound",
+      "Umbraen",
       "Gearknight",
-      "Tumerok",
+      "Aun Tumerok",
       "Lugian",
       "Empyrean",
       "Penumbraen",
       "Undead",
-      "Olthoi",
-      "OlthoiAcid",
+      "Olthoi"
     ]
 
     @@ranks = [
