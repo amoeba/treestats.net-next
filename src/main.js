@@ -23,7 +23,6 @@ for(var i = 0; i < tabcontainers.length; i++) {
           tabs[k].addEventListener("click", function() {
             activate(this);
           });
-
         }
       }
     }
