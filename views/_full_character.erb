@@ -1,98 +1,100 @@
-<div class="tabcontainer">
-  <div class="tabbar">
-    <div class="tab active">Character</div>
-    <div class="tab inactive">Skills</div>
-    <div class="tab inactive">Titles</div>
+<div class="panes">
+  <div class="tabcontainer">
+    <div class="tabbar">
+      <div class="tab active">Character</div>
+      <div class="tab inactive">Skills</div>
+      <div class="tab inactive">Titles</div>
+    </div>
+    <div class="box active">
+      <ul>
+        <li>Created: <%= @character[:created_at] %></li>
+        <li>Updated: <%= @character[:updated_at] %></li>
+        <li>Gender: <%= gender(@character[:gender_id]) %></li>
+        <li>Race: <%= race(@character[:race_id]) %></li>
+        <li>Rank: <%= rank_name(@character[:race_id], @character[:gender_id], @character[:rank]) %> (<%= @character[:rank] %>)</li>
+      </ul>
+      <ul>
+        <li>Strength: <%= @character[:strength_creation] %> | <%= @character[:strength_base] %></li>
+        <li>Endurance: <%= @character[:endurance_creation] %> | <%= @character[:endurance_base] %></li>
+        <li>Coordination: <%= @character[:coordination_creation] %> | <%= @character[:coordination_base] %></li>
+        <li>Quickness: <%= @character[:quickness_creation] %> | <%= @character[:quickness_base] %></li>
+        <li>Focus: <%= @character[:focus_creation] %> | <%= @character[:focus_base] %></li>
+        <li>Self: <%= @character[:self_creation] %> | <%= @character[:self_base] %></li>
+      </ul>
+      <ul>
+        <li>Health: <%= @character[:health_creation] %> | <%= @character[:health_base] %></li>
+        <li>Stamina: <%= @character[:stamina_creation] %> | <%= @character[:stamina_base] %></li>
+        <li>Mana: <%= @character[:mana_creation] %> | <%= @character[:mana_base] %></li>
+      </ul>
+        </div>
+        <div class="box inactive">
+        <h4>Specialized</h4>
+      <ul>
+        <% @character.skills.filter { |s| s.training_id == 3 }.each do |skill| %>
+        <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
+        <% end %>
+      </ul>
+      <h4>Trained</h4>
+      <ul>
+        <% @character.skills.filter { |s| s.training_id == 2 }.each do |skill| %>
+        <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
+        <% end %>
+      </ul>
+      <h4>Untrained</h4>
+      <ul>
+        <% @character.skills.filter { |s| s.training_id == 1 }.each do |skill| %>
+        <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
+        <% end %>
+      </ul>
+      <h4>Unusable</h4>
+      <ul>
+        <% @character.skills.filter { |s| s.training_id == 0 }.each do |skill| %>
+        <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="box inactive">
+      <ul>
+        <% @character.titles.each do |title| %>
+        <li><%= title(title.id) %></li>
+        <% end %>
+      </ul>
+    </div>
   </div>
-  <div class="box active">
-    <ul>
-      <li>Created: <%= @character[:created_at] %></li>
-      <li>Updated: <%= @character[:updated_at] %></li>
-      <li>Gender: <%= gender(@character[:gender_id]) %></li>
-      <li>Race: <%= race(@character[:race_id]) %></li>
-      <li>Rank: <%= rank_name(@character[:race_id], @character[:gender_id], @character[:rank]) %> (<%= @character[:rank] %>)</li>
-    </ul>
-    <ul>
-      <li>Strength: <%= @character[:strength_creation] %> | <%= @character[:strength_base] %></li>
-      <li>Endurance: <%= @character[:endurance_creation] %> | <%= @character[:endurance_base] %></li>
-      <li>Coordination: <%= @character[:coordination_creation] %> | <%= @character[:coordination_base] %></li>
-      <li>Quickness: <%= @character[:quickness_creation] %> | <%= @character[:quickness_base] %></li>
-      <li>Focus: <%= @character[:focus_creation] %> | <%= @character[:focus_base] %></li>
-      <li>Self: <%= @character[:self_creation] %> | <%= @character[:self_base] %></li>
-    </ul>
-    <ul>
-      <li>Health: <%= @character[:health_creation] %> | <%= @character[:health_base] %></li>
-      <li>Stamina: <%= @character[:stamina_creation] %> | <%= @character[:stamina_base] %></li>
-      <li>Mana: <%= @character[:mana_creation] %> | <%= @character[:mana_base] %></li>
-    </ul>
-      </div>
-      <div class="box inactive">
-      <h4>Specialized</h4>
-    <ul>
-      <% @character.skills.filter { |s| s.training_id == 3 }.each do |skill| %>
-      <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
-      <% end %>
-    </ul>
-    <h4>Trained</h4>
-    <ul>
-      <% @character.skills.filter { |s| s.training_id == 2 }.each do |skill| %>
-      <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
-      <% end %>
-    </ul>
-    <h4>Untrained</h4>
-    <ul>
-      <% @character.skills.filter { |s| s.training_id == 1 }.each do |skill| %>
-      <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
-      <% end %>
-    </ul>
-    <h4>Unusable</h4>
-    <ul>
-      <% @character.skills.filter { |s| s.training_id == 0 }.each do |skill| %>
-      <li><%= skill(skill[:skill_id]) %> | <%= training(skill[:training_id]) %> | <%= skill[:base] %></li>
-      <% end %>
-    </ul>
-  </div>
-  <div class="box inactive">
-    <ul>
-      <% @character.titles.each do |title| %>
-      <li><%= title(title.id) %></li>
-      <% end %>
-    </ul>
-  </div>
-</div>
 
-<div class="tabcontainer">
-  <div class="tabbar">
-    <div class="tab active">Allegiance</div>
-    <div class="tab inactive">Properties</div>
-  </div>
-  <div class="box active">
-    <% if @character.monarch %>
-    Monarch: <a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a>
-    <% else %>
-    Monarch: No Monarch
-    <% end%>
-    <br />
+  <div class="tabcontainer">
+    <div class="tabbar">
+      <div class="tab active">Allegiance</div>
+      <div class="tab inactive">Properties</div>
+    </div>
+    <div class="box active">
+      <% if @character.monarch %>
+      Monarch: <a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a>
+      <% else %>
+      Monarch: No Monarch
+      <% end%>
+      <br />
 
-    <% if @character.patron %>
-    Patron: <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= @character.patron[:server] %>/<%= @character.patron[:name] %></a>
-    <% else %>
-    Patron: No Patron
-    <% end%>
-    <br />
+      <% if @character.patron %>
+      Patron: <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= @character.patron[:server] %>/<%= @character.patron[:name] %></a>
+      <% else %>
+      Patron: No Patron
+      <% end%>
+      <br />
 
-    <h4>Vassals</h4>
-    <ul>
-      <% @character.vassals.each do |vassal| %>
-      <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= vassal[:server] %>/<%= vassal[:name] %></a></li>
-      <% end %>
-    </ul>
-  </div>
-  <div class="box inactive">
-    <ul>
-      <% @character.properties.each do |property| %>
-      <li><%= property[:property_id] %>: <%= property[:value] %> </li>
-      <% end %>
-    </ul>
+      <h4>Vassals</h4>
+      <ul>
+        <% @character.vassals.each do |vassal| %>
+        <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= vassal[:server] %>/<%= vassal[:name] %></a></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="box inactive">
+      <ul>
+        <% @character.properties.each do |property| %>
+        <li><%= property[:property_id] %>: <%= property[:value] %> </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
