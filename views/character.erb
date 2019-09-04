@@ -2,4 +2,6 @@
 
 <%= erb :_full_character if @character.strength_base %>
 
-<div id="chain" data-server="<%= @character.server %>" data-character="<%= @character.name %>"></div>
+<div id="chain" data-server="<%= @character.server %>" data-character="<%= @character.name %>">
+  <div class="message">Loading...</div>
+</div>

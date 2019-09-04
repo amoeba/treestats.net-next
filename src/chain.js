@@ -1,9 +1,9 @@
 import * as d3 from "d3";
 
-export default function (selector, server, character) {
-  d3.json("/" + server + "/" + character + "/chain").then(function (data) {
-    const width = 600;
-    const height = 400;
+export default function (selector, server, character, options = {}) {
+  d3.json("/" + server + "/" + character + "/chain").then(data => {
+    const width = options.width || 600;
+    const height = options.height || 400;
 
     const tree_data = d3.stratify()
       .id(function (d) { return d.id; })
@@ -19,6 +19,13 @@ export default function (selector, server, character) {
 
     const root = tree(tree_data);
     const chart = d3.select(selector);
+
+    // Remove "Loading..." text. A tad hacky?
+    try {
+      d3.select(selector)["_groups"][0][0].innerHTML = "";
+    } catch (error) {
+      // Nothing
+    }
 
     d3.select(window)
       .on("resize", function () {
@@ -92,5 +99,11 @@ export default function (selector, server, character) {
       zoom.transform,
       d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(-zoomY, -zoomX)
     );
+  }).catch(error => {
+    try {
+      d3.select(selector)["_groups"][0][0].innerHTML = "<div class=\"message\">" + error + "</div>";
+    } catch (error) {
+      // Nothing
+    }
   });
 }
