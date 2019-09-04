@@ -4,27 +4,25 @@ body {
   padding: 0.5rem;
 }
 
-header {
+nav {
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-header h1 {
-  margin: 0 0 0.5rem 0;
+nav h1 {
+  margin: 0;
   padding: 0;
 }
 
-header a,
-header a:visited {
+nav a,
+nav a:visited {
   color: blue;
   text-decoration: none;
 }
 
-nav {
-  margin-bottom: 0.5rem;
-}
-
 nav ul {
-  display: flex;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -32,7 +30,8 @@ nav ul {
 
 nav li {
   display: inline-block;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
 }
 
 nav li:last-child {
