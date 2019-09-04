@@ -13,13 +13,23 @@ header a:visited {
 }
 
 nav {
-  display: flex;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-nav a {
+nav ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
   display: inline-block;
-  margin: 0 1rem;
+  margin-right: 1rem;
+}
+
+nav li:last-child {
+  margin-right: 0;
 }
 
 /* General styles */
