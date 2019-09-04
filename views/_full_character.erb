@@ -69,14 +69,14 @@
     </div>
     <div class="box active">
       <% if @character.monarch %>
-      Monarch: <a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= @character.monarch[:server] %>/<%= @character.monarch[:name] %></a>
+      Monarch: <a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= rank_name(@character.monarch[:race_id], @character.monarch[:gender_id], @character.monarch[:rank]) %> <%= @character.monarch[:name] %></a>
       <% else %>
       Monarch: No Monarch
       <% end%>
       <br />
 
       <% if @character.patron %>
-      Patron: <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= @character.patron[:server] %>/<%= @character.patron[:name] %></a>
+      Patron: <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= rank_name(@character.patron[:race_id], @character.patron[:gender_id], @character.patron[:rank]) %> <%= @character.patron[:name] %></a>
       <% else %>
       Patron: No Patron
       <% end%>
@@ -85,7 +85,7 @@
       <h4>Vassals</h4>
       <ul>
         <% @character.vassals.each do |vassal| %>
-        <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= vassal[:server] %>/<%= vassal[:name] %></a></li>
+        <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= rank_name(vassal[:race_id], vassal[:gender_id], vassal[:rank]) %> <%= vassal[:name] %></a></li>
         <% end %>
       </ul>
     </div>
