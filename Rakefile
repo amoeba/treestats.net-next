@@ -44,102 +44,119 @@ namespace :db do
       require_relative "models/property"
 
       files.each do |file|
+        puts file
         contents = File.read(file)
-        data = JSON.parse(contents)
-        puts "#{data["server"]}/#{data["name"]}"
 
-        char = Character.update_or_create(server: data["server"], name: data["name"]) do |char|
-          # Update monarch, patron before
-          monarch = nil
+        contents.split("\n").each do |line|
+          data = JSON.parse(line)
+          puts data
+          puts "#{data["s"]}/#{data["n"]}"
 
-          if data["monarch"]
-            monarch = Character.update_or_create(server: data["server"], name: data["monarch"]["name"]) do |m|
-              m.rank = data["monarch"]["rank"]
-              m.race_id = data["monarch"]["race"].to_i - 1
-              m.gender_id = data["monarch"]["gender"].to_i - 1
-              m.followers = data["monarch"]["followers"]
+          char = Character.update_or_create(server: data["s"], name: data["n"]) do |char|
+            # Update monarch, patron before
+            monarch = nil
+
+            if data["m"]
+              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) do |m|
+                m.rank = data["m"]["rank"]
+                m.race_id = ImportHelper::race_id(data["m"]["race"])
+                m.gender_id = ImportHelper::gender_id(data["m"]["gender"])
+                m.followers = data["m"]["followers"]
+              end
+            end
+
+            patron = nil
+
+            if data["p"]
+              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) do |p|
+                p.rank = data["p"]["rank"]
+                p.race_id = ImportHelper::race_id(data["p"]["race"])
+                p.gender_id = ImportHelper::gender_id(data["p"]["gender"])
+                p.followers = data["p"]["followers"]
+              end
+            end
+
+            char.server = data["s"]
+            char.name = data["n"]
+            char.race_id = ImportHelper::race_id(data["r"])
+            char.gender_id = ImportHelper::gender_id(data["g"])
+            char.rank = data["rn"]
+            char.allegiance_name = data["an"]
+            char.created_at = data["c_at"]
+            char.updated_at = data["u_at"]
+
+            if data["a"]
+              char.level = data["l"]
+              char.deaths = data["d"]
+              char.birth = data["b"] # TODO: Handle right
+              char.followers = data["f"]
+              char.strength_creation = data["a"]["strength"]["creation"]
+              char.strength_base = data["a"]["strength"]["base"]
+              char.endurance_creation = data["a"]["endurance"]["creation"]
+              char.endurance_base = data["a"]["endurance"]["base"]
+              char.coordination_creation = data["a"]["coordination"]["creation"]
+              char.coordination_base = data["a"]["coordination"]["base"]
+              char.quickness_creation = data["a"]["quickness"]["creation"]
+              char.quickness_base = data["a"]["quickness"]["base"]
+              char.focus_creation = data["a"]["focus"]["creation"]
+              char.focus_base = data["a"]["focus"]["base"]
+              char.self_creation = data["a"]["self"]["creation"]
+              char.self_base = data["a"]["self"]["base"]
+              char.health_base = data["vi"]["health"]["base"]
+              char.stamina_base = data["vi"]["stamina"]["base"]
+              char.mana_base = data["vi"]["mana"]["base"]
+              char.current_title = data["tc"]
+              char.total_xp = data["tx"]
+              char.unassigned_xp = data["u"]
+              char.skill_credits = data["sc"]
+              char.luminance_total = data["lt"]
+              char.luminance_earned = data["lx"]
+            end
+
+
+            if monarch
+              puts "Setting #{data["n"]}'s monarch to #{monarch.name}."
+              char.monarch_id = monarch.id
+            end
+
+            if patron
+              puts "Setting #{data["n"]}'s patron to #{patron.name}."
+              char.patron_id = patron.id
             end
           end
 
-          patron = nil
+          if data["sk"]
+            data["sk"].each do |k,v|
+              skill_id = ImportHelper::skill_id(v["name"])
+              next if skill_id.nil?
 
-          if data["patron"]
-            patron = Character.update_or_create(server: data["server"], name: data["patron"]["name"]) do |p|
-              p.rank = data["patron"]["rank"]
-              p.race_id = data["patron"]["race"].to_i - 1
-              p.gender_id = data["patron"]["gender"].to_i - 1
-              p.followers = data["patron"]["followers"]
+              Skill.new(
+                character_id: char.id,
+                skill_id: skill_id,
+                training_id: ImportHelper::training_id(v["training"]),
+                base: v["base"]
+              ).save
             end
           end
 
-          char.server = data["server"]
-          char.name = data["name"]
-          char.race_id = ImportHelper::race_id(data["race"])
-          char.gender_id = ImportHelper::gender_id(data["gender"])
-          char.level = data["level"]
-          char.rank = data["rank"]
-          char.allegiance_name = data["allegiance_name"]
-          char.deaths = data["deaths"]
-          char.birth = data["birth"] # TODO: Handle right
-          char.created_at = data["created_at"]
-          char.updated_at = data["updated_at"]
-          char.followers = data["followers"]
-          char.strength_creation = data["attribs"]["strength"]["creation"]
-          char.strength_base = data["attribs"]["strength"]["base"]
-          char.endurance_creation = data["attribs"]["endurance"]["creation"]
-          char.endurance_base = data["attribs"]["endurance"]["base"]
-          char.coordination_creation = data["attribs"]["coordination"]["creation"]
-          char.coordination_base = data["attribs"]["coordination"]["base"]
-          char.quickness_creation = data["attribs"]["quickness"]["creation"]
-          char.quickness_base = data["attribs"]["quickness"]["base"]
-          char.focus_creation = data["attribs"]["focus"]["creation"]
-          char.focus_base = data["attribs"]["focus"]["base"]
-          char.self_creation = data["attribs"]["self"]["creation"]
-          char.self_base = data["attribs"]["self"]["base"]
-          char.health_base = data["vitals"]["health"]["base"]
-          char.stamina_base = data["vitals"]["stamina"]["base"]
-          char.mana_base = data["vitals"]["mana"]["base"]
-          char.current_title = data["current_title"]
-          char.total_xp = data["total_xp"]
-          char.unassigned_xp = data["unassigned_xp"]
-          char.skill_credits = data["skill_credits"]
-          char.luminance_total = data["luminance_total"]
-          char.luminance_earned = data["rank"]
-
-          if monarch
-            puts "Setting #{data["name"]}'s monarch to #{monarch.name}."
-            char.monarch_id = monarch.id
+          if data["ti"]
+            data["ti"].each do |t|
+              Title.new(
+                character_id: char.id,
+                title_id: t
+              ).save
+            end
           end
 
-          if patron
-            puts "Setting #{data["name"]}'s patron to #{patron.name}."
-            char.patron_id = patron.id
+          if data["pr"]
+            data["pr"].each do |k,v|
+              Property.new(
+                character_id: char.id,
+                property_id: k.to_i,
+                value: v.to_i
+              ).save
+            end
           end
-      end
-
-
-        data["skills"].each do |k,v|
-          Skill.new(
-            character_id: char.id,
-            skill_id: ImportHelper::skill_id(v["name"]),
-            training_id: ImportHelper::training_id(v["training"]),
-            base: v["base"]
-          ).save
-        end
-
-        data["titles"].each do |t|
-          Title.new(
-            character_id: char.id,
-            title_id: t
-          ).save
-        end
-
-        data["properties"].each do |k,v|
-          Property.new(
-            character_id: char.id,
-            property_id: k.to_i,
-            value: v.to_i
-          ).save
         end
       end
     end

@@ -5,18 +5,29 @@ module ImportHelper
     "Sho" => 2,
     "Viamontian" => 3,
     "Shadowbound" => 4,
+    "Umbraen Shadow" => 4,
     "Gearknight" => 5,
+    "Gear Knight" => 5,
     "Tumerok" => 6,
     "Lugian" => 7,
     "Empyrean" => 8,
     "Penumbraen" => 9,
+    "Penumbraen Shadow" => 9,
     "Undead" => 10,
-    "Olthoi" => 11,
-    "OlthoiAcid"  => 12
+    "Olthoi Soldier"  => 11,
+    "Olthoi Spitter"  => 11
   }
 
   def self.race_id(name)
-    RACE_ID[name]
+    if name.nil?
+      return 0
+    elsif name.is_a?(Integer)
+      return name
+    elsif name.to_i.to_s == name
+      return name.to_i
+    else
+      return RACE_ID[name]
+    end
   end
 
   GENDER_ID = {
@@ -25,7 +36,15 @@ module ImportHelper
   }
 
   def self.gender_id(name)
-    GENDER_ID[name]
+    if name.nil?
+      return 0
+    elsif name.is_a?(Integer)
+      return name
+    elsif name.to_i.to_s == name
+      return name.to_i
+    else
+      return GENDER_ID[name]
+    end
   end
 
   SKILL = {
