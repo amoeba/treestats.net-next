@@ -63,6 +63,8 @@ get "/characters/?" do
     .order(:updated_at)
     .reverse
 
+  @count = @characters.count
+
   erb :characters
 end
 
