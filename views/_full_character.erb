@@ -83,6 +83,9 @@
       <br />
 
       <h4>Vassals</h4>
+      <% if @character.vassals.length == 0 %>
+        No vassals.
+      <% end %>
       <ul>
         <% @character.vassals.each do |vassal| %>
         <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= rank_name(vassal[:race_id], vassal[:gender_id], vassal[:rank]) %> <%= vassal[:name] %></a></li>
