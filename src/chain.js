@@ -14,7 +14,7 @@ export default function (selector, server, character, options = {}) {
       const root = d3.hierarchy(tree_data);
       root.dx = 10;
       root.dy = width / (root.height + 1);
-      return d3.tree().nodeSize([root.dx, root.dy])(root);
+      return d3.tree().nodeSize([root.dx, 150])(root);
     }
 
     const root = tree(tree_data);
