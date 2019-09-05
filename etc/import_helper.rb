@@ -96,7 +96,7 @@ module ImportHelper
     "Unusable" => 0,
     "Untrained" => 1,
     "Trained" => 2,
-    "Specialized" => 4
+    "Specialized" => 3
   }
   def self.training_id(name)
     TRAINING[name]
