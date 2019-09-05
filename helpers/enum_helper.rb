@@ -2,6 +2,13 @@
 
 module Sinatra
   module EnumHelper
+    TRAINING = {
+      :unusable => 0,
+      :untrained => 1,
+      :trained => 2,
+      :specialized => 3
+    }
+
     def gender(id)
       @@genders[id]
     end

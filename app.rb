@@ -141,5 +141,24 @@ get "/:server/:name" do
     .filter(name: params[:name], server: params[:server])
     .first
 
+  @skills = {
+    :specialized => @character.skills
+      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:specialized] }
+      .sort_by { |s| skill(s[:skill_id])
+    },
+    :trained => @character.skills
+      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:specialized] }
+      .sort_by { |s| skill(s[:skill_id])
+    },
+    :untrained => @character.skills
+      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:untrained] }
+      .sort_by { |s| skill(s[:skill_id])
+    },
+    :unusable => @character.skills
+      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:unusable] }
+      .sort_by { |s| skill(s[:skill_id])
+    }
+  }
+
   erb :character
 end
