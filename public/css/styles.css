@@ -90,6 +90,8 @@ input {
 .box {
   border: 1px solid black;
   padding: 0.25rem;
+  max-height: 300px;
+  overflow-y: scroll;
 }
 
 .box.active {
