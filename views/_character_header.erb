@@ -1,0 +1,18 @@
+<div class="character-header">
+  <div>
+    <div><%= @character[:name] %></div>
+    <div><%= gender(@character[:gender_id]) %> <%= race(@character[:race_id]) %> <%= title(@character[:current_title]) %></div>
+    <table>
+      <tbody>
+        <tr>
+          <td>Total Experience (XP):</td>
+          <td><%= @character[:total_xp] %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <div>Character Level</div>
+    <div><%= @character[:level] %></div>
+  </div>
+</div>

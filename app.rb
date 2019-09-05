@@ -160,5 +160,7 @@ get "/:server/:name" do
     }
   }
 
+  @titles = @character.titles.sort_by { |t| t.title_id }
+
   erb :character
 end

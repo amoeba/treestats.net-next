@@ -46,6 +46,7 @@ input {
 /* Specific stuff */
 #chain {
   border: 1px solid black;
+  max-width: 624px;
 }
 
 #chain .message {
@@ -97,4 +98,36 @@ input {
 
 .box.inactive {
   display: none;
+}
+
+.box table {
+  width: 100%;
+}
+
+.box table thead tr th {
+  text-align: left;
+}
+
+.box table tbody tr td:last-child {
+  text-align: right;
+}
+
+.character-header {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+
+.character-header div {
+  text-align: center;
+}
+
+ul.titles {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.highlight {
+  color: green;
+  font-weight: bold;
 }
