@@ -25,7 +25,7 @@ end
 
 get "/search" do
   # Sanitize input first
-  @query = params[:query].gsub(/[^a-zA-Z'\- ]/, "")
+  @query = params[:query].gsub(/[^a-zA-Z'\-\+ ]/, "")
 
   @page = get_page(params)
   limit = 25
@@ -111,7 +111,7 @@ get "/:server/:name/chain" do
 
   # TODO: Validate server name
   # TODO: Write validator for char names
-  name = params[:name].gsub(/[^a-zA-Z'\- ]/, "")
+  name = params[:name].gsub(/[^a-zA-Z'\-\+ ]/, "")
   server = params[:server]
 
   character = Character
