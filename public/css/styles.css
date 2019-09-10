@@ -89,9 +89,9 @@ input {
 
 .box {
   border: 1px solid black;
-  padding: 0.25rem;
-  max-height: 300px;
+  max-height: 320px;
   overflow-y: scroll;
+  font-size: 90%;
 }
 
 .box.active {
@@ -100,6 +100,12 @@ input {
 
 .box.inactive {
   display: none;
+}
+
+.box h4 {
+  margin: 0;
+  padding: 0;
+  color: gold;
 }
 
 .box table {
@@ -117,13 +123,47 @@ input {
 .character-header {
   display: grid;
   grid-template-columns: 4fr 1fr;
+  border-bottom: 1px solid black;
+  font-size: 90%
 }
 
-.character-header div {
+.character-header > div {
   text-align: center;
 }
 
-ul.titles {
+.character-header-left {
+  border-right: 1px solid black;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1.5fr;
+}
+
+.character-header .twocol {
+  align-self: end;
+}
+
+.character-header-level {
+  font-size: 200%;
+}
+
+.character-footer {
+  border-top: 1px solid black;
+}
+
+.twocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.twocol > div:first-child {
+  text-align: left;
+}
+
+.twocol > div:last-child {
+  text-align: right;
+}
+
+ul.titles,
+ul.vassals {
   list-style-type: none;
   margin: 0;
   padding: 0;

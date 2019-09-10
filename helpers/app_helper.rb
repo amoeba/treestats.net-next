@@ -22,6 +22,10 @@ module Sinatra
       query_string.chop!
       query_string
     end
+
+    def with_commas(string)
+      string.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+    end
   end
 
   helpers AppHelper

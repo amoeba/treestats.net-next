@@ -1,18 +1,14 @@
 <div class="character-header">
-  <div>
-    <div><%= @character[:name] %></div>
-    <div><%= gender(@character[:gender_id]) %> <%= race(@character[:race_id]) %> <%= title(@character[:current_title]) %></div>
-    <table>
-      <tbody>
-        <tr>
-          <td>Total Experience (XP):</td>
-          <td><%= @character[:total_xp] %></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="character-header-left">
+    <div><strong><%= @character[:name] %></strong></div>
+    <div>(<%= gender(@character[:gender_id]) %> <%= race(@character[:race_id]) %> <%= title(@character[:current_title]) %>)</div>
+    <div class="twocol">
+      <div>Total XP:</div>
+      <div><%= with_commas(@character[:total_xp].to_i) %></div>
+    </div>
   </div>
   <div>
-    <div>Character Level</div>
-    <div><%= @character[:level] %></div>
+    <div>character level</div>
+    <div class="character-header-level"><%= @character[:level] %></div>
   </div>
 </div>
