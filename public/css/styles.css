@@ -164,6 +164,10 @@ input {
   text-align: right;
 }
 
+.controls {
+  margin: 1.5rem 0;
+}
+
 ul.titles,
 ul.vassals {
   list-style-type: none;

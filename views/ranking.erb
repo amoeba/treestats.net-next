@@ -1,13 +1,24 @@
-<h2>Ranking</h2>
-
-Ranking is <%= @ranking %>
+<h2><%= @ranking.capitalize %></h2>
 
 <%= erb :_page_controls %>
 
-<ul>
-<% @characters.each do |character| %>
-  <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a> => <%= character[@ranking.to_sym] %></li>
-<% end %>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Server</th>
+      <th>Character</th>
+      <th><%= @ranking.capitalize %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @characters.each do |character| %>
+    <tr>
+      <td><a href="/<%= character[:server] %>"><%= character[:server] %></a></td>
+      <td><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:name] %></a></td>
+      <td><%= character[@ranking.to_sym] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
 
 <%= erb :_page_controls %>
