@@ -3,11 +3,11 @@
 module Sinatra
   module RankingsHelper
     def get_ranking(params)
-      Rankings.send(params[:ranking], params)
+      Rankings.default(params)
     end
 
     class Rankings
-      def self.level(*args)
+      def self.default(*args)
         params = args[0]
         ranking = params[:ranking].to_sym
 
