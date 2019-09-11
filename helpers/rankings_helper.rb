@@ -9,12 +9,16 @@ module Sinatra
     class Rankings
       def self.level(*args)
         params = args[0]
+        ranking = params[:ranking].to_sym
 
-        Character
-          .order(params[:ranking])
+        query = Character
+          .order(ranking)
           .reverse
           .limit(params[:limit])
           .offset(params[:offset])
+
+        puts query.sql
+        query
       end
     end
   end
