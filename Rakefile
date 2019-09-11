@@ -62,6 +62,10 @@ namespace :db do
                 m.race_id = ImportHelper::race_id(data["m"]["race"])
                 m.gender_id = ImportHelper::gender_id(data["m"]["gender"])
                 m.followers = data["m"]["followers"]
+
+                if m.gender_id > 1
+                  raise Exception
+                end
               end
             end
 
@@ -73,6 +77,10 @@ namespace :db do
                 p.race_id = ImportHelper::race_id(data["p"]["race"])
                 p.gender_id = ImportHelper::gender_id(data["p"]["gender"])
                 p.followers = data["p"]["followers"]
+
+                if p.gender_id > 1
+                  raise Exception
+                end
               end
             end
 
@@ -80,6 +88,11 @@ namespace :db do
             char.name = data["n"]
             char.race_id = ImportHelper::race_id(data["r"])
             char.gender_id = ImportHelper::gender_id(data["g"])
+
+            if char.gender_id > 1
+              raise Exception
+            end
+
             char.rank = data["rn"]
             char.allegiance_name = data["an"]
             char.created_at = data["c_at"]
