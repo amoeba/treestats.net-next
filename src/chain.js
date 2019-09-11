@@ -47,7 +47,7 @@ export default function (selector, server, character, options = {}) {
     const g = svg.append("g")
       .attr("font-size", 10);
 
-    const link = g.append("g")
+    g.append("g")
       .attr("fill", "none")
       .attr("stroke", "#000")
       .selectAll("path")
