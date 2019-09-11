@@ -4,21 +4,21 @@
 //
 // Called by tab's onclick handler, activates the tab and
 // corresponding content box.
-var activate = function (ele) {
+let activate = function (ele) {
   if (!ele) {
     return;
   }
 
-  var index = -1,
+  let index = -1,
     clicked_index = -1,
     children = ele.parentNode.parentNode.childNodes;
 
-  for (var i in children) {
+  for (let i in children) {
     if (has_class(children[i], "tabbar")) {
-      var tabs = children[i].childNodes;
+      let tabs = children[i].childNodes;
 
       // Tabs
-      for (var j in tabs) {
+      for (let j in tabs) {
         if (has_class(tabs[j], "tab")) {
           index += 1;
 
@@ -35,12 +35,12 @@ var activate = function (ele) {
 
   // Boxes
   if (ele.parentNode && ele.parentNode.parentNode) {
-    var children = ele.parentNode.parentNode.childNodes;
+    const children = ele.parentNode.parentNode.childNodes;
 
-    var box_index = -1;
+    let box_index = -1;
     index = -1;
 
-    for (var i in children) {
+    for (let i in children) {
       if (has_class(children[i], "box")) {
         index += 1;
 
@@ -54,41 +54,24 @@ var activate = function (ele) {
   }
 }
 
-// select_by_class(class_name)
-//
-// Selects all documents with class class_name.
-var select_by_class = function (class_name) {
-  var all = document.getElementsByTagName('*'),
-    i,
-    elements = [];
-
-  for (i in all) {
-    if (has_class(all[i], class_name)) {
-      elements.push(all[i]);
-    }
-  }
-
-  return elements;
-}
-
 // has_class(ele, class_name)
 //
 // Determines whether the given element ele has the class
 // name class_name;
-var has_class = function (ele, class_name) {
+let has_class = function (ele, class_name) {
   if (ele) {
     return (' ' + ele.className + ' ').indexOf(' ' + class_name + ' ') > -1
   }
 }
 
 export default function (el) {
-  var children = el.childNodes;
+  const children = el.childNodes;
 
-  for (var j = 0; j < children.length; j++) {
+  for (let j = 0; j < children.length; j++) {
     if (has_class(children[j], "tabbar")) {
-      var tabs = children[j].childNodes;
+      let tabs = children[j].childNodes;
 
-      for (var k = 0; k < tabs.length; k++) {
+      for (let k = 0; k < tabs.length; k++) {
         if (has_class(tabs[k], "tab")) {
           tabs[k].addEventListener("click", function () {
             activate(this);
