@@ -4,26 +4,25 @@
 //
 // Called by tab's onclick handler, activates the tab and
 // corresponding content box.
-
-var activate = function(ele) {
+var activate = function (ele) {
   if (!ele) {
     return;
   }
 
   var index = -1,
-      clicked_index = -1,
-      children = ele.parentNode.parentNode.childNodes;
+    clicked_index = -1,
+    children = ele.parentNode.parentNode.childNodes;
 
-  for(var i in children) {
+  for (var i in children) {
     if (has_class(children[i], "tabbar")) {
       var tabs = children[i].childNodes;
 
       // Tabs
-      for(var j in tabs) {
-        if(has_class(tabs[j], "tab")) {
+      for (var j in tabs) {
+        if (has_class(tabs[j], "tab")) {
           index += 1;
 
-          if(tabs[j] == ele) {
+          if (tabs[j] == ele) {
             clicked_index = index;
             tabs[j].className = "tab active";
           } else {
@@ -34,19 +33,18 @@ var activate = function(ele) {
     }
   }
 
-
   // Boxes
-  if(ele.parentNode && ele.parentNode.parentNode) {
+  if (ele.parentNode && ele.parentNode.parentNode) {
     var children = ele.parentNode.parentNode.childNodes;
 
     var box_index = -1;
-        index = -1;
+    index = -1;
 
-    for(var i in children) {
-      if(has_class(children[i], "box")) {
+    for (var i in children) {
+      if (has_class(children[i], "box")) {
         index += 1;
 
-        if(index == clicked_index) {
+        if (index == clicked_index) {
           children[i].className = "box active";
         } else {
           children[i].className = "box inactive";
@@ -59,13 +57,13 @@ var activate = function(ele) {
 // select_by_class(class_name)
 //
 // Selects all documents with class class_name.
-var select_by_class = function(class_name) {
+var select_by_class = function (class_name) {
   var all = document.getElementsByTagName('*'),
-        i,
-        elements = [];
+    i,
+    elements = [];
 
   for (i in all) {
-    if(has_class(all[i], class_name)) {
+    if (has_class(all[i], class_name)) {
       elements.push(all[i]);
     }
   }
@@ -77,14 +75,26 @@ var select_by_class = function(class_name) {
 //
 // Determines whether the given element ele has the class
 // name class_name;
-var has_class = function(ele, class_name) {
-  if(ele) {
+var has_class = function (ele, class_name) {
+  if (ele) {
     return (' ' + ele.className + ' ').indexOf(' ' + class_name + ' ') > -1
   }
 }
 
-export {
-  activate,
-  select_by_class,
-  has_class
+export default function (el) {
+  var children = el.childNodes;
+
+  for (var j = 0; j < children.length; j++) {
+    if (has_class(children[j], "tabbar")) {
+      var tabs = children[j].childNodes;
+
+      for (var k = 0; k < tabs.length; k++) {
+        if (has_class(tabs[k], "tab")) {
+          tabs[k].addEventListener("click", function () {
+            activate(this);
+          });
+        }
+      }
+    }
+  }
 }
