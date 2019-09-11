@@ -34,17 +34,14 @@ let activate = function (ele) {
 
       index += 1;
 
-      let classNames = new Set(tabs[tab].className.split(" "));
-
       if (tabs[tab] == ele) {
         clicked_index = index;
-        classNames.delete(INACTIVE_CLASS);
-        classNames.add(ACTIVE_CLASS);
+        tabs[tab].classList.remove(INACTIVE_CLASS);
+        tabs[tab].classList.add(ACTIVE_CLASS);
       } else {
-        classNames.add(INACTIVE_CLASS);
-        classNames.delete(ACTIVE_CLASS);      }
-
-      tabs[tab].className = [...classNames].join(" ");
+        tabs[tab].classList.add(INACTIVE_CLASS);
+        tabs[tab].classList.remove(ACTIVE_CLASS);
+      }
     }
   }
 
@@ -61,16 +58,13 @@ let activate = function (ele) {
 
       index += 1;
 
-      let classNames = new Set(children[i].className.split(" "));
-
       if (index == clicked_index) {
-        classNames.delete(INACTIVE_CLASS);
-        classNames.add(ACTIVE_CLASS);
+        children[i].classList.remove(INACTIVE_CLASS);
+        children[i].classList.add(ACTIVE_CLASS);
       } else {
-        classNames.add(INACTIVE_CLASS);
-        classNames.delete(ACTIVE_CLASS);      }
-
-      children[i].className = [...classNames].join(" ");
+        children[i].classList.remove(ACTIVE_CLASS);
+        children[i].classList.add(INACTIVE_CLASS);
+      }
     }
   }
 }
@@ -80,8 +74,8 @@ let activate = function (ele) {
 // Determines whether the given element ele has the class
 // name class_name;
 let has_class = function (ele, class_name) {
-  if (ele) {
-    return (' ' + ele.className + ' ').indexOf(' ' + class_name + ' ') > -1
+  if (ele && ele.classList) {
+    return ele.classList.contains(class_name);
   } else {
     return false;
   }
