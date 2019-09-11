@@ -1,11 +1,11 @@
 <h2><%= @server %></h2>
 
-<% if @characters.count == 0 %>
-No characters to show.
+<% if @characters.empty? %>
+  No characters to show.
 <% else %>
-<ul>
-<% @characters.each do |character| %>
-  <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a></li>
-<% end%>
-</ul>
+  <ul>
+    <% @characters.each do |character| %>
+      <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a></li>
+    <% end%>
+  </ul>
 <% end %>

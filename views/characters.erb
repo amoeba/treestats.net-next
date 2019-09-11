@@ -2,10 +2,14 @@
 
 <%= erb :_page_controls %>
 
-<ul>
-<% @characters.each do |character| %>
-  <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a></li>
-<% end%>
-</ul>
+<% if @characters.empty? %>
+  No characters to show.
+<% else %>
+  <ul>
+  <% @characters.each do |character| %>
+    <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a></li>
+  <% end%>
+  </ul>
+<% end %>
 
 <%= erb :_page_controls %>
