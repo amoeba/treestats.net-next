@@ -1,5 +1,11 @@
 // Simple tabbing functionality
 
+const ACTIVE_CLASS = "active";
+const INACTIVE_CLASS = "inactive";
+const TABBAR_CLASS = "tabbar";
+const BOX_CLASS = "box";
+const TAB_CLASS = "tab";
+
 // activate(ele)
 //
 // Called by tab's onclick handler, activates the tab and
@@ -14,22 +20,31 @@ let activate = function (ele) {
     children = ele.parentNode.parentNode.childNodes;
 
   for (let i in children) {
-    if (has_class(children[i], "tabbar")) {
-      let tabs = children[i].childNodes;
+    if (!has_class(children[i], TABBAR_CLASS)) {
+      continue;
+    }
 
-      // Tabs
-      for (let j in tabs) {
-        if (has_class(tabs[j], "tab")) {
-          index += 1;
+    let tabs = children[i].childNodes;
 
-          if (tabs[j] == ele) {
-            clicked_index = index;
-            tabs[j].className = "tab active";
-          } else {
-            tabs[j].className = "tab inactive";
-          }
-        }
+    // Tabs
+    for (let tab in tabs) {
+      if (!has_class(tabs[tab], TAB_CLASS)) {
+        continue;
       }
+
+      index += 1;
+
+      let classNames = new Set(tabs[tab].className.split(" "));
+
+      if (tabs[tab] == ele) {
+        clicked_index = index;
+        classNames.delete(INACTIVE_CLASS);
+        classNames.add(ACTIVE_CLASS);
+      } else {
+        classNames.add(INACTIVE_CLASS);
+        classNames.delete(ACTIVE_CLASS);      }
+
+      tabs[tab].className = [...classNames].join(" ");
     }
   }
 
@@ -37,19 +52,25 @@ let activate = function (ele) {
   if (ele.parentNode && ele.parentNode.parentNode) {
     const children = ele.parentNode.parentNode.childNodes;
 
-    let box_index = -1;
     index = -1;
 
     for (let i in children) {
-      if (has_class(children[i], "box")) {
-        index += 1;
-
-        if (index == clicked_index) {
-          children[i].className = "box active";
-        } else {
-          children[i].className = "box inactive";
-        }
+      if (!has_class(children[i], BOX_CLASS)) {
+        continue;
       }
+
+      index += 1;
+
+      let classNames = new Set(children[i].className.split(" "));
+
+      if (index == clicked_index) {
+        classNames.delete(INACTIVE_CLASS);
+        classNames.add(ACTIVE_CLASS);
+      } else {
+        classNames.add(INACTIVE_CLASS);
+        classNames.delete(ACTIVE_CLASS);      }
+
+      children[i].className = [...classNames].join(" ");
     }
   }
 }
@@ -61,6 +82,8 @@ let activate = function (ele) {
 let has_class = function (ele, class_name) {
   if (ele) {
     return (' ' + ele.className + ' ').indexOf(' ' + class_name + ' ') > -1
+  } else {
+    return false;
   }
 }
 
@@ -68,16 +91,22 @@ export default function (el) {
   const children = el.childNodes;
 
   for (let j = 0; j < children.length; j++) {
-    if (has_class(children[j], "tabbar")) {
-      let tabs = children[j].childNodes;
+    if (!has_class(children[j], TABBAR_CLASS)) {
+      continue;
+    }
 
-      for (let k = 0; k < tabs.length; k++) {
-        if (has_class(tabs[k], "tab")) {
-          tabs[k].addEventListener("click", function () {
-            activate(this);
-          });
-        }
+    let tabs = children[j].childNodes;
+
+    for (let k = 0; k < tabs.length; k++) {
+      if (!has_class(tabs[k], TAB_CLASS)) {
+        continue;
       }
+
+      tabs[k].addEventListener("click", function () {
+        activate(this);
+      }, {
+        passive: true
+      });
     }
   }
 }
