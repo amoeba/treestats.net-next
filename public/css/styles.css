@@ -59,10 +59,12 @@ input {
 
 .panes {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .tabcontainer {
   width: 300px;
+  min-width: 300px;
   margin: 0 1.5rem 1.5rem 0;
 }
 
