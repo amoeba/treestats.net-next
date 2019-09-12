@@ -80,13 +80,13 @@ get "/rankings/:ranking" do
   @prev = { :page => @page - 1 }
   @next = { :page => @page + 1 }
 
-  @ranking = params[:ranking]
   params[:page] = @page
   params[:offset] = offset
   params[:limit] = limit
 
   @characters = get_ranking(params)
   @value_col = value_col(params[:ranking].to_sym)
+  @ranking_name = params[:ranking].split("_").map { |w| w.capitalize }.join(" ")
 
   if @characters.nil?
     not_found
