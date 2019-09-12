@@ -186,6 +186,19 @@ input {
   text-align: right;
 }
 
+.rankings {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rankings .group {
+  margin-right: 1.5rem;
+}
+
+.rankings .group:last-child {
+  margin-right: 0;
+}
+
 .controls {
   margin: 1.5rem 0;
 }
