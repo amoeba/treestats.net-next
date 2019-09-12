@@ -3,36 +3,38 @@ require_relative "./enum_helper"
 
 module Sinatra
   module RankingsHelper
-    RANKINGS = [
-      :level,
-      :strength_base,
-      :endurance_base,
-      :coordination_base,
-      :quickness_base,
-      :focus_base,
-      :self_base,
-      :health_base,
-      :stamina_base,
-      :mana_base,
-      :alchemy
-    ]
+    extend EnumHelper
 
-    VALUE_COL = {
-      :level => :level,
-      :strength_base => :strength_base,
-      :endurance_base => :endurance_base,
-      :coordination_base => :coordination_base,
-      :quickness_base => :quickness_base,
-      :focus_base => :focus_base,
-      :self_base => :self_base,
-      :health_base => :health_base,
-      :stamina_base => :stamina_base,
-      :mana_base => :mana_base,
-      :alchemy => :base
+    # All enabled rankings and which method we use to call them. A 404 results
+    # if the ranking isn't in this list.
+    RANKINGS = {
+      :strength_base => :character,
+      :endurance_base => :character,
+      :coordination_base => :character,
+      :quickness_base => :character,
+      :focus_base => :character,
+      :self_base => :character,
+      :health_base => :character,
+      :stamina_base => :character,
+      :mana_base => :character,
+      :alchemy => :skill,
+      :level => :character
     }
 
+    # Which database column to pull each ranking type's value from. If not
+    # present, assume we can use the ranking as-is.
+    VALUE_COL = {
+      :skill => :base,
+    }
+
+    # Return the value column for each ranking type. If not present in
+    # VALUE_COL, assume the value column is the same as the ranking itself.
     def value_col(ranking)
-      VALUE_COL[ranking]
+      type = RANKINGS[ranking]
+
+      return ranking if !VALUE_COL[type]
+
+      VALUE_COL[type]
     end
 
     def get_ranking(params)
@@ -42,41 +44,40 @@ module Sinatra
         halt(404, "Ranking '#{ranking}' not found.")
       end
 
-      if ranking == :alchemy
-        puts "SKILL"
-        Rankings.skill(params)
+      type = RANKINGS[ranking]
+
+      if type == :skill
+        skill(params)
+      elsif type == :character
+        character(params)
       else
-        puts "ELSE"
-        Rankings.default(params)
+        self.call(ranking, params)
       end
     end
 
-    class Rankings
-      extend EnumHelper
+    def character(*args)
+      params = args[0]
+      ranking = params[:ranking].to_sym
 
-      def self.default(*args)
-        params = args[0]
-        ranking = params[:ranking].to_sym
+      Character
+        .order(ranking)
+        .reverse
+        .limit(params[:limit])
+        .offset(params[:offset])
+    end
 
-        Character
-          .order(ranking)
-          .reverse
-          .limit(params[:limit])
-          .offset(params[:offset])
-      end
+    def skill(*args)
+      params = args[0]
+      ranking = params[:ranking].to_sym
+      type = RANKINGS[ranking]
 
-      def self.skill(*args)
-        params = args[0]
-        ranking = params[:ranking].to_sym
-
-        Skill
-          .where(skill_id: skill_id(ranking))
-          .order(VALUE_COL[ranking])
-          .reverse
-          .limit(params[:limit])
-          .offset(params[:offset])
-          .association_join(:character)
-      end
+      Skill
+        .where(skill_id: skill_id(ranking))
+        .order(VALUE_COL[type])
+        .reverse
+        .limit(params[:limit])
+        .offset(params[:offset])
+        .association_join(:character)
     end
   end
 
