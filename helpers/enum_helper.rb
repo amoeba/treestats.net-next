@@ -21,8 +21,12 @@ module Sinatra
       @@ranks[race_id][gender_id][rank]
     end
 
-    def skill(id)
-      @@skills[id]
+    def skill_name(id)
+      @@skill_names[id]
+    end
+
+    def skill_id(key)
+      @@skill_ids[key]
     end
 
     def training(id)
@@ -364,7 +368,7 @@ module Sinatra
       ],
     ]
 
-    @@skills = [
+    @@skill_names = [
       "Alchemy",
       "Arcane Lore",
       "Armor Tinkering",
@@ -404,6 +408,47 @@ module Sinatra
       "War Magic",
       "Weapon Tinkering",
     ]
+
+    @@skill_ids = {
+      :alchemy => 0,
+      :arcane_lore => 1,
+      :armor_tinkering => 2,
+      :assess_creature => 3,
+      :assess_person => 4,
+      :cooking => 5,
+      :creature_enchantment => 6,
+      :deception => 7,
+      :dirty_fighting => 8,
+      :dual_wield => 9,
+      :fletching => 10,
+      :finesse_weapons => 11,
+      :healing => 12,
+      :heavy_weapons => 13,
+      :item_enchantment => 14,
+      :item_tinkering => 15,
+      :jump => 16,
+      :leadership => 17,
+      :life_magic => 18,
+      :light_weapons => 19,
+      :lockpick => 20,
+      :loyalty => 21,
+      :magic_defense => 22,
+      :magic_item_tinkering => 23,
+      :mana_conversion => 24,
+      :melee_defense => 25,
+      :missile_defense => 26,
+      :missile_weapons => 27,
+      :recklessness => 28,
+      :run => 29,
+      :salvaging => 30,
+      :shield => 31,
+      :sneak_attack => 32,
+      :two_handed_combat => 33,
+      :summoning => 34,
+      :void_magic => 35,
+      :war_magic => 36,
+      :weapon_tinkering => 37
+    }
 
     @@training = [
       "Unusable",

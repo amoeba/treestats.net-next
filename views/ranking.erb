@@ -7,7 +7,7 @@
     <tr>
       <th>Server</th>
       <th>Character</th>
-      <th><%= @ranking.capitalize %></th>
+      <th><%= @ranking %></th>
     </tr>
   </thead>
   <tbody>
@@ -15,7 +15,7 @@
     <tr>
       <td><a href="/<%= character[:server] %>"><%= character[:server] %></a></td>
       <td><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:name] %></a></td>
-      <td><%= character[@ranking.to_sym] %></td>
+      <td><%= character[@value_col] %></td>
     </tr>
   <% end %>
   </tbody>

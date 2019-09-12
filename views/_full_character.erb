@@ -72,7 +72,7 @@
           <% @skills[:specialized].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -86,7 +86,7 @@
           <% @skills[:trained].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -100,7 +100,7 @@
           <% @skills[:untrained].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -114,7 +114,7 @@
           <% @skills[:unusable].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
