@@ -2,13 +2,6 @@
 
 module Sinatra
   module EnumHelper
-    TRAINING = {
-      :unusable => 0,
-      :untrained => 1,
-      :trained => 2,
-      :specialized => 3
-    }
-
     def gender(id)
       @@genders[id]
     end
@@ -17,11 +10,11 @@ module Sinatra
       @@races[id]
     end
 
-    def rank_name(race_id, gender_id, rank)
+    def rank(race_id, gender_id, rank)
       @@ranks[race_id][gender_id][rank]
     end
 
-    def skill_name(id)
+    def skill(id)
       @@skill_names[id]
     end
 
@@ -35,6 +28,10 @@ module Sinatra
 
     def title(id)
       @@titles[id]
+    end
+
+    def property_id(key)
+      @@property_ids[key]
     end
 
     @@genders = [
@@ -367,6 +364,13 @@ module Sinatra
         ],
       ],
     ]
+
+    TRAINING = {
+      :unusable => 0,
+      :untrained => 1,
+      :trained => 2,
+      :specialized => 3
+    }
 
     @@skill_names = [
       "Alchemy",
@@ -1331,6 +1335,10 @@ module Sinatra
       892 => "Transcended",
       893 => "Cosmic Conscious",
       894 => "Last Man Standing",
+    }
+
+    @@property_ids = {
+      :times_enlightened => 390
     }
   end
 

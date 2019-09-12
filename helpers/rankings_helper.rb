@@ -18,13 +18,24 @@ module Sinatra
       :stamina_base => :character,
       :mana_base => :character,
       :alchemy => :skill,
-      :level => :character
+      # TODO add more skills
+      :level => :character,
+      :birth => :character,
+      :deaths => :character,
+      :rank => :character,
+      :followers => :character,
+      :unassigned_xp => :character,
+      :total_xp => :character,
+      :titles => :title,
+      :times_enlightened => :property
     }
 
     # Which database column to pull each ranking type's value from. If not
     # present, assume we can use the ranking as-is.
     VALUE_COL = {
       :skill => :base,
+      :title => :count,
+      :property => :value
     }
 
     # Return the value column for each ranking type. If not present in
@@ -46,16 +57,20 @@ module Sinatra
 
       type = RANKINGS[ranking]
 
-      if type == :skill
-        skill(params)
-      elsif type == :character
-        character(params)
+      if type == :character
+        character_ranking(params)
+      elsif type == :skill
+        skill_ranking(params)
+      elsif type == :title
+        title_ranking(params)
+      elsif type == :property
+        property_ranking(params)
       else
         self.call(ranking, params)
       end
     end
 
-    def character(*args)
+    def character_ranking(*args)
       params = args[0]
       ranking = params[:ranking].to_sym
 
@@ -66,13 +81,46 @@ module Sinatra
         .offset(params[:offset])
     end
 
-    def skill(*args)
+    def skill_ranking(*args)
       params = args[0]
       ranking = params[:ranking].to_sym
       type = RANKINGS[ranking]
 
       Skill
         .where(skill_id: skill_id(ranking))
+        .order(VALUE_COL[type])
+        .reverse
+        .limit(params[:limit])
+        .offset(params[:offset])
+        .association_join(:character)
+    end
+
+    def title_ranking(*args)
+      params = args[0]
+      ranking = params[:ranking].to_sym
+      type = RANKINGS[ranking]
+
+      q = Title
+        .group_and_count(:character_id)
+        .order(:count)
+        .reverse
+        .limit(params[:limit])
+        .offset(params[:offset])
+        .association_join(:character)
+        .select_append(:server, :name)
+
+      puts q.sql
+
+      q
+    end
+
+    def property_ranking(*args)
+      params = args[0]
+      ranking = params[:ranking].to_sym
+      type = RANKINGS[ranking]
+
+      Property
+        .where(property_id: property_id(ranking))
         .order(VALUE_COL[type])
         .reverse
         .limit(params[:limit])

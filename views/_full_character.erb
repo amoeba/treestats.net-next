@@ -72,7 +72,7 @@
           <% @skills[:specialized].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill_name(skill[:skill_id]) %></td>
+              <td><%= skill(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -86,7 +86,7 @@
           <% @skills[:trained].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill_name(skill[:skill_id]) %></td>
+              <td><%= skill(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -100,7 +100,7 @@
           <% @skills[:untrained].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill_name(skill[:skill_id]) %></td>
+              <td><%= skill(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -114,7 +114,7 @@
           <% @skills[:unusable].each do |skill| %>
             <tr>
               <td>[ ]</td>
-              <td><%= skill_name(skill[:skill_id]) %></td>
+              <td><%= skill(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -141,14 +141,14 @@
     </div>
     <div class="box active padded divided">
       <div>
-        <div class="larger"><%= rank_name(@character.race_id, @character.gender_id, @character.rank) %> <%= @character.name %></div>
+        <div class="larger"><%= rank(@character.race_id, @character.gender_id, @character.rank) %> <%= @character.name %></div>
         <div><%= @character[:allegiance_name] %></div>
         <div>Followers: <%= @character[:followers] %> | Rank: <%= @character[:rank] %></div>
       </div>
       <div>
         <h4>Monarch</h4>
         <% if @character.monarch %>
-          <div><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= rank_name(@character.monarch[:race_id], @character.monarch[:gender_id], @character.monarch[:rank]) %> <%= @character.monarch[:name] %></a></div>
+          <div><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= rank(@character.monarch[:race_id], @character.monarch[:gender_id], @character.monarch[:rank]) %> <%= @character.monarch[:name] %></a></div>
           <div>Followers: <%= @character.monarch[:followers] %></div>
         <% else %>
           No Monarch
@@ -157,7 +157,7 @@
       <div>
         <h4>Patron</h4>
         <% if @character.patron %>
-          <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= rank_name(@character.patron[:race_id], @character.patron[:gender_id], @character.patron[:rank]) %> <%= @character.patron[:name] %></a>
+          <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= rank(@character.patron[:race_id], @character.patron[:gender_id], @character.patron[:rank]) %> <%= @character.patron[:name] %></a>
         <% else %>
           No Patron
         <% end%>
@@ -169,7 +169,7 @@
         <% end %>
         <ul class="vassals">
           <% @character.vassals.each do |vassal| %>
-          <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= rank_name(vassal[:race_id], vassal[:gender_id], vassal[:rank]) %> <%= vassal[:name] %></a></li>
+          <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= rank(vassal[:race_id], vassal[:gender_id], vassal[:rank]) %> <%= vassal[:name] %></a></li>
           <% end %>
         </ul>
       </div>
