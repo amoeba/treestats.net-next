@@ -105,16 +105,16 @@ input {
   display: none;
 }
 
-.box.padded > div,
-.box.padded > ul {
-    padding: 0.25rem;
+.box.padded>div,
+.box.padded>ul {
+  padding: 0.25rem;
 }
 
-.box.divided > div {
+.box.divided>div {
   border-bottom: 1px solid black;
 }
 
-.box.divided > div:last-child {
+.box.divided>div:last-child {
   border: none;
 }
 
@@ -143,7 +143,7 @@ input {
   font-size: 90%
 }
 
-.character-header > div {
+.character-header>div {
   text-align: center;
 }
 
@@ -174,15 +174,15 @@ input {
   grid-template-columns: 3fr 1fr;
 }
 
-.twocol > div {
+.twocol>div {
   padding: 0 0.25rem;
 }
 
-.twocol > div:first-child {
+.twocol>div:first-child {
   text-align: left;
 }
 
-.twocol > div:last-child {
+.twocol>div:last-child {
   text-align: right;
 }
 
