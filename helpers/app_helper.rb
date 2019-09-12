@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sinatra
   module AppHelper
     def get_page(params)
