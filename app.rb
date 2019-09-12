@@ -148,7 +148,7 @@ get "/:server/:name" do
       .sort_by { |s| skill(s[:skill_id])
     },
     :trained => @character.skills
-      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:specialized] }
+      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:trained] }
       .sort_by { |s| skill(s[:skill_id])
     },
     :untrained => @character.skills
