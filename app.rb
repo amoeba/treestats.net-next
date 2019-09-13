@@ -88,9 +88,7 @@ get "/rankings/:ranking" do
   @value_col = value_col(params[:ranking].to_sym)
   @ranking_name = params[:ranking].split("_").map { |w| w.capitalize }.join(" ")
 
-  if @characters.nil?
-    not_found
-  end
+  not_found if @characters.nil?
 
   erb :ranking
 end
