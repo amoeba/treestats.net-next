@@ -80,7 +80,7 @@ input {
 
 .tab {
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
   max-width: 100px;
   overflow: hidden;
 }
