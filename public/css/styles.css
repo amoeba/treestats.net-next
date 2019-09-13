@@ -98,8 +98,8 @@ input {
 
 .box {
   border: 1px solid black;
-  height: 19.2rem;
-  overflow-y: scroll;
+  max-height: 19.2rem;
+  overflow-y: auto;
   font-size: 90%;
 }
 
