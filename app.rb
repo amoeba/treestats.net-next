@@ -161,17 +161,23 @@ get "/:server/:name" do
     }
   }
 
-  @properties = {
-    :augs => @character.properties
-      .filter { |p| property(p.property_id)[:type] == :aug }
-      .sort_by { |p| property(p.property_id)[:name] },
-    :auras => @character.properties
-      .filter { |p| property(p.property_id)[:type] == :aura }
-      .sort_by { |p| property(p.property_id)[:name] },
-    :ratings => @character.properties
-      .filter { |p| property(p.property_id)[:type] == :rating }
-      .sort_by { |p| property(p.property_id)[:name] }
-  }
+  @properties = @character.properties.map do |prop|
+    property(prop[:property_id]).merge({
+      :value => prop[:value]
+    })
+  end
+
+  @augs = @properties
+    .filter { |p| p[:type] == :aug }
+    .sort_by { |p| p[:name] }
+
+  @auras = @properties
+    .filter { |p| p[:type] == :aura }
+    .sort_by { |p| p[:name] }
+
+  @ratings = @properties
+    .filter { |p| p[:type] == :rating }
+    .sort_by { |p| p[:name] }
 
   @titles = @character.titles.sort_by { |t| t.title_id }
 

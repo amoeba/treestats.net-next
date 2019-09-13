@@ -190,9 +190,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @properties[:augs].each do |prop| %>
+          <% @augs.each do |prop| %>
           <tr>
-            <td><%= property(prop[:property_id])[:name] %></td>
+            <td><%= prop[:name] %></td>
             <td><%= prop[:value] %></td>
           </tr>
           <% end %>
@@ -208,9 +208,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @properties[:auras].each do |prop| %>
+          <% @auras.each do |prop| %>
           <tr>
-            <td><%= property(prop[:property_id])[:name] %></td>
+            <td><%= prop[:name] %></td>
             <td><%= prop[:value] %></td>
           </tr>
           <% end %>
@@ -226,9 +226,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @properties[:ratings].each do |prop| %>
+          <% @ratings.each do |prop| %>
           <tr>
-            <td><%= property(prop[:property_id])[:name] %></td>
+            <td><%= prop[:name] %></td>
             <td><%= prop[:value] %></td>
           </tr>
           <% end %>
