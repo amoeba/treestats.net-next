@@ -13,7 +13,10 @@ nav {
   justify-content: space-between;
 }
 
-nav h1 {
+h1,
+h2,
+h3,
+h4 {
   margin: 0;
   padding: 0;
 }
@@ -40,9 +43,18 @@ nav li:last-child {
   margin-right: 0;
 }
 
+main>h2 {
+  margin-bottom: 0.5rem;
+}
+
 /* General styles */
 input {
   font-size: inherit;
+}
+
+#search {
+  margin: 0.5rem 0;
+  text-align: right;
 }
 
 /* Specific stuff */
