@@ -137,7 +137,6 @@
   <div class="tabcontainer">
     <div class="tabbar">
       <div class="tab active">Allegiance</div>
-      <div class="tab inactive">Properties</div>
     </div>
     <div class="box active padded divided">
       <div>
@@ -174,12 +173,67 @@
         </ul>
       </div>
     </div>
+  </div>
+
+  <div class="tabcontainer">
+    <div class="tabbar">
+      <div class="tab active">Augs</div>
+      <div class="tab inactive">Auras</div>
+      <div class="tab inactive">Ratings</div>
+    </div>
+    <div class="box active">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @properties[:augs].each do |prop| %>
+          <tr>
+            <td><%= property(prop[:property_id])[:name] %></td>
+            <td><%= prop[:value] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
     <div class="box inactive">
-      <ul>
-        <% @character.properties.each do |property| %>
-        <li><%= property[:property_id] %>: <%= property[:value] %> </li>
-        <% end %>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @properties[:auras].each do |prop| %>
+          <tr>
+            <td><%= property(prop[:property_id])[:name] %></td>
+            <td><%= prop[:value] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="box inactive">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @properties[:ratings].each do |prop| %>
+          <tr>
+            <td><%= property(prop[:property_id])[:name] %></td>
+            <td><%= prop[:value] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

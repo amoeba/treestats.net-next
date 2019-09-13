@@ -161,6 +161,18 @@ get "/:server/:name" do
     }
   }
 
+  @properties = {
+    :augs => @character.properties
+      .filter { |p| property(p.property_id)[:type] == :aug }
+      .sort_by { |p| property(p.property_id)[:name] },
+    :auras => @character.properties
+      .filter { |p| property(p.property_id)[:type] == :aura }
+      .sort_by { |p| property(p.property_id)[:name] },
+    :ratings => @character.properties
+      .filter { |p| property(p.property_id)[:type] == :rating }
+      .sort_by { |p| property(p.property_id)[:name] }
+  }
+
   @titles = @character.titles.sort_by { |t| t.title_id }
 
   erb :character
