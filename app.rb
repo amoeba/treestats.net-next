@@ -140,6 +140,11 @@ get "/:server/:name" do
     .filter(name: params[:name], server: params[:server])
     .first
 
+  halt(404, "Character not found.") if @character.nil?
+
+  # Return early if this is a stub character
+  return erb :character if @character[:strength_base].nil?
+
   @skills = {
     :specialized => @character.skills
       .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:specialized] }
