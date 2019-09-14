@@ -194,6 +194,12 @@
       </div>
 
       <div>
+        <% @ratings.each do |rating| %>
+          <div>Your <%= rating[:name] %> rating is +<%= rating[:value] %>.</div>
+        <% end %>
+      </div>
+
+      <div>
         <div>You have <%= @other[:aetheria_slots] %> aetheria slots.</div>
         <div>You have been enlightened <%= @other[:times_enlightened] %> times.</div>
       </div>
