@@ -51,6 +51,18 @@ module Sinatra
         :rank => society_id.first[:value]
       }
     end
+
+    def get_property_value(properties, id)
+      properties = properties.filter { |p| p[:property_id] == id }
+
+      if properties.length != 1
+        puts "#{id} is length #{properties.length}, returning nil"
+        return nil
+      end
+
+      puts "id => #{properties.first}"
+      properties.first[:value]
+    end
   end
 
   helpers AppHelper

@@ -191,11 +191,11 @@ get "/:server/:name" do
   }
 
   @other = {
-    :housing_purchase_date => @character.properties.filter { |p| p[:property_id] == 199}.first[:value],
-    :fishing_skill => @character.properties.filter { |p| p[:property_id] == 192}.first[:value],
-    :chess_rank => @character.properties.filter { |p| p[:property_id] == 181}.first[:value],
-    :aetheria_slots => @character.properties.filter { |p| p[:property_id] == 322}.first[:value],
-    :times_enlightened => @character.properties.filter { |p| p[:property_id] == 390}.first[:value],
+    :housing_purchase_date => get_property_value(@character.properties, 199),
+    :fishing_skill => get_property_value(@character.properties, 192),
+    :chess_rank => get_property_value(@character.properties, 181),
+    :aetheria_slots => get_property_value(@character.properties, 322),
+    :times_enlightened => get_property_value(@character.properties, 390),
     :society => get_society(@character.properties)
   }
 
