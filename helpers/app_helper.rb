@@ -28,6 +28,29 @@ module Sinatra
     def with_commas(string)
       string.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
     end
+
+    def get_mastery(properties, type)
+      mastery = properties.filter { |p| p[:property_id] == Sinatra::EnumHelper::MASTERY[type] }
+
+      if mastery.length != 1
+        return nil
+      end
+
+      mastery(Sinatra::EnumHelper::MASTERY[type], mastery.first[:value])
+    end
+
+    def get_society(properties)
+      society_id = properties.filter { |p| p[:property_id] >= 287 && p[:property_id] <= 289 }
+
+      if society_id.length != 1
+        return nil
+      end
+
+      {
+        :name => society(society_id.first[:property_id]),
+        :rank => society_id.first[:value]
+      }
+    end
   end
 
   helpers AppHelper

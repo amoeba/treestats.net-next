@@ -1424,6 +1424,49 @@ module Sinatra
     @@property_ids = {
       :times_enlightened => 390
     }
+
+    @@society = {
+      287 => "Celestial Hand",
+      288 => "Eldrytch Web",
+      289 => "Radiant Blood"
+    }
+
+    def society(id)
+      @@society[id]
+    end
+
+    def mastery(type, value)
+      @@mastery_names[type][value]
+    end
+
+    MASTERY = {
+      :melee => 354,
+      :ranged => 355,
+      :summoning => 362
+
+    }
+    @@mastery_names = {
+      MASTERY[:melee] => {
+          1 => "Unarmed",
+          2 => "Swords",
+          3 => "Axes",
+          4 => "Maces",
+          6 => "Daggers",
+          7 => "Staves",
+          9 => "Crossbows",
+          11 => "Two-Handed"
+        },
+      MASTERY[:ranged] => {
+        8 => "Bows",
+        10 => "Thrown Weapons",
+        12 => "Magical Spells"
+      },
+      MASTERY[:summoning] => {
+        1 => "Primalist",
+        2 => "Necromancer",
+        3 => "Naturalist"
+      }
+    }
   end
 
   helpers EnumHelper

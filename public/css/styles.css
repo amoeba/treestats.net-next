@@ -154,6 +154,11 @@ input {
   text-align: right;
 }
 
+.box.other>div {
+  margin: 1rem;
+  text-align: center;
+}
+
 .character-header {
   display: grid;
   grid-template-columns: 4fr 1fr;

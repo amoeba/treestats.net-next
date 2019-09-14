@@ -174,26 +174,43 @@
         </ul>
       </div>
     </div>
-    <div class="box inactive">
-      <div>You were born on ...</div>
-      <div>You have played for ...</div>
-      <div>You have died ... times.</div>
+    <div class="box inactive other">
+      <div>
+        <div>You were born on <%= @character[:born] %>.</div>
+        <div>You have played for <%= @character[:age] %>.</div>
+        <div>You have died <%= @character[:deaths] %> times.</div>
+      </div>
 
-      <div>Natural Resistances: X</div>
-      <div>Drain Resistance: X</div>
-      <div>Regeneration Bonus: X</div>
+      <div>
+        <% if @mastery[:melee] %>
+          <div>Your melee mastery is <%= @mastery[:melee] %>.</div>
+        <% end %>
+        <% if @mastery[:ranged] %>
+          <div>Your ranged mastery is <%= @mastery[:ranged] %>.</div>
+        <% end %>
+        <% if @mastery[:summoning] %>
+          <div>Your summoning mastery is <%= @mastery[:summoning] %>.</div>
+        <% end %>
+      </div>
 
-      <div>Your melee master is X</div>
-      <div>Your ranged master is X</div>
+      <div>
+        <div>You have <%= @other[:aetheria_slots] %> aetheria slots.</div>
+        <div>You have been enlightened <%= @other[:times_enlightened] %> times.</div>
+      </div>
 
-      <div>Aetheria Slots: X</div>
-      <div>Times Enlightened: X</div>
+      <div>
+        <div>Your chess rank is <%= @other[:chess_rank] %>.</div>
+        <div>Your fishing skill is <%= @other[:fishing_skill] %>.</div>
+      </div>
 
-      <div>Chess Rank: X</div>
-      <div>Fishing Skill: 0</div>
-      <div>Housing purchase date: X</div>
+      <div>
+        <div>You purchased housing last on <%= Time.at(@other[:housing_purchase_date]).strftime("%Y/%m/%d %r") %>.</div>
+      </div>
 
-      <div>Society: X</div>
+
+      <div>
+        <div>You are a member of the <%= @other[:society][:name] %> (Rank <%= @other[:society][:rank] %>)</div>
+      </div>
     </div>
   </div>
   <div class="tabcontainer">
