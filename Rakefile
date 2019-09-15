@@ -26,10 +26,13 @@ namespace :db do
   end
 
   task :drop do
+    desc "Delete database"
     `rm db/treestats.db`
   end
 
   task :import, [:path] do |t, args|
+    desc "Import data from JSON files"
+
     require "json"
     files = Dir.glob("#{args[:path]}/*.json")
 
