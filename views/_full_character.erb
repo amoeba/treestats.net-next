@@ -182,40 +182,39 @@
       </div>
 
       <div>
-        <% if @mastery[:melee] %>
-          <div>Your melee mastery is <%= @mastery[:melee] %>.</div>
+        <% if @properties[:masteries][:melee] %>
+          <div>Your melee mastery is <%= @properties[:masteries][:melee] %>.</div>
         <% end %>
-        <% if @mastery[:ranged] %>
-          <div>Your ranged mastery is <%= @mastery[:ranged] %>.</div>
+        <% if @properties[:masteries][:ranged] %>
+          <div>Your ranged mastery is <%= @properties[:masteries][:ranged] %>.</div>
         <% end %>
-        <% if @mastery[:summoning] %>
-          <div>Your summoning mastery is <%= @mastery[:summoning] %>.</div>
-        <% end %>
-      </div>
-
-      <div>
-        <% @ratings.each do |rating| %>
-          <div>Your <%= rating[:name] %> rating is +<%= rating[:value] %>.</div>
+        <% if @properties[:masteries][:summoning] %>
+          <div>Your summoning mastery is <%= @properties[:masteries][:summoning] %>.</div>
         <% end %>
       </div>
 
       <div>
-        <div>You have <%= @other[:aetheria_slots] %> aetheria slots.</div>
-        <div>You have been enlightened <%= @other[:times_enlightened] %> times.</div>
+        <% @properties[:ratings].each do |k,v| %>
+          <div>Your <%= v[:name] %> rating is <%= v[:value] %>.</div>
+        <% end %>
       </div>
 
       <div>
-        <div>Your chess rank is <%= @other[:chess_rank] %>.</div>
-        <div>Your fishing skill is <%= @other[:fishing_skill] %>.</div>
+        <div>You have <%= @properties[:aetheria_slots] %> aetheria slots.</div>
+        <div>You have been enlightened <%= @properties[:times_enlightened] %> times.</div>
       </div>
 
       <div>
-        <div>You purchased housing last on <%= Time.at(@other[:housing_purchase_date]).strftime("%Y/%m/%d %r") %>.</div>
+        <div>Your chess rank is <%= @properties[:chess_rank] || 0 %>.</div>
+        <div>Your fishing skill is <%= @properties[:fishing_skill] || 0 %>.</div>
       </div>
 
+      <div>
+        <div>You purchased housing last on <%= Time.at(@properties[:housing_purchase_date]).strftime("%Y/%m/%d %r") %>.</div>
+      </div>
 
       <div>
-        <div>You are a member of the <%= @other[:society][:name] %> (Rank <%= @other[:society][:rank] %>)</div>
+        <div>You are a member of the <%= @properties[:society][:name] %> (Rank <%= @properties[:society][:value] %>)</div>
       </div>
     </div>
   </div>
@@ -234,10 +233,10 @@
           </tr>
         </thead>
         <tbody>
-          <% @augs.each do |prop| %>
+          <% @properties[:augmentations].each do |k,v| %>
           <tr>
-            <td><%= prop[:name] %></td>
-            <td><%= prop[:value] %></td>
+            <td><%= v[:name] %></td>
+            <td><%= v[:value] %></td>
           </tr>
           <% end %>
         </tbody>
@@ -252,10 +251,10 @@
           </tr>
         </thead>
         <tbody>
-          <% @auras.each do |prop| %>
+          <% @properties[:auras].each do |k,v| %>
           <tr>
-            <td><%= prop[:name] %></td>
-            <td><%= prop[:value] %></td>
+            <td><%= v[:name] %></td>
+            <td><%= v[:value] %></td>
           </tr>
           <% end %>
         </tbody>
@@ -270,10 +269,10 @@
           </tr>
         </thead>
         <tbody>
-          <% @ratings.each do |prop| %>
+          <% @properties[:ratings].each do |k,v| %>
           <tr>
-            <td><%= prop[:name] %></td>
-            <td><%= prop[:value] %></td>
+            <td><%= v[:name] %></td>
+            <td><%= v[:value] %></td>
           </tr>
           <% end %>
         </tbody>

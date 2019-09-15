@@ -30,26 +30,61 @@ module Sinatra
     end
 
     def get_mastery(properties, type)
-      mastery = properties.filter { |p| p[:property_id] == Sinatra::EnumHelper::MASTERY[type] }
+      return nil unless properties[type]
 
-      if mastery.length != 1
-        return nil
-      end
-
-      mastery(Sinatra::EnumHelper::MASTERY[type], mastery.first[:value])
+      mastery(Sinatra::EnumHelper::MASTERY[type], properties[type][:value])
     end
 
     def get_society(properties)
-      society_id = properties.filter { |p| p[:property_id] >= 287 && p[:property_id] <= 289 }
+      society_ids = properties.filter { |k,p| p[:id] >= 287 && p[:id] <= 289 }
 
-      if society_id.length != 1
+      if society_ids.length != 1
         return nil
       end
 
-      {
-        :name => society(society_id.first[:property_id]),
-        :rank => society_id.first[:value]
+      society_ids.first[1]
+    end
+
+    def get_properties(properties)
+      # Add in values
+      properties = @character.properties.to_h { |p|
+        prop = property(p[:property_id])
+
+        [
+          prop[:key],
+          prop.merge({
+            :id => p[:property_id],
+            :value => p[:value]
+          })
+        ]
       }
+
+      {
+        :augmentations => properties.filter { |k,p| p[:type] == :aug }.sort_by { |k,p| p[:name] }.to_h,
+        :auras => properties.filter { |k,p| p[:type] == :aura }.sort_by { |k,p| p[:name] }.to_h,
+        :ratings => properties.filter { |k,p| p[:type] == :rating }.sort_by { |k,p| p[:name] }.to_h,
+
+        :masteries => {
+          :melee => get_mastery(properties, :melee),
+          :ranged => get_mastery(properties, :ranged),
+          :summoning => get_mastery(properties, :summoning)
+        },
+
+        :housing_purchase_date => get_property(properties, :housing_purchase_date),
+        :fishing_skill => get_property(properties, :fishing_skill),
+        :chess_rank => get_property(properties, :chess_rank),
+        :aetheria_slots => get_property(properties, :aetheria_slots),
+        :times_enlightened => get_property(properties, :times_enlightened),
+
+        :society => get_society(properties)
+      }
+    end
+
+    # nil-safe property getter
+    def get_property(properties, key)
+      return nil unless properties.has_key?(key)
+
+      properties[key][:value]
     end
 
     def get_property_value(properties, id)

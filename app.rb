@@ -164,40 +164,8 @@ get "/:server/:name" do
     }
   }
 
-  properties = @character.properties.map do |prop|
-    property(prop[:property_id]).merge({
-      :value => prop[:value]
-    })
-  end
-
-  @augs = properties
-    .filter { |p| p[:type] == :aug }
-    .sort_by { |p| p[:name] }
-
-  @auras = properties
-    .filter { |p| p[:type] == :aura }
-    .sort_by { |p| p[:name] }
-
-  @ratings = properties
-    .filter { |p| p[:type] == :rating }
-    .sort_by { |p| p[:name] }
-
   @titles = @character.titles.sort_by { |t| t.title_id }
-
-  @mastery = {
-    :melee => get_mastery(@character.properties, :melee),
-    :ranged => get_mastery(@character.properties, :ranged),
-    :summoning => get_mastery(@character.properties, :summoning)
-  }
-
-  @other = {
-    :housing_purchase_date => get_property_value(@character.properties, 199),
-    :fishing_skill => get_property_value(@character.properties, 192),
-    :chess_rank => get_property_value(@character.properties, 181),
-    :aetheria_slots => get_property_value(@character.properties, 322),
-    :times_enlightened => get_property_value(@character.properties, 390),
-    :society => get_society(@character.properties)
-  }
+  @properties = get_properties(@character.properties)
 
   erb :character
 end
