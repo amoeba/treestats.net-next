@@ -213,9 +213,11 @@
         <div>You purchased housing last on <%= Time.at(@properties[:housing_purchase_date]).strftime("%Y/%m/%d %r") %>.</div>
       </div>
 
-      <div>
-        <div>You are a member of the <%= @properties[:society][:name] %> (Rank <%= @properties[:society][:value] %>)</div>
-      </div>
+      <% if @properties[:society] %>
+        <div>
+          <div>You are a member of the <%= @properties[:society][:name] %> (Rank <%= @properties[:society][:value] %>)</div>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="tabcontainer">
