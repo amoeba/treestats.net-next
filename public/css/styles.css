@@ -144,6 +144,13 @@ input {
 
 .box table {
   width: 100%;
+  border-collapse: collapse;
+}
+
+.box th,
+.box td {
+  margin: 0;
+  padding: 3px 5px;
 }
 
 .box table thead tr th {
@@ -256,4 +263,20 @@ ul.titles li {
 
 .larger {
   font-size: 110%
+}
+
+.specialized {
+  background-color: purple;
+}
+
+.trained {
+  background-color: teal;
+}
+
+.untrained {
+  background-color: brown;
+}
+
+.unusable {
+  background-color: brown;
 }
