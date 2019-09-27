@@ -14,17 +14,17 @@
 <script src="/js/chain.js"></script>
 <script src="/js/tabs.js"></script>
 <script>
-// Chain
-const chainEl = document.getElementById("chain");
+  // Chain
+  const chainEl = document.getElementById("chain");
 
-if (chainEl) {
-  chain(chainEl, chainEl.dataset.server, chainEl.dataset.character);
-}
+  if (chainEl) {
+    chain(chainEl, chainEl.dataset.server, chainEl.dataset.character);
+  }
 
-// Tabs
-const containers = document.getElementsByClassName("tabcontainer");
+  // Tabs
+  const containers = document.getElementsByClassName("tabcontainer");
 
-for (let i = 0; i < containers.length; i++) {
-  tabs(containers[i]);
-}
+  for (let i = 0; i < containers.length; i++) {
+    tabs(containers[i]);
+  }
 </script>
