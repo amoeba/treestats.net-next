@@ -71,8 +71,8 @@
         <tbody>
           <% @skills[:specialized].each do |skill| %>
             <tr>
-              <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><img src="/img/skills/<%= skill_key(skill.skill_id) %>.png"/></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -85,8 +85,8 @@
         <tbody>
           <% @skills[:trained].each do |skill| %>
             <tr>
-              <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><img src="/img/skills/<%= skill_key(skill.skill_id) %>.png"/></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -99,8 +99,8 @@
         <tbody>
           <% @skills[:untrained].each do |skill| %>
             <tr>
-              <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><img src="/img/skills/<%= skill_key(skill.skill_id) %>.png"/></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>
@@ -113,8 +113,8 @@
         <tbody>
           <% @skills[:unusable].each do |skill| %>
             <tr>
-              <td>[ ]</td>
-              <td><%= skill(skill[:skill_id]) %></td>
+              <td><img src="/img/skills/<%= skill_key(skill.skill_id) %>.png"/></td>
+              <td><%= skill_name(skill[:skill_id]) %></td>
               <td><%= skill[:base] %></td>
               </tr>
           <% end %>

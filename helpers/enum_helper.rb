@@ -14,7 +14,11 @@ module Sinatra
       @@ranks[race_id][gender_id][rank]
     end
 
-    def skill(id)
+    def skill_key(id)
+      @@skill_keys[id]
+    end
+
+    def skill_name(id)
       @@skill_names[id]
     end
 
@@ -375,6 +379,47 @@ module Sinatra
       :trained => 2,
       :specialized => 3
     }
+
+    @@skill_keys = [
+      "alchemy",
+      "arcane_lore",
+      "armor_tinkering",
+      "assess_creature",
+      "assess_person",
+      "cooking",
+      "creature_enchantment",
+      "deception",
+      "dirty_fighting",
+      "dual_wield",
+      "fletching",
+      "finesse_weapons",
+      "healing",
+      "heavy_weapons",
+      "item_enchantment",
+      "item_tinkering",
+      "jump",
+      "leadership",
+      "life_magic",
+      "light_weapons",
+      "lockpick",
+      "loyalty",
+      "magic_defense",
+      "magic_item_tinkering",
+      "mana_conversion",
+      "melee_defense",
+      "missile_defense",
+      "missile_weapons",
+      "recklessness",
+      "run",
+      "salvaging",
+      "shield",
+      "sneak_attack",
+      "two_handed_combat",
+      "summoning",
+      "void_magic",
+      "war_magic",
+      "weapon_tinkering"
+    ]
 
     @@skill_names = [
       "Alchemy",

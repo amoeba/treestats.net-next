@@ -21,6 +21,10 @@ h4 {
   padding: 0;
 }
 
+img {
+  clip-path: circle(10px at center);
+}
+
 table.listing th {
   border-bottom: 1px solid black;
 }
