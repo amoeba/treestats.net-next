@@ -6,7 +6,7 @@ Sequel.migration do
 
       Integer :skill_id, null: false
       Integer :training_id, null: false
-      Integer :base
+      Integer :base, null: false
     end
   end
 

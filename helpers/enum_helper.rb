@@ -55,8 +55,7 @@ module Sinatra
       "Lugian",
       "Empyrean",
       "Penumbraen",
-      "Undead",
-      "Olthoi"
+      "Undead"
     ]
 
     @@ranks = [

@@ -11,6 +11,7 @@ require_relative "models/character.rb"
 require_relative "models/skill.rb"
 require_relative "models/title.rb"
 require_relative "models/property.rb"
+require_relative "models/account.rb"
 
 # Helpers
 require_relative "helpers/app_helper.rb"

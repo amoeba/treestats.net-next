@@ -16,37 +16,52 @@ module ImportHelper
     "Penumbraen" => 9,
     "Penumbraen Shadow" => 9,
     "Undead" => 10,
-    "Olthoi Soldier"  => 11,
-    "Olthoi Spitter"  => 11
+    "0" => 0,
+    "1" => 1,
+    "2" => 2,
+    "3" => 3,
+    "4" => 4,
+    "5" => 5,
+    "6" => 6,
+    "7" => 7,
+    "8" => 8,
+    "9" => 9,
+    "10" => 10,
+    0 => 0,
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    5 => 5,
+    6 => 6,
+    7 => 7,
+    8 => 8,
+    9 => 9,
+    10 => 10
   }
 
+  # Return nil when nil or Olthoi so importer can skip
   def self.race_id(name)
-    if name.nil?
-      return 0
-    elsif name.is_a?(Integer)
-      return name
-    elsif name.to_i.to_s == name
-      return name.to_i
-    else
-      return RACE_ID[name]
-    end
+    return nil unless RACE_ID.has_key?(name)
+
+    RACE_ID[name]
   end
 
   GENDER_ID = {
     "Male" => 0,
-    "Female" => 1
+    "Female" => 1,
+    "0" => 0,
+    "1" => 1,
+    "2" => 1,
+    0 => 0,
+    1 => 0,
+    2 => 1
   }
 
   def self.gender_id(name)
-    if name.nil?
-      return 0
-    elsif name.is_a?(Integer)
-      return name
-    elsif name.to_i.to_s == name
-      return name.to_i
-    else
-      return GENDER_ID[name]
-    end
+    return nil unless GENDER_ID.has_key?(name)
+
+    GENDER_ID[name]
   end
 
   SKILL = {

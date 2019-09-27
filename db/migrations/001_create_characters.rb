@@ -3,6 +3,13 @@ Sequel.migration do
     create_table(:characters) do
       primary_key :id
 
+      # Constraints
+      unique [:server, :name]
+      constraint(:gender_constraint, gender_id: 0..1)
+      constraint(:race_constraint, race_id: 0..10)
+      constraint(:rank_constraint, rank: 1..10)
+
+      # Columns
       String :server, null: false
       String :name, null: false
       String :account_name
@@ -22,7 +29,7 @@ Sequel.migration do
 
       # Allegiance
       String :allegiance_name
-      Integer :rank
+      Integer :rank, null: false
       Integer :followers
       Integer :monarch_id
       Integer :patron_id
@@ -46,8 +53,11 @@ Sequel.migration do
       Integer :stamina_base
       Integer :mana_base
 
-      timestamp :created_at
-      timestamp :updated_at
+      timestamp :created_at, null: false
+      timestamp :updated_at, null: false
+
+      # Account
+      foreign_key :account_id, :accounts
     end
   end
 

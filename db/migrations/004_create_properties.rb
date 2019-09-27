@@ -5,7 +5,7 @@ Sequel.migration do
       foreign_key :character_id, :characters
 
       Integer :property_id, null: false
-      Integer :value
+      Integer :value, null: false
     end
   end
 
