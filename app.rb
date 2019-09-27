@@ -62,7 +62,6 @@ get "/characters/?" do
     .offset(offset)
     .select(:server, :name)
     .order(:updated_at)
-    .reverse
 
   @count = @characters.count
 
@@ -95,23 +94,97 @@ get "/rankings/:ranking" do
 end
 
 get "/allegiances/?" do
-  return "Not implemented."
+  @page = get_page(params)
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @prev = { :page => @page - 1 }
+  @next = { :page => @page + 1 }
+
+  params[:page] = @page
+  params[:offset] = offset
+  params[:limit] = limit
+
+  @allegiances = Character
+    .distinct
+    .select(:server, :allegiance_name)
+    .order(:allegiance_name)
+    .limit(limit)
+    .offset(offset)
+    .exclude(allegiance_name: nil)
+
+  not_found if @allegiances.nil?
+
+  erb :allegiances
 end
 
-get "/allegiances/:allegiance" do |allegiance|
-  return "Not implemented."
+get "/allegiances/:server" do |server|
+  @page = get_page(params)
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @prev = { :page => @page - 1 }
+  @next = { :page => @page + 1 }
+
+  params[:page] = @page
+  params[:offset] = offset
+  params[:limit] = limit
+
+  @characters = Character
+    .distinct
+    .select(:server, :allegiance_name)
+    .where(server: server)
+    .order(:allegiance_name)
+    .limit(limit)
+    .offset(offset)
+
+  not_found if @characters.nil?
+
+  erb :characters
+end
+
+get "/allegiances/:server/:allegiance" do |server, allegiance|
+  @page = get_page(params)
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @prev = { :page => @page - 1 }
+  @next = { :page => @page + 1 }
+
+  params[:page] = @page
+  params[:offset] = offset
+  params[:limit] = limit
+
+  @header = "Allegiance: #{allegiance} (#{server})"
+  @characters = Character
+    .select(:server, :name)
+    .where(server: server, allegiance_name: allegiance)
+    .order(:name)
+    .limit(limit)
+    .offset(offset)
+
+  not_found if @characters.nil?
+
+  erb :characters
 end
 
 get "/:server" do
-  @server = params[:server]
+  @page = get_page(params)
+  limit = 25
+  offset = (@page - 1) * limit
+
+  @prev = { :page => @page - 1 }
+  @next = { :page => @page + 1 }
+
+  @header = @server
   @characters = Character
     .filter(server: params[:server])
     .select(:server, :name)
     .order(:updated_at)
-    .reverse
-    .limit(25)
+    .offset(offset)
+    .limit(limit)
 
-  erb :server
+  erb :characters
 end
 
 get "/:server/:name/chain" do

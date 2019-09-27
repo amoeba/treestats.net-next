@@ -21,6 +21,10 @@ h4 {
   padding: 0;
 }
 
+table.listing th {
+  border-bottom: 1px solid black;
+}
+
 nav a,
 nav a:visited {
   color: blue;
@@ -29,7 +33,7 @@ nav a:visited {
 
 nav ul {
   list-style-type: none;
-  margin: 0;
+  margin: 0 0 0 1.5rem;
   padding: 0;
 }
 
@@ -110,7 +114,7 @@ input {
 
 .box {
   border: 1px solid black;
-  max-height: 19.2rem;
+  max-height: 23rem;
   overflow-y: auto;
   font-size: 90%;
 }
@@ -170,25 +174,27 @@ input {
   display: grid;
   grid-template-columns: 4fr 1fr;
   border-bottom: 1px solid black;
-  font-size: 90%
-}
-
-.character-header>div {
-  text-align: center;
+  font-size: 80%
 }
 
 .character-header-left {
   border-right: 1px solid black;
   display: grid;
   grid-template-rows: 1fr 1fr 1.5fr;
+  padding: 0.25rem 0;
 }
 
 .character-header .twocol {
   align-self: end;
 }
 
-.character-header-level {
+.character-header-name {
+  font-size: 130%;
+}
+
+.character-header > div {
   padding: 0.25rem;
+  text-align: center;
 }
 
 .character-header-level-number {
@@ -202,10 +208,6 @@ input {
 .twocol {
   display: grid;
   grid-template-columns: 3fr 1fr;
-}
-
-.twocol>div {
-  padding: 0 0.25rem;
 }
 
 .twocol>div:first-child {

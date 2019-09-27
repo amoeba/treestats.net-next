@@ -1,0 +1,23 @@
+<h2>Allegiances</h2>
+
+<%= erb :_page_controls %>
+
+<table class="listing">
+  <thead>
+    <tr>
+      <th>Server</th>
+      <th>Allegiance</th>
+      <th><%= @ranking_name %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @allegiances.each do |allegiance| %>
+    <tr>
+      <td><a href="/allegiances/<%= allegiance[:server] %>"><%= allegiance[:server] %></a></td>
+      <td><a href="/allegiances/<%= allegiance[:server] %>/<%= allegiance[:allegiance_name] %>"><%= allegiance[:allegiance_name] %></a></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= erb :_page_controls %>

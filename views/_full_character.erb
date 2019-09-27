@@ -142,7 +142,7 @@
     <div class="box active padded divided">
       <div>
         <div class="larger"><%= rank(@character.race_id, @character.gender_id, @character.rank) %> <%= @character.name %></div>
-        <div><a href="/allegiances/<%= @character[:allegiance_name] %>"><%= @character[:allegiance_name] %></a></div>
+        <div><a href="/allegiances/<%= @character[:server] %>/<%= @character[:allegiance_name] %>"><%= @character[:allegiance_name] %></a></div>
         <div>Followers: <%= @character[:followers] %> | Rank: <%= @character[:rank] %></div>
       </div>
       <div>

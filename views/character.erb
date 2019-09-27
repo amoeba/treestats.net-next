@@ -1,6 +1,10 @@
 <h2><%= @character[:name] %> (<%= @character[:server] %>)</h2>
 
-<%= erb :_full_character if @character.strength_base %>
+<% if !@character.level %>
+  <p>This character is incomplete so only its allegiance chain is shown.</p>
+<% else %>
+  <%= erb :_full_character %>
+<% end %>
 
 <h4>Chain</h4>
 <div id="chain" data-server="<%= @character.server %>" data-character="<%= @character.name %>">
