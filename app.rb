@@ -93,6 +93,14 @@ get "/rankings/:ranking" do
   erb :ranking
 end
 
+get "/allegiances/?" do
+  return "Not implemented."
+end
+
+get "/allegiances/:allegiance" do |allegiance|
+  return "Not implemented."
+end
+
 get "/:server" do
   @server = params[:server]
   @characters = Character
