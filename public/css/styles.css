@@ -266,11 +266,15 @@ ul.titles li {
 }
 
 .specialized {
-  background-color: purple;
+  color: white;
+  background-color: #392067;
+  background: linear-gradient(to right, #392067, #392067, black);
 }
 
 .trained {
-  background-color: teal;
+  color: white;
+  background-color: #0F3C3E;
+  background: linear-gradient(to right, #0F3C3E, #0F3C3E, black);
 }
 
 .untrained {
