@@ -209,9 +209,11 @@
         <div>Your fishing skill is <%= @properties[:fishing_skill] || 0 %>.</div>
       </div>
 
-      <div>
-        <div>You purchased housing last on <%= Time.at(@properties[:housing_purchase_date]).strftime("%Y/%m/%d %r") %>.</div>
-      </div>
+      <% if @properties[:housing_purchase_date] %>
+        <div>
+          <div>You purchased housing last on <%= Time.at(@properties[:housing_purchase_date]).strftime("%Y/%m/%d %r") %>.</div>
+        </div>
+      <% end %>
 
       <% if @properties[:society] %>
         <div>
