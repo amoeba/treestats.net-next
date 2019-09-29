@@ -165,7 +165,7 @@ input {
 .box th,
 .box td {
   margin: 0;
-  padding: 3px 5px;
+  padding: 1px 3px;
 }
 
 .box table thead tr th {
@@ -263,10 +263,6 @@ ul.vassals {
   padding: 0;
 }
 
-ul.titles li {
-  line-height: 1.25rem;
-}
-
 .highlight {
   color: green;
   font-weight: bold;
@@ -278,6 +274,10 @@ ul.titles li {
 
 .larger {
   font-size: 110%
+}
+
+.skill-group {
+  height: 1.5rem;
 }
 
 .specialized {
@@ -293,9 +293,14 @@ ul.titles li {
 }
 
 .untrained {
-  background-color: brown;
+  background-color: rgba(255, 141, 35, 0.329);
 }
 
 .unusable {
-  background-color: brown;
+  background-color: rgba(255, 141, 35, 0.329);
+}
+
+td.icon {
+  width: 26px;
+  padding-right: 0;
 }
