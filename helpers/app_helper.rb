@@ -15,14 +15,7 @@ module Sinatra
     def to_params(params)
       return "" unless params.is_a?(Hash)
 
-      query_string = "?"
-
-      params.each do |k, v|
-        query_string += "#{k}=#{URI.encode_www_form(v.to_s)}&"
-      end
-
-      query_string.chop!
-      query_string
+      URI.encode_www_form(params)
     end
 
     def with_commas(string)
