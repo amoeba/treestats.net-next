@@ -32,8 +32,8 @@ get "/search" do
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :query => @query, :page => @page - 1 }
-  @next = { :query => @query, :page => @page + 1 }
+  @prev = {query: @query, page: @page - 1}
+  @next = {query: @query, page: @page + 1}
 
   @characters = Character
     .where(Sequel.lit("name LIKE ?", "%#{@query}%"))
@@ -54,8 +54,8 @@ get "/characters/?" do
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :page => @page - 1 }
-  @next = { :page => @page + 1 }
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
 
   @characters = Character
     .limit(limit)
@@ -77,8 +77,8 @@ get "/rankings/:ranking" do
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :page => @page - 1 }
-  @next = { :page => @page + 1 }
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
 
   params[:page] = @page
   params[:offset] = offset
@@ -98,8 +98,8 @@ get "/allegiances/?" do
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :page => @page - 1 }
-  @next = { :page => @page + 1 }
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
 
   params[:page] = @page
   params[:offset] = offset
@@ -123,8 +123,8 @@ get "/allegiances/:server" do |server|
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :page => @page - 1 }
-  @next = { :page => @page + 1 }
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
 
   params[:page] = @page
   params[:offset] = offset
@@ -148,8 +148,8 @@ get "/allegiances/:server/:allegiance" do |server, allegiance|
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :page => @page - 1 }
-  @next = { :page => @page + 1 }
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
 
   params[:page] = @page
   params[:offset] = offset
@@ -173,8 +173,8 @@ get "/:server" do
   limit = 25
   offset = (@page - 1) * limit
 
-  @prev = { :page => @page - 1 }
-  @next = { :page => @page + 1 }
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
 
   @header = @server
   @characters = Character
@@ -228,22 +228,18 @@ get "/:server/:name" do
   return erb :character if @character[:strength_base].nil?
 
   @skills = {
-    :specialized => @character.skills
+    specialized: @character.skills
       .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:specialized] }
-      .sort_by { |s| skill_name(s[:skill_id])
-    },
-    :trained => @character.skills
+      .sort_by { |s| skill_name(s[:skill_id]) },
+    trained: @character.skills
       .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:trained] }
-      .sort_by { |s| skill_name(s[:skill_id])
-    },
-    :untrained => @character.skills
+      .sort_by { |s| skill_name(s[:skill_id]) },
+    untrained: @character.skills
       .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:untrained] }
-      .sort_by { |s| skill_name(s[:skill_id])
-    },
-    :unusable => @character.skills
+      .sort_by { |s| skill_name(s[:skill_id]) },
+    unusable: @character.skills
       .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:unusable] }
-      .sort_by { |s| skill_name(s[:skill_id])
-    }
+      .sort_by { |s| skill_name(s[:skill_id]) },
   }
 
   @titles = @character.titles.sort_by { |t| t.title_id }

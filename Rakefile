@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "date"
-require 'bundler/setup'
+require "bundler/setup"
 Bundler.require(:default)
 
 require "./etc/import_helper"
@@ -9,7 +9,7 @@ require "./etc/import_helper"
 task default: :test
 
 task :test do
-  Dir['./test/*_test.rb'].each { |f| load f }
+  Dir["./test/*_test.rb"].each { |f| load f }
 end
 
 namespace :db do
@@ -38,7 +38,6 @@ namespace :db do
 
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
     Sequel.connect(db_uri) do |db|
-
       require "date"
       require_relative "models/character"
       require_relative "models/skill"
@@ -60,26 +59,31 @@ namespace :db do
         contents.split("\n").each do |line|
           data = JSON.parse(line)
 
-          puts "#{data['s']}/#{data['n']}"
+          puts "#{data["s"]}/#{data["n"]}"
 
           # Skip if needed
-          race_id = ImportHelper::race_id(data["r"])
-          gender_id = ImportHelper::gender_id(data["g"])
+          race_id = ImportHelper.race_id(data["r"])
+          gender_id = ImportHelper.gender_id(data["g"])
 
           # Skip on nil race
-          if race_id.nil? or gender_id.nil?
+          if race_id.nil? || gender_id.nil?
             puts "NIL RACE/GENDER: #{data}"
             next
           end
 
-          char = Character.update_or_create(server: data["s"], name: data["n"]) do |char|
+          char = Character.update_or_create(server: data["s"], name: data["n"]) { |char|
             char.server = data["s"]
             char.name = data["n"]
             char.race_id = race_id
             char.gender_id = gender_id
 
             rank = data["rn"]
-            char.rank = rank.nil? ? 1 : (rank == 0 ? 1 : rank) # Fix data corruption where rank is 0
+
+            char.rank = if rank.nil? || rank.zero?
+              1
+            else
+              rank
+            end
 
             char.allegiance_name = data["an"]
             char.created_at = DateTime.parse(data["c_at"]["$date"]).to_time.utc
@@ -113,16 +117,16 @@ namespace :db do
               char.current_title = data["tc"]
 
               # Handle case where tx and u are either { "12345" } or { "$numberLong" => 12345 }
-              if data["tx"].is_a?(Hash)
-                char.total_xp = data["tx"]["$numberLong"].to_i
+              char.total_xp = if data["tx"].is_a?(Hash)
+                data["tx"]["$numberLong"].to_i
               else
-                char.total_xp = data["tx"].to_i
+                data["tx"].to_i
               end
 
-              if data["u"].is_a?(Hash)
-                char.unassigned_xp = data["u"]["$numberLong"].to_i
+              char.unassigned_xp = if data["u"].is_a?(Hash)
+                data["u"]["$numberLong"].to_i
               else
-                char.unassigned_xp = data["u"].to_i
+                data["u"].to_i
               end
 
               char.skill_credits = data["sc"]
@@ -131,19 +135,24 @@ namespace :db do
             end
 
             if data["m"]
-              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) do |m|
+              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
                 if m.race_id.nil?
-                  race_id = ImportHelper::race_id(data["m"]["race"])
+                  race_id = ImportHelper.race_id(data["m"]["race"])
                   m.race_id = race_id.nil? ? 0 : race_id
                 end
 
                 if m.gender_id.nil?
-                  gender_id = ImportHelper::gender_id(data["m"]["gender"])
+                  gender_id = ImportHelper.gender_id(data["m"]["gender"])
                   m.gender_id = gender_id.nil? ? 0 : gender_id
                 end
 
                 rank = data["m"]["rank"]
-                m.rank = rank.nil? ? 1 : (rank == 0 ? 1 : rank)
+
+                m.rank = if rank.nil? || rank.zero?
+                  1
+                else
+                  rank
+                end
 
                 if m.followers.nil?
                   m.followers = data["m"]["followers"]
@@ -156,25 +165,30 @@ namespace :db do
                 if m.updated_at.nil?
                   m.updated_at = DateTime.now.to_time.utc
                 end
-              end
+              }
 
               char.monarch_id = monarch.id
             end
 
             if data["p"]
-              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) do |p|
+              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
                 if p.race_id.nil?
-                  race_id = ImportHelper::race_id(data["p"]["race"])
+                  race_id = ImportHelper.race_id(data["p"]["race"])
                   p.race_id = race_id.nil? ? 0 : race_id
                 end
 
                 if p.gender_id.nil?
-                  gender_id = ImportHelper::gender_id(data["p"]["gender"])
+                  gender_id = ImportHelper.gender_id(data["p"]["gender"])
                   p.gender_id = gender_id.nil? ? 0 : gender_id
                 end
 
                 rank = data["p"]["rank"]
-                p.rank = rank.nil? ? 1 : (rank == 0 ? 1 : rank)
+
+                p.rank = if rank.nil? || rank.zero?
+                  1
+                else
+                  rank
+                end
 
                 if p.created_at.nil?
                   p.created_at = Time.now
@@ -183,55 +197,49 @@ namespace :db do
                 if p.updated_at.nil?
                   p.updated_at = Time.now
                 end
-              end
+              }
 
               char.patron_id = patron.id
             end
-          end
+          }
 
           if data["acc"]
-            account = Account.update_or_create(name: data["acc"]) do |a|
+            account = Account.update_or_create(name: data["acc"]) { |a|
               a.name = data["acc"]
-            end
+            }
 
             char.account_id = account.id
           end
 
-          if data["sk"]
-            data["sk"].each do |k,v|
-              skill_id = ImportHelper::skill_id(v["name"])
+          data["sk"]&.each do |k, v|
+            skill_id = ImportHelper.skill_id(v["name"])
 
-              if skill_id.nil?
-                puts "Skill ID was nil: #{data}"
-                next
-              end
-
-              Skill.new(
-                character_id: char.id,
-                skill_id: skill_id,
-                training_id: ImportHelper::training_id(v["training"]),
-                base: v["base"]
-              ).save
+            if skill_id.nil?
+              puts "Skill ID was nil: #{data}"
+              next
             end
+
+            Skill.new(
+              character_id: char.id,
+              skill_id: skill_id,
+              training_id: ImportHelper.training_id(v["training"]),
+              base: v["base"]
+            ).save
           end
 
-          if data["ti"]
-            data["ti"].each do |t|
-              Title.new(
-                character_id: char.id,
-                title_id: t
-              ).save
-            end
+          data["ti"]&.each do |t|
+            Title.new(
+              character_id: char.id,
+              title_id: t
+            ).save
           end
 
-          if data["pr"]
-            data["pr"].each do |k,v|
-              Property.new(
-                character_id: char.id,
-                property_id: k.to_i,
-                value: v.to_i
-              ).save
-            end
+          data["pr"]&.each do |k, v|
+            Property.new(
+              character_id: char.id,
+              property_id: k.to_i,
+              value: v.to_i
+            ).save
           end
         end
       end
@@ -246,7 +254,6 @@ namespace :db do
 
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
     Sequel.connect(db_uri) do |db|
-
       require_relative "models/character"
       require_relative "models/skill"
       require_relative "models/title"
@@ -272,7 +279,7 @@ namespace :db do
             # rank = data["m"]["rank"]
             # followers = data["m"]["followers"]
 
-            next unless not patron.nil?
+            next unless !patron.nil?
 
             puts "#{patron.race_id}/#{data["p"]["race"]}"
           end
@@ -280,7 +287,6 @@ namespace :db do
       end
     end
   end
-
 
   task :seed do
     Rake::Task["db:drop"].invoke

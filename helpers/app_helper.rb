@@ -18,7 +18,7 @@ module Sinatra
       query_string = "?"
 
       params.each do |k, v|
-        query_string += "#{k}=#{URI.encode(v.to_s)}&"
+        query_string += "#{k}=#{URI.encode_www_form(v.to_s)}&"
       end
 
       query_string.chop!
@@ -36,7 +36,7 @@ module Sinatra
     end
 
     def get_society(properties)
-      society_ids = properties.filter { |k,p| p[:id] >= 287 && p[:id] <= 289 }
+      society_ids = properties.filter { |k, p| p[:id] >= 287 && p[:id] <= 289 }
 
       if society_ids.length != 1
         return nil
@@ -45,44 +45,44 @@ module Sinatra
       society_ids.first[1]
     end
 
-    def get_properties(properties)
+    def get_properties(props)
       # Add in values
-      properties = @character.properties.to_h { |p|
+      properties = @character.props.to_h { |p|
         prop = property(p[:property_id])
 
         [
           prop[:key],
           prop.merge({
-            :id => p[:property_id],
-            :value => p[:value]
-          })
+            id: p[:property_id],
+            value: p[:value],
+          }),
         ]
       }
 
       {
-        :augmentations => properties.filter { |k,p| p[:type] == :aug }.sort_by { |k,p| p[:name] }.to_h,
-        :auras => properties.filter { |k,p| p[:type] == :aura }.sort_by { |k,p| p[:name] }.to_h,
-        :ratings => properties.filter { |k,p| p[:type] == :rating }.sort_by { |k,p| p[:name] }.to_h,
+        augmentations: properties.filter { |k, p| p[:type] == :aug }.sort_by { |k, p| p[:name] }.to_h,
+        auras: properties.filter { |k, p| p[:type] == :aura }.sort_by { |k, p| p[:name] }.to_h,
+        ratings: properties.filter { |k, p| p[:type] == :rating }.sort_by { |k, p| p[:name] }.to_h,
 
-        :masteries => {
-          :melee => get_mastery(properties, :melee),
-          :ranged => get_mastery(properties, :ranged),
-          :summoning => get_mastery(properties, :summoning)
+        masteries: {
+          melee: get_mastery(properties, :melee),
+          ranged: get_mastery(properties, :ranged),
+          summoning: get_mastery(properties, :summoning),
         },
 
-        :housing_purchase_date => get_property(properties, :housing_purchase_date),
-        :fishing_skill => get_property(properties, :fishing_skill),
-        :chess_rank => get_property(properties, :chess_rank),
-        :aetheria_slots => get_property(properties, :aetheria_slots),
-        :times_enlightened => get_property(properties, :times_enlightened),
+        housing_purchase_date: get_property(properties, :housing_purchase_date),
+        fishing_skill: get_property(properties, :fishing_skill),
+        chess_rank: get_property(properties, :chess_rank),
+        aetheria_slots: get_property(properties, :aetheria_slots),
+        times_enlightened: get_property(properties, :times_enlightened),
 
-        :society => get_society(properties)
+        society: get_society(properties),
       }
     end
 
     # nil-safe property getter
     def get_property(properties, key)
-      return nil unless properties.has_key?(key)
+      return nil unless properties.key?(key)
 
       properties[key][:value]
     end

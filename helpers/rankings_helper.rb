@@ -9,70 +9,70 @@ module Sinatra
     # All enabled rankings and which method we use to call them. A 404 results
     # if the ranking isn't in this list.
     RANKINGS = {
-      :strength_base => :character,
-      :endurance_base => :character,
-      :coordination_base => :character,
-      :quickness_base => :character,
-      :focus_base => :character,
-      :self_base => :character,
-      :health_base => :character,
-      :stamina_base => :character,
-      :mana_base => :character,
-      :alchemy => :skill,
-      :arcane_lore => :skill,
-      :armor_tinkering => :skill,
-      :assess_creature => :skill,
-      :assess_person => :skill,
-      :cooking => :skill,
-      :creature_enchantment => :skill,
-      :deception => :skill,
-      :dirty_fighting => :skill,
-      :dual_wield => :skill,
-      :fletching => :skill,
-      :finesse_weapons => :skill,
-      :healing => :skill,
-      :heavy_weapons => :skill,
-      :item_enchantment => :skill,
-      :item_tinkering => :skill,
-      :jump => :skill,
-      :leadership => :skill,
-      :life_magic => :skill,
-      :light_weapons => :skill,
-      :lockpick => :skill,
-      :loyalty => :skill,
-      :magic_defense => :skill,
-      :magic_item_tinkering => :skill,
-      :mana_conversion => :skill,
-      :melee_defense => :skill,
-      :missile_defense => :skill,
-      :missile_weapons => :skill,
-      :recklessness => :skill,
-      :run => :skill,
-      :salvaging => :skill,
-      :shield => :skill,
-      :sneak_attack => :skill,
-      :two_handed_combat => :skill,
-      :summoning => :skill,
-      :void_magic => :skill,
-      :war_magic => :skill,
-      :weapon_tinkering => :skill,
-      :level => :character,
-      :birth => :character,
-      :deaths => :character,
-      :rank => :character,
-      :followers => :character,
-      :unassigned_xp => :character,
-      :total_xp => :character,
-      :titles => :title,
-      :times_enlightened => :property
+      strength_base: :character,
+      endurance_base: :character,
+      coordination_base: :character,
+      quickness_base: :character,
+      focus_base: :character,
+      self_base: :character,
+      health_base: :character,
+      stamina_base: :character,
+      mana_base: :character,
+      alchemy: :skill,
+      arcane_lore: :skill,
+      armor_tinkering: :skill,
+      assess_creature: :skill,
+      assess_person: :skill,
+      cooking: :skill,
+      creature_enchantment: :skill,
+      deception: :skill,
+      dirty_fighting: :skill,
+      dual_wield: :skill,
+      fletching: :skill,
+      finesse_weapons: :skill,
+      healing: :skill,
+      heavy_weapons: :skill,
+      item_enchantment: :skill,
+      item_tinkering: :skill,
+      jump: :skill,
+      leadership: :skill,
+      life_magic: :skill,
+      light_weapons: :skill,
+      lockpick: :skill,
+      loyalty: :skill,
+      magic_defense: :skill,
+      magic_item_tinkering: :skill,
+      mana_conversion: :skill,
+      melee_defense: :skill,
+      missile_defense: :skill,
+      missile_weapons: :skill,
+      recklessness: :skill,
+      run: :skill,
+      salvaging: :skill,
+      shield: :skill,
+      sneak_attack: :skill,
+      two_handed_combat: :skill,
+      summoning: :skill,
+      void_magic: :skill,
+      war_magic: :skill,
+      weapon_tinkering: :skill,
+      level: :character,
+      birth: :character,
+      deaths: :character,
+      rank: :character,
+      followers: :character,
+      unassigned_xp: :character,
+      total_xp: :character,
+      titles: :title,
+      times_enlightened: :property,
     }
 
     # Which database column to pull each ranking type's value from. If not
     # present, assume we can use the ranking as-is.
     VALUE_COL = {
-      :skill => :base,
-      :title => :count,
-      :property => :value
+      skill: :base,
+      title: :count,
+      property: :value,
     }
 
     # Return the value column for each ranking type. If not present in
@@ -80,7 +80,7 @@ module Sinatra
     def value_col(ranking)
       type = RANKINGS[ranking]
 
-      return ranking if !VALUE_COL[type]
+      return ranking unless VALUE_COL[type]
 
       VALUE_COL[type]
     end
@@ -88,7 +88,7 @@ module Sinatra
     def get_ranking(params)
       ranking = params[:ranking].to_sym
 
-      if !RANKINGS.include?(ranking)
+      unless RANKINGS.include?(ranking)
         halt(404, "Ranking '#{ranking}' not found.")
       end
 
@@ -103,7 +103,7 @@ module Sinatra
       elsif type == :property
         property_ranking(params)
       else
-        self.call(ranking, params)
+        call(ranking, params)
       end
     end
 
@@ -134,8 +134,6 @@ module Sinatra
 
     def title_ranking(*args)
       params = args[0]
-      ranking = params[:ranking].to_sym
-      type = RANKINGS[ranking]
 
       q = Title
         .group_and_count(:character_id)
@@ -145,8 +143,6 @@ module Sinatra
         .offset(params[:offset])
         .association_join(:character)
         .select_append(:server, :name)
-
-      puts q.sql
 
       q
     end

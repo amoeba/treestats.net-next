@@ -8,7 +8,7 @@ class AppTest < MiniTest::Test
   end
 
   def test_hello_world
-    get '/'
+    get "/"
     assert last_response.ok?
   end
 end

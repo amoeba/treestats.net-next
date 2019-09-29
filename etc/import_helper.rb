@@ -37,12 +37,12 @@ module ImportHelper
     7 => 7,
     8 => 8,
     9 => 9,
-    10 => 10
+    10 => 10,
   }
 
   # Return nil when nil or Olthoi so importer can skip
   def self.race_id(name)
-    return nil unless RACE_ID.has_key?(name)
+    return nil unless RACE_ID.key?(name)
 
     RACE_ID[name]
   end
@@ -55,11 +55,11 @@ module ImportHelper
     "2" => 1,
     0 => 0,
     1 => 0,
-    2 => 1
+    2 => 1,
   }
 
   def self.gender_id(name)
-    return nil unless GENDER_ID.has_key?(name)
+    return nil unless GENDER_ID.key?(name)
 
     GENDER_ID[name]
   end
@@ -113,7 +113,7 @@ module ImportHelper
     "Unusable" => 0,
     "Untrained" => 1,
     "Trained" => 2,
-    "Specialized" => 3
+    "Specialized" => 3,
   }
   def self.training_id(name)
     TRAINING[name]
