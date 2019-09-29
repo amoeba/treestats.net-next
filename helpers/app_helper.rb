@@ -40,7 +40,7 @@ module Sinatra
 
     def get_properties(props)
       # Add in values
-      properties = @character.props.to_h { |p|
+      properties = props.to_h { |p|
         prop = property(p[:property_id])
 
         [
