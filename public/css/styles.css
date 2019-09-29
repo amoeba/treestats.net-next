@@ -65,6 +65,13 @@ input {
   text-align: right;
 }
 
+#search input {
+  border: none;
+  box-shadow: #CCC 0 0 0 1px,1px 1px 1px 0 #CCC;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+}
+
 /* Specific stuff */
 #chain {
   border: 1px solid black;
