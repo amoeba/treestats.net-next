@@ -41,6 +41,7 @@ get "/search" do
     .offset(offset)
     .select(:name, :server)
     .order(:name)
+    .exclude(level: nil)
 
   erb :search
 end
@@ -62,6 +63,7 @@ get "/characters/?" do
     .offset(offset)
     .select(:server, :name)
     .order(:updated_at)
+    .exclude(level: nil)
 
   @count = @characters.count
 
@@ -162,6 +164,7 @@ get "/allegiances/:server/:allegiance" do |server, allegiance|
     .order(:name)
     .limit(limit)
     .offset(offset)
+    .exclude(level: nil)
 
   not_found if @characters.nil?
 
@@ -183,6 +186,7 @@ get "/:server" do
     .order(:updated_at)
     .offset(offset)
     .limit(limit)
+    .exclude(level: nil)
 
   erb :characters
 end
