@@ -60,10 +60,6 @@ class Character < Sequel::Model
     char[:created_at] = self.created_at
     char[:updated_at] = self.updated_at
 
-
-
-
-
     char[:attributes] = {
       strength: {
         creation: self.strength_creation,
@@ -105,7 +101,7 @@ class Character < Sequel::Model
 
     char[:skills] = self.skills
     char[:titles] = self.titles
-    char[:properties] = self.properties
+    char[:properties] = self.properties.select { |p| p[:name] != "UNK" }
 
     char.to_json
   end
