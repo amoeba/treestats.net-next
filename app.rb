@@ -36,7 +36,7 @@ get "/search" do
   @next = {query: @query, page: @page + 1}
 
   @characters = Character
-    .where(Sequel.lit("name LIKE ?", "%#{@query}%"))
+    .where(Sequel.lit("lower(name) LIKE ?", "%#{@query.downcase}%"))
     .limit(limit)
     .offset(offset)
     .select(:name, :server)
