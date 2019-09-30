@@ -188,14 +188,13 @@ input {
   font-size: 80%;
 }
 
-.character-header > div {
+.character-header-left {
+  border-right: 1px solid black;
   padding: 0.25rem;
 }
 
-.character-header-left {
-  border-right: 1px solid black;
-  display: grid;
-  grid-template-rows: 1fr 1fr 1.5fr;
+.character-header-level {
+  padding: 0.25rem;
 }
 
 .character-header .twocol {
@@ -206,7 +205,11 @@ input {
   font-size: 120%;
 }
 
-.character-header > div {
+.character-header-description {
+  margin-bottom: 1rem;
+}
+
+.character-header {
   text-align: center;
 }
 
