@@ -43,6 +43,13 @@ module Sinatra
       @@property_ids[key]
     end
 
+    module_function :skill_name
+    module_function :training
+    module_function :property
+    module_function :title
+    module_function :race
+    module_function :gender
+
     @@genders = [
       "Male",
       "Female",
