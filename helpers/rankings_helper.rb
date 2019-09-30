@@ -67,6 +67,11 @@ module Sinatra
       times_enlightened: :property,
     }
 
+    # Default is descending, these rankings should be ascending
+    ASCENDING = {
+      birth: true
+    }
+
     # Which database column to pull each ranking type's value from. If not
     # present, assume we can use the ranking as-is.
     VALUE_COL = {
@@ -111,11 +116,17 @@ module Sinatra
       params = args[0]
       ranking = params[:ranking].to_sym
 
-      Character
+      query = Character
         .order(ranking)
-        .reverse
         .limit(params[:limit])
         .offset(params[:offset])
+        .exclude({ ranking => nil })
+
+      if ASCENDING.key?(ranking)
+        return query
+      else
+        return query.reverse
+      end
     end
 
     def skill_ranking(*args)
