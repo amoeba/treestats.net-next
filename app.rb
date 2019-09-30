@@ -221,6 +221,24 @@ get "/:server/:name/chain" do
   chain(ultimate).to_json
 end
 
+get "/:server/:name.json" do
+  @character = Character
+    .filter(name: params[:name], server: params[:server])
+    .first
+
+  halt(404, "{ \"error\": \"Character not found.\"}") if @character.nil?
+
+  content_type :json
+  @character
+    .to_json(
+      except: [ :id, :account_id, :archived],
+      include: {
+        skills: { except: [ :id, :character_id ] },
+        titles: { except: [ :id, :character_id ] },
+        properties: { except: [ :id, :character_id ] }
+      })
+end
+
 get "/:server/:name" do
   @character = Character
     .filter(name: params[:name], server: params[:server])
