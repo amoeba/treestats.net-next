@@ -151,7 +151,7 @@
           <div><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= rank(@character.monarch[:race_id], @character.monarch[:gender_id], @character.monarch[:rank]) %> <%= @character.monarch[:name] %></a></div>
           <div>Followers: <%= @character.monarch[:followers] %></div>
         <% else %>
-          No Monarch
+          No monarch
         <% end%>
       </div>
       <div>
@@ -159,13 +159,13 @@
         <% if @character.patron %>
           <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= rank(@character.patron[:race_id], @character.patron[:gender_id], @character.patron[:rank]) %> <%= @character.patron[:name] %></a>
         <% else %>
-          No Patron
+          No patron
         <% end%>
       </div>
       <div>
         <h4>Vassals</h4>
         <% if @character.vassals.length == 0 %>
-          No vassals.
+          No vassals
         <% end %>
         <ul class="vassals">
           <% @character.vassals.each do |vassal| %>
