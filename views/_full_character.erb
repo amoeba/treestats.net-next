@@ -176,8 +176,12 @@
     </div>
     <div class="box inactive other">
       <div>
-        <div>You were born on <%= @character[:born] %>.</div>
-        <div>You have played for <%= @character[:age] %>.</div>
+        <% if @character[:born] %>
+          <div>You were born on <%= @character[:born] %>.</div>
+        <% end%>
+        <% if @character[:born] %>
+          <div>You have played for <%= @character[:age] %>.</div>
+        <% end %>
         <div>You have died <%= @character[:deaths] %> times.</div>
       </div>
 
@@ -200,8 +204,8 @@
       </div>
 
       <div>
-        <div>You have <%= @properties[:aetheria_slots] %> aetheria slots.</div>
-        <div>You have been enlightened <%= @properties[:times_enlightened] %> times.</div>
+        <div>You have <%= @properties[:aetheria_slots] || 0 %> aetheria slots.</div>
+        <div>You have been enlightened <%= @properties[:times_enlightened] || 0 %> times.</div>
       </div>
 
       <div>
