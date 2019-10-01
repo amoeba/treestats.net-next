@@ -6,13 +6,6 @@ body {
   margin: 0 auto;
 }
 
-nav {
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 h1,
 h2,
 h3,
@@ -29,26 +22,30 @@ table.listing th {
   border-bottom: 1px solid black;
 }
 
-nav a,
-nav a:visited {
-  color: blue;
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #CCC;
+}
+
+header a,
+header a:visited
+{
+  color: black;
   text-decoration: none;
+  font-weight: bold;
+  margin-right: 1rem;
+  padding: 0.5rem 0;
 }
 
-nav ul {
-  list-style-type: none;
-  margin: 0 0 0 1.5rem;
-  padding: 0;
+header h1 a:hover {
+  border: none;
 }
 
-nav li {
-  display: inline-block;
-  margin-right: 0.5rem;
-  vertical-align: middle;
-}
-
-nav li:last-child {
-  margin-right: 0;
+header a:hover {
+  border-bottom: 1px solid red;
 }
 
 main > h2 {
@@ -63,6 +60,7 @@ input {
 #search {
   margin: 0.5rem 0;
   text-align: right;
+  align-self: flex-end;
 }
 
 #search input {
