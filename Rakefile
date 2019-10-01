@@ -38,7 +38,6 @@ namespace :db do
 
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
     Sequel.connect(db_uri) do |db|
-      require "date"
       require_relative "models/character"
       require_relative "models/skill"
       require_relative "models/title"
@@ -191,11 +190,11 @@ namespace :db do
                 end
 
                 if p.created_at.nil?
-                  p.created_at = Time.now
+                  p.created_at = DateTime.now.to_time.utc
                 end
 
                 if p.updated_at.nil?
-                  p.updated_at = Time.now
+                  p.updated_at = DateTime.now.to_time.utc
                 end
               }
 
@@ -310,7 +309,7 @@ namespace :db do
         gender_id: 0,
         level: 275,
         current_title: 1,
-        birth: Date.new,
+        birth: DateTime.now.to_time.utc,
         deaths: 100,
         total_xp: 100,
         unassigned_xp: 100,
@@ -369,7 +368,7 @@ namespace :db do
         rank: 1,
         level: 126,
         current_title: 1,
-        birth: Date.new,
+        birth: DateTime.now.to_time.utc,
         deaths: 100,
         total_xp: 100,
         unassigned_xp: 100,
@@ -419,7 +418,7 @@ namespace :db do
         rank: 1,
         level: 50,
         current_title: 1,
-        birth: Date.new,
+        birth: DateTime.now.to_time.utc,
         deaths: 100,
         total_xp: 100,
         unassigned_xp: 100,
