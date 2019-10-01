@@ -26,7 +26,7 @@ class Character < Sequel::Model
       name: name,
       gender: Sinatra::EnumHelper.gender(gender_id),
       race: Sinatra::EnumHelper.race(race_id),
-      rank: rank
+      rank: rank,
     }
 
     return char.to_json unless level
