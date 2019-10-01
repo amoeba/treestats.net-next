@@ -288,9 +288,6 @@ namespace :db do
   end
 
   task :seed do
-    Rake::Task["db:drop"].invoke
-    Rake::Task["db:migrate"].invoke
-
     require "sequel"
 
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
