@@ -293,14 +293,15 @@ namespace :db do
     Rake::Task["db:migrate"].invoke
 
     require "sequel"
-    require_relative "models/character"
-    require_relative "models/skill"
-    require_relative "models/title"
-    require_relative "models/property"
 
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
 
     Sequel.connect(db_uri) do |db|
+      require_relative "models/character"
+      require_relative "models/skill"
+      require_relative "models/title"
+      require_relative "models/property"
+
       # Kolthar
       kolthar = Character.new(
         server: "WintersEbb",
@@ -365,6 +366,7 @@ namespace :db do
         name: "Kolth",
         race_id: 0,
         gender_id: 0,
+        rank: 1,
         level: 126,
         current_title: 1,
         birth: Date.new,
@@ -375,7 +377,6 @@ namespace :db do
         luminance_earned: 100,
         skill_credits: 5,
         allegiance_name: "ALLEGIANCE",
-        rank: 0,
         followers: 0,
         monarch_id: kolthar.id,
         patron_id: kolthar.id,
@@ -415,6 +416,7 @@ namespace :db do
         name: "Kol'thar",
         race_id: 0,
         gender_id: 0,
+        rank: 1,
         level: 50,
         current_title: 1,
         birth: Date.new,
@@ -425,7 +427,6 @@ namespace :db do
         luminance_earned: 100,
         skill_credits: 5,
         allegiance_name: "ALLEGIANCE",
-        rank: 0,
         followers: 0,
         monarch_id: kolthar.id,
         patron_id: kolthar.id,
@@ -445,205 +446,6 @@ namespace :db do
         stamina_base: 100,
         mana_base: 100
       ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "Stub",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        followers: 0,
-        monarch_id: kolthar.id,
-        patron_id: kol_thar.id,
-      ).save
-
-      # Make a deep chain
-      top = Character.new(
-        server: "WintersEbb",
-        name: "TopTen",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        followers: 0
-      ).save
-      parent = top
-
-      (1..10).each do |i|
-        parent = Character.new(
-          server: "WintersEbb",
-          name: "TopTen",
-          race_id: 0,
-          gender_id: 0,
-          rank: 0,
-          followers: 0,
-          patron_id: parent.id,
-          monarch_id: top.id
-        ).save
-      end
-
-      # Make a deeper chain
-      top = Character.new(
-        server: "WintersEbb",
-        name: "TopThousand",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        followers: 0
-      ).save
-      parent = top
-
-      (1..1000).each do |i|
-        parent = Character.new(
-          server: "WintersEbb",
-          name: "TopThousand",
-          race_id: 0,
-          gender_id: 0,
-          rank: 0,
-          followers: 0,
-          patron_id: parent.id,
-          monarch_id: top.id
-        ).save
-      end
-
-      # Make a pretty tree
-      a = Character.new(
-        server: "WintersEbb",
-        name: "A",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0
-      ).save
-
-      b1 = Character.new(
-        server: "WintersEbb",
-        name: "BA",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: a.id
-      ).save
-
-      b2 = Character.new(
-        server: "WintersEbb",
-        name: "BB",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: a.id
-      ).save
-
-      c1 = Character.new(
-        server: "WintersEbb",
-        name: "CA",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: b1.id
-      ).save
-
-      c2 = Character.new(
-        server: "WintersEbb",
-        name: "CB",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: b1.id
-      ).save
-
-      c3 = Character.new(
-        server: "WintersEbb",
-        name: "CC",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: b2.id
-      ).save
-
-      c4 = Character.new(
-        server: "WintersEbb",
-        name: "CD",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: b2.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DA",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c1.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DB",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c1.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DC",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c2.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DD",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c2.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DE",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c3.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DF",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c3.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DG",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c4.id
-      ).save
-
-      Character.new(
-        server: "WintersEbb",
-        name: "DH",
-        race_id: 0,
-        gender_id: 0,
-        rank: 0,
-        patron_id: c4.id
-      ).save
-
-      puts Character.count
-      puts Skill.count
-      puts Title.count
-      puts Property.count
     end
   end
 end

@@ -53,8 +53,8 @@ Sequel.migration do
       Integer :stamina_base
       Integer :mana_base
 
-      timestamp :created_at, null: false
-      timestamp :updated_at, null: false
+      timestamp :created_at
+      timestamp :updated_at
 
       # Account
       foreign_key :account_id, :accounts
