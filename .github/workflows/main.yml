@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
     - name: Standard checks
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      uses: amoeba/standardrb-action@v1
+      uses: amoeba/standardrb-action@v2
