@@ -9,9 +9,9 @@ class Skill < Sequel::Model
 
   def to_json(options)
     {
-      name: Sinatra::EnumHelper.skill_name(self.skill_id),
-      training: Sinatra::EnumHelper.training(self.training_id),
-      base: 300
+      name: Sinatra::EnumHelper.skill_name(skill_id),
+      training: Sinatra::EnumHelper.training(training_id),
+      base: 300,
     }.to_json
   end
 end

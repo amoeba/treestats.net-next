@@ -69,7 +69,7 @@ module Sinatra
 
     # Default is descending, these rankings should be ascending
     ASCENDING = {
-      birth: true
+      birth: true,
     }
 
     # Which database column to pull each ranking type's value from. If not
@@ -120,7 +120,7 @@ module Sinatra
         .order(ranking)
         .limit(params[:limit])
         .offset(params[:offset])
-        .exclude({ ranking => nil })
+        .exclude({ranking: nil})
 
       if ASCENDING.key?(ranking)
         return query

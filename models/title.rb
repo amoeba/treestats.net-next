@@ -6,6 +6,6 @@ class Title < Sequel::Model
   many_to_one :character
 
   def to_json(options)
-    Sinatra::EnumHelper.title(self.title_id).to_json
+    Sinatra::EnumHelper.title(title_id).to_json
   end
 end

@@ -22,86 +22,86 @@ class Character < Sequel::Model
   def to_json
     # Basics
     char = {
-      server: self.server,
-      name: self.name,
-      gender: Sinatra::EnumHelper.gender(self.gender_id),
-      race: Sinatra::EnumHelper.race(self.race_id),
-      rank: self.rank
+      server: server,
+      name: name,
+      gender: Sinatra::EnumHelper.gender(gender_id),
+      race: Sinatra::EnumHelper.race(race_id),
+      rank: rank,
     }
 
-    return char.to_json unless self.level
+    return char.to_json unless level
 
-    char[:level] = self.level
-    char[:birth] = self.birth
-    char[:deaths] = "%d" % self.deaths
-    char[:total_xp] = "%d" % self.total_xp
-    char[:unassigned_xp] = "%d" % self.unassigned_xp
-    char[:luminance_earned] = "%d" % self.luminance_earned
-    char[:skill_credits] = self.skill_credits
-    char[:allegiance_name] = self.allegiance_name
-    char[:followers] = self.followers
+    char[:level] = level
+    char[:birth] = birth
+    char[:deaths] = "%d" % deaths
+    char[:total_xp] = "%d" % total_xp
+    char[:unassigned_xp] = "%d" % unassigned_xp
+    char[:luminance_earned] = "%d" % luminance_earned
+    char[:skill_credits] = skill_credits
+    char[:allegiance_name] = allegiance_name
+    char[:followers] = followers
 
-    if self.monarch
+    if monarch
       char[:monarch] = {
-        name: self.monarch.name
+        name: monarch.name,
       }
     end
 
-    if self.patron
+    if patron
       char[:patron] = {
-        name: self.patron.name
+        name: patron.name,
       }
     end
 
-    if self.vassals
-      char[:vassals] = self.vassals.map { |v| v.name }
+    if vassals
+      char[:vassals] = vassals.map { |v| v.name }
     end
 
-    char[:created_at] = self.created_at
-    char[:updated_at] = self.updated_at
+    char[:created_at] = created_at
+    char[:updated_at] = updated_at
 
     char[:attributes] = {
       strength: {
-        creation: self.strength_creation,
-        base: self.strength_base
+        creation: strength_creation,
+        base: strength_base,
       },
       endurance: {
-        creation: self.endurance_creation,
-        base: self.endurance_base
+        creation: endurance_creation,
+        base: endurance_base,
       },
       coordination: {
-        creation: self.coordination_creation,
-        base: self.coordination_base
+        creation: coordination_creation,
+        base: coordination_base,
       },
       quickness: {
-        creation: self.quickness_creation,
-        base: self.quickness_base
+        creation: quickness_creation,
+        base: quickness_base,
       },
       focus: {
-        creation: self.focus_creation,
-        base: self.focus_base
+        creation: focus_creation,
+        base: focus_base,
       },
       self: {
-        creation: self.self_creation,
-        base: self.self_base
+        creation: self_creation,
+        base: self_base,
       },
     }
 
     char[:vitals] = {
       health: {
-        base: self.health_base
+        base: health_base,
       },
       stamina: {
-        base: self.stamina_base
+        base: stamina_base,
       },
       mana: {
-        base: self.mana_base
+        base: mana_base,
       },
     }
 
-    char[:skills] = self.skills
-    char[:titles] = self.titles
-    char[:properties] = self.properties.select { |p| p[:name] != "UNK" }
+    char[:skills] = skills
+    char[:titles] = titles
+    char[:properties] = properties.select { |p| p[:name] != "UNK" }
 
     char.to_json
   end
