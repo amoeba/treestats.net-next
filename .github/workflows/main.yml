@@ -12,4 +12,4 @@ jobs:
     - name: Standard checks
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      uses: amoeba/standard-action@master
+      uses: amoeba/standardrb-action@v1
