@@ -120,7 +120,7 @@ module Sinatra
         .order(ranking)
         .limit(params[:limit])
         .offset(params[:offset])
-        .exclude({ranking: nil})
+        .exclude({ranking => nil})
 
       if ASCENDING.key?(ranking)
         return query
