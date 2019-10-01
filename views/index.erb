@@ -1,1 +1,40 @@
-<h2>Index</h2>
+<div class="panes">
+  <div class="dashboard">
+    <h3>Recently Updated</h3>
+    <table class="listing">
+      <thead>
+        <tr>
+          <th>Server</th>
+          <th>Character</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent.each do |character| %>
+          <tr>
+            <td><a href="/<%= character[:server] %>"><%= character[:server] %></a></td>
+            <td><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:name] %></a></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="dashboard">
+    <h3>Characters per Server</h3>
+    <table class="listing">
+      <thead>
+        <tr>
+          <th>Server</th>
+          <th>Characters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @chars_per_server.each do |server| %>
+          <tr>
+            <td><a href="/<%= server[:server] %>"><%= server[:server] %></a></td>
+            <td><%= server[:count] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

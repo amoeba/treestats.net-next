@@ -89,6 +89,16 @@ input {
   flex-wrap: wrap;
 }
 
+.panes .dashboard {
+  margin-right: 1rem;
+  padding: 0.5rem;
+}
+
+.panes .dashboard h3 {
+  font-size: 100%;
+  margin-bottom: 0.25rem;
+}
+
 .tabcontainer {
   width: 300px;
   min-width: 300px;
@@ -170,7 +180,7 @@ input {
   text-align: left;
 }
 
-.box table tbody tr td:last-child {
+.box td:last-child {
   text-align: right;
 }
 

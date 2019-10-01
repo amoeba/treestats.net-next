@@ -21,6 +21,17 @@ require_relative "helpers/enum_helper.rb"
 
 # Routes
 get "/" do
+  @recent = Character
+    .select(:name, :server)
+    .exclude(level: nil)
+    .order(:updated_at)
+    .limit(10)
+
+  @chars_per_server = Character
+    .group_and_count(:server)
+    .order(:count)
+    .reverse
+
   erb :index
 end
 
