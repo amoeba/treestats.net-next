@@ -1,3 +1,4 @@
+/* General styles */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
@@ -14,12 +15,16 @@ h4 {
   padding: 0;
 }
 
+h2 {
+  margin-bottom: 1rem;
+}
+
 img {
   clip-path: circle(10px at center);
 }
 
-table.listing th {
-  border-bottom: 1px solid black;
+input {
+  font-size: inherit;
 }
 
 header {
@@ -48,15 +53,7 @@ header a:hover {
   border-bottom: 1px solid red;
 }
 
-main > h2 {
-  margin-bottom: 0.5rem;
-}
-
-/* General styles */
-input {
-  font-size: inherit;
-}
-
+/* Special elements */
 #search {
   margin: 0.5rem 0;
   text-align: right;
@@ -84,6 +81,25 @@ input {
   padding: 1.5rem;
 }
 
+/* Controls */
+.controls {
+  margin-bottom: 1rem;
+}
+
+.controls a {
+  text-decoration: none;
+}
+
+.controls a:visited {
+  color: blue;
+}
+
+/* Listings */
+table.listing th {
+  border-bottom: 1px solid black;
+}
+
+/* Panes */
 .panes {
   display: flex;
   flex-wrap: wrap;
@@ -189,6 +205,7 @@ input {
   text-align: center;
 }
 
+/* Character sheet */
 .character-header {
   display: grid;
   grid-template-columns: 4fr 1fr;
@@ -253,18 +270,6 @@ input {
 
 .rankings .group:last-child {
   margin-right: 0;
-}
-
-.controls {
-  margin: 1.5rem 0;
-}
-
-.controls a {
-  text-decoration: none;
-}
-
-.controls a:visited {
-  color: blue;
 }
 
 ul.titles,
