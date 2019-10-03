@@ -25,7 +25,6 @@ namespace :db do
     end
   end
 
-
   task :import do
     desc "Import data from JSON files"
 
@@ -404,7 +403,7 @@ namespace :db do
         ).save
       end
 
-      kol_thar = Character.new(
+      Character.new(
         server: "WintersEbb",
         name: "Kol'thar",
         race_id: 0,
