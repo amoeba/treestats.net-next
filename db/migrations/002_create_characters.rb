@@ -2,6 +2,7 @@ Sequel.migration do
   up do
     create_table(:characters) do
       primary_key :id
+      foreign_key :account_id, :accounts
 
       # Constraints
       unique [:server, :name]
@@ -55,9 +56,6 @@ Sequel.migration do
 
       timestamp :created_at
       timestamp :updated_at
-
-      # Account
-      foreign_key :account_id, :accounts
     end
   end
 
