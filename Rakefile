@@ -33,6 +33,7 @@ namespace :db do
     require "json"
 
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
+
     Sequel.connect(db_uri) do |db|
       require_relative "models/character"
       require_relative "models/skill"
