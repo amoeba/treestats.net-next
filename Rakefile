@@ -25,10 +25,6 @@ namespace :db do
     end
   end
 
-  task :drop do
-    desc "Delete database"
-    `rm db/treestats.db`
-  end
 
   task :import do
     desc "Import data from JSON files"
