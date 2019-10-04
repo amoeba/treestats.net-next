@@ -109,7 +109,7 @@ export default function (selector, server, character, options = {}) {
 
     svg.transition().duration(250).call(
       zoom.transform,
-      d3.zoomIdentity.translate(width / 2, height / 2).scale(1.5).translate(-zoomY, -zoomX)
+      d3.zoomIdentity.translate(width / 2, height / 2).scale(1.25).translate(-zoomY, -zoomX)
     );
   }).catch(error => {
     try {
