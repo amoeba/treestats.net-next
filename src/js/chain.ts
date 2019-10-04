@@ -70,6 +70,9 @@ export default function (selector, server, character, options = {}) {
       .attr("xlink:href", function (d) {
         return ["/", server, "/", d.data.data.name].join("");
       })
+      .attr("aria-label", function (d) {
+        return d.data.data.name;
+      })
       .append("circle")
       .attr("fill", "#000")
       .attr("r", 2.5);
@@ -77,6 +80,9 @@ export default function (selector, server, character, options = {}) {
     node.append("svg:a")
       .attr("xlink:href", function (d) {
         return ["/", server, "/", d.data.data.name].join("");
+      })
+      .attr("aria-label", function (d) {
+        return d.data.data.name;
       })
       .append("text")
       .attr("dy", "0.31em")
