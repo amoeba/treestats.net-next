@@ -12,7 +12,7 @@ module Sinatra
           WHERE characters.id = children.n
         )
         SELECT id, name, patron_id FROM characters
-        WHERE characters.id IN children AND patron_id IS NULL;
+        WHERE characters.id IN (select * from children) AND patron_id IS NULL;
       QUERY
 
       patron_result = database.fetch(patron_query).to_a
@@ -34,7 +34,7 @@ module Sinatra
           WHERE characters.patron_id = children.x
         )
         SELECT id, name, patron_id FROM characters
-        WHERE characters.id IN children;
+        WHERE characters.id IN (select * from children);
       QUERY
 
       database.fetch(query).to_a
