@@ -5,6 +5,7 @@ require "bundler/setup"
 Bundler.require(:default)
 
 require "./etc/import_helper"
+require "./etc/tree.rb"
 
 task default: :test
 
@@ -471,6 +472,8 @@ namespace :db do
         stamina_base: 100,
         mana_base: 100
       ).save
+
+      Tree.new(10)
     end
   end
 end
