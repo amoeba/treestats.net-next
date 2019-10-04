@@ -46,9 +46,8 @@ class Tree
     ).save
 
     (1..@size).each do |i|
-      build(char.id, level+1)
+      build(char.id, level + 1)
     end
-
 
     char.id
   end
