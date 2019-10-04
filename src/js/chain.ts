@@ -35,6 +35,9 @@ export default function (selector, server, character, options = {}) {
         chart.attr("height", chart.node().getBoundingClientRect().height);
 
         svg.attr("viewBox", [0, 0, chart.node().getBoundingClientRect().width, chart.node().getBoundingClientRect().height])
+      },
+      {
+        passive: true
       });
 
     const zoom = d3.zoom()
