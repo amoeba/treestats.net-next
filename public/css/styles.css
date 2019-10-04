@@ -70,8 +70,9 @@ header a:hover {
 /* Specific stuff */
 #chain-container {
   border: 1px solid black;
-  max-width: 624px;
   position: relative;
+  background-color: white;
+  max-width: 622px;
 }
 
 #chain-container.zoomed {
@@ -81,7 +82,6 @@ header a:hover {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: white;
 }
 
 #chain-container .toggle {
@@ -94,12 +94,15 @@ header a:hover {
   padding: 0.25rem 0.5rem;
 }
 
-#chain .message {
+#chain {
   width: 100%;
   height: 100%;
+}
+
+#chain > span {
+  display: block;
   text-align: center;
-  vertical-align: middle;
-  padding: 1.5rem;
+  padding: 3rem;
 }
 
 /* Controls */

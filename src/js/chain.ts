@@ -29,8 +29,12 @@ export default function (selector, server, character, options = {}) {
 
     d3.select(window)
       .on("resize", function () {
-        var targetWidth = chart.node().getBoundingClientRect().width;
-        chart.attr("width", targetWidth);
+        console.log("resize triggered");
+
+        chart.attr("width", chart.node().getBoundingClientRect().width);
+        chart.attr("height", chart.node().getBoundingClientRect().height);
+
+        svg.attr("viewBox", [0, 0, chart.node().getBoundingClientRect().width, chart.node().getBoundingClientRect().height])
       });
 
     const zoom = d3.zoom()
@@ -96,7 +100,7 @@ export default function (selector, server, character, options = {}) {
 
     svg.transition().duration(250).call(
       zoom.transform,
-      d3.zoomIdentity.translate(width / 2, height / 2).scale(3).translate(-zoomY, -zoomX)
+      d3.zoomIdentity.translate(width / 2, height / 2).scale(1.5).translate(-zoomY, -zoomX)
     );
   }).catch(error => {
     try {
