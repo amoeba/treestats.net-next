@@ -438,6 +438,39 @@ namespace :db do
         stamina_base: 100,
         mana_base: 100
       ).save
+
+      Character.new(
+        server: "WintersEbb",
+        name: "Someone",
+        race_id: 0,
+        gender_id: 0,
+        rank: 1,
+        level: 50,
+        current_title: 1,
+        birth: DateTime.now.to_time.utc,
+        deaths: 100,
+        total_xp: 100,
+        unassigned_xp: 100,
+        luminance_total: 100,
+        luminance_earned: 100,
+        skill_credits: 5,
+        followers: 0,
+        strength_creation: 100,
+        strength_base: 100,
+        endurance_creation: 100,
+        endurance_base: 100,
+        coordination_creation: 100,
+        coordination_base: 100,
+        quickness_creation: 100,
+        quickness_base: 100,
+        focus_creation: 100,
+        focus_base: 100,
+        self_creation: 100,
+        self_base: 100,
+        health_base: 100,
+        stamina_base: 100,
+        mana_base: 100
+      ).save
     end
   end
 end
