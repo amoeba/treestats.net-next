@@ -68,9 +68,30 @@ header a:hover {
 }
 
 /* Specific stuff */
-#chain {
+#chain-container {
   border: 1px solid black;
   max-width: 624px;
+  position: relative;
+}
+
+#chain-container.zoomed {
+  max-width: inherit;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: white;
+}
+
+#chain-container .toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  padding: 0.25rem 0.5rem;
 }
 
 #chain .message {

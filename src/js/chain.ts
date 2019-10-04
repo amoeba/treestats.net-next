@@ -34,7 +34,6 @@ export default function (selector, server, character, options = {}) {
       });
 
     const zoom = d3.zoom()
-      .extent([[0, 0], [width, height]])
       .scaleExtent([0.1, 5])
       .on("zoom", function () {
         g.attr("transform", d3.event.transform);
@@ -97,7 +96,7 @@ export default function (selector, server, character, options = {}) {
 
     svg.transition().duration(250).call(
       zoom.transform,
-      d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(-zoomY, -zoomX)
+      d3.zoomIdentity.translate(width / 2, height / 2).scale(3).translate(-zoomY, -zoomX)
     );
   }).catch(error => {
     try {
