@@ -8,9 +8,9 @@
 
 <div>
   <% if @characters.empty? %>
-    No characters to show.
+    <div class="listing">No characters to show.</div>
   <% else %>
-    <ul>
+    <ul class="listing">
       <% @characters.each do |character| %>
         <li><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:server] %>/<%= character[:name] %></a></li>
       <% end%>

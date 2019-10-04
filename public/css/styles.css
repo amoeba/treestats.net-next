@@ -119,6 +119,10 @@ header a:hover {
 }
 
 /* Listings */
+.listing {
+  margin-bottom: 1.5rem;
+}
+
 table.listing th {
   border-bottom: 1px solid black;
 }
