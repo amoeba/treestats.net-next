@@ -3,21 +3,9 @@
 require "sinatra"
 require "sinatra/sequel"
 
-# Database
 set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
-
-# Models
-require_relative "models/character.rb"
-require_relative "models/skill.rb"
-require_relative "models/title.rb"
-require_relative "models/property.rb"
-require_relative "models/account.rb"
-
-# Helpers
-require_relative "helpers/app_helper.rb"
-require_relative "helpers/rankings_helper.rb"
-require_relative "helpers/query_helper.rb"
-require_relative "helpers/enum_helper.rb"
+Dir[__dir__ + '/models/*'].each &method(:require)
+Dir[__dir__ + '/helpers/*'].each &method(:require)
 
 # Routes
 get "/" do

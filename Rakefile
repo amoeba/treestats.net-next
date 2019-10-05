@@ -290,10 +290,7 @@ namespace :db do
     db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
 
     Sequel.connect(db_uri) do |db|
-      require_relative "models/character"
-      require_relative "models/skill"
-      require_relative "models/title"
-      require_relative "models/property"
+      Dir[__dir__ + '/models/*'].each &method(:require)
 
       # Kolthar
       kolthar = Character.new(
