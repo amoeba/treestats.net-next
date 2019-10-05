@@ -27,31 +27,49 @@ input {
   font-size: inherit;
 }
 
-header {
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav h1 {
+  font-size: 200%;
+}
+
+nav a,
+nav a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0 0 0 0.5rem;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid #CCC;
+  justify-content: flex-end;
 }
 
-header a,
-header a:visited
-{
-  color: black;
-  text-decoration: none;
+nav ul li {
+  display: inline-block;
+  margin-left: 1rem;
   font-weight: bold;
-  margin-right: 1rem;
-  padding: 0.5rem 0;
+  text-align: end;
+  box-sizing: border-box;
 }
 
-header h1 a:hover {
-  border: none;
-}
-
-header a:hover {
+nav ul li a:hover {
   border-bottom: 1px solid red;
 }
+
+/*
+@media (min-width: 57.5em)
+.mobile-nav-button {
+    display: none;
+
+} */
 
 /* Special elements */
 #search {
