@@ -1,1 +1,0 @@
-{"version":3,"file":"test.js","sources":["../../src/test.ts"],"sourcesContent":["export default function (arg: string) : string{\n  arg + 1;\n  arg + arg;\n\n  return null;\n}"],"names":[],"mappings":"mDAIE"}
