@@ -4,8 +4,8 @@ require "sinatra"
 require "sinatra/sequel"
 
 set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
-Dir[__dir__ + '/models/*'].each &method(:require)
-Dir[__dir__ + '/helpers/*'].each &method(:require)
+Dir[__dir__ + "/models/*"].each &method(:require)
+Dir[__dir__ + "/helpers/*"].each &method(:require)
 
 # Routes
 get "/" do
