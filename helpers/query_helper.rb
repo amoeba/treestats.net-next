@@ -39,6 +39,21 @@ module Sinatra
 
       database.fetch(query).to_a
     end
+
+    def populations
+      query = <<-QUERY
+        SELECT
+         server_id,
+         max(count) as max,
+         strftime('%Y/%m/%d', created_at) as day
+        FROM populations
+        GROUP BY
+          strftime('%Y/%m/%d', created_at),
+          server_id;
+      QUERY
+
+      database.fetch(query).to_a
+    end
   end
 
   helpers RankingsHelper

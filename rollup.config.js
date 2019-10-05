@@ -43,5 +43,21 @@ export default [
 			typescript(),
 			production && terser() // minify, but only in production
 		]
+	},
+	{
+		input: 'src/js/popchart.ts',
+		output: {
+			name: "popchart",
+			file: 'public/js/popchart.js',
+			format: 'iife', // immediately-invoked function expression — suitable for <script> tags
+			sourcemap: true
+		},
+		plugins: [
+			resolve(), // tells Rollup how to find date-fns in node_modules
+			commonjs(), // converts date-fns to ES modules
+			minify(),
+			typescript(),
+			production && terser() // minify, but only in production
+		]
 	}
 ]

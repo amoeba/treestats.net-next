@@ -175,6 +175,8 @@ get "/titles/?" do
 end
 
 get "/populations/?" do
+  @populations = populations
+
   erb :populations
 end
 
