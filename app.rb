@@ -182,6 +182,22 @@ get "/allegiances/:server/:allegiance" do |server, allegiance|
   erb :characters
 end
 
+get "/titles/?" do
+  erb :titles
+end
+
+get "/populations/?" do
+  erb :populations
+end
+
+get "/download/?" do
+  erb :download
+end
+
+get "/api/?" do
+  erb :api
+end
+
 get "/:server" do
   @page = get_page(params)
   limit = 25
