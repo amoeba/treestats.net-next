@@ -476,36 +476,42 @@ namespace :db do
       Population.new(
         server_id: 0,
         count: 100,
-        created_at: "2019-10-03 02:02:52.893375"
+        created_at: "2012-10-03 02:02:52.893375"
       ).save
 
       Population.new(
         server_id: 0,
         count: 120,
-        created_at: "2019-10-04 02:02:52.893375"
+        created_at: "2013-10-04 02:02:52.893375"
       ).save
 
       Population.new(
         server_id: 0,
         count: 130,
-        created_at: "2019-10-05 02:02:52.893375"
+        created_at: "2014-10-05 02:02:52.893375"
       ).save
 
       Population.new(
         server_id: 0,
         count: 0,
-        created_at: "2019-10-05 02:02:52.893375"
+        created_at: "2015-10-05 02:02:52.893375"
       ).save
 
       Population.new(
         server_id: 0,
         count: 1000,
-        created_at: "2019-10-05 02:02:52.893375"
+        created_at: "2016-10-05 02:02:52.893375"
       ).save
 
       Population.new(
         server_id: 1,
         count: 1000,
+        created_at: "2012-10-05 02:02:52.893375"
+      ).save
+
+      Population.new(
+        server_id: 1,
+        count: 50,
         created_at: "2018-10-05 02:02:52.893375"
       ).save
     end
