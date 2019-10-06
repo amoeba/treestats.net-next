@@ -20,6 +20,16 @@ get "/" do
     .order(:count)
     .reverse
 
+  @top_monarchs = Character
+    .filter(patron_id: nil)
+    .select(:server,
+            :name,
+            :allegiance_name,
+            :followers,
+            :rank,
+            :race_id,
+            :gender_id)
+
   erb :index
 end
 

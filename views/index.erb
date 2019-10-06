@@ -37,4 +37,28 @@
       </tbody>
     </table>
   </div>
+
+  <div class="dashboard">
+    <h3>Top Monarchs</h3>
+    <table class="listing">
+      <thead>
+        <tr>
+          <th>Server</th>
+          <th>Name</th>
+          <th>Allegiance</th>
+          <th>Followers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @top_monarchs.each do |monarch| %>
+          <tr>
+            <td><a href="/<%= monarch[:server] %>"><%= monarch[:server] %></a></td>
+            <td><a href="/<%= monarch[:server] %>/<%= monarch[:name] %>%"><%= rank(monarch[:race_id], monarch[:gender_id], monarch[:rank]) %> <%= monarch[:name] %></td>
+            <td><%= monarch[:allegiance_name] %></td>
+            <td><%= monarch[:followers] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
