@@ -33,7 +33,7 @@ get "/" do
   erb :index
 end
 
-get "/search" do
+get "/search/?" do
   # Sanitize input first
   @query = params[:query].gsub(/[^a-zA-Z'\-\+ ]/, "")
 
@@ -83,7 +83,7 @@ get "/rankings/?" do
   erb :rankings
 end
 
-get "/rankings/:ranking" do
+get "/rankings/:ranking/?" do
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -129,7 +129,7 @@ get "/allegiances/?" do
   erb :allegiances
 end
 
-get "/allegiances/:server" do |server|
+get "/allegiances/:server/?" do |server|
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -154,7 +154,7 @@ get "/allegiances/:server" do |server|
   erb :characters
 end
 
-get "/allegiances/:server/:allegiance" do |server, allegiance|
+get "/allegiances/:server/:allegiance/?" do |server, allegiance|
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -225,7 +225,7 @@ get "/api/?" do
   erb :api
 end
 
-get "/:server" do
+get "/:server/?" do
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -245,7 +245,7 @@ get "/:server" do
   erb :characters
 end
 
-get "/:server/:name/chain" do
+get "/:server/:name/chain.json" do
   content_type :json
 
   # TODO: Validate server name
@@ -276,17 +276,18 @@ get "/:server/:name/chain" do
 end
 
 get "/:server/:name.json" do
+  content_type :json
+
   @character = Character
     .filter(name: params[:name], server: params[:server])
     .first
 
   halt(404, "{ \"error\": \"Character not found.\"}") if @character.nil?
 
-  content_type :json
   @character.to_json
 end
 
-get "/:server/:name" do
+get "/:server/:name/?" do
   @character = Character
     .filter(name: params[:name], server: params[:server])
     .first
