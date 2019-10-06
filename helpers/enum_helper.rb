@@ -34,6 +34,10 @@ module Sinatra
       @@titles[id]
     end
 
+    def titles
+      @@titles
+    end
+
     def property(id)
       return {type: :unknown, name: "UNK"} unless @@properties.key?(id)
       @@properties[id]
@@ -47,6 +51,7 @@ module Sinatra
     module_function :training
     module_function :property
     module_function :title
+    module_function :titles
     module_function :race
     module_function :gender
 
@@ -518,7 +523,7 @@ module Sinatra
     ]
 
     @@titles = {
-      0 => "Invalid",
+      0 => "Unknown",
       1 => "Adventurer",
       2 => "Archer",
       3 => "Blademaster",
@@ -682,11 +687,11 @@ module Sinatra
       162 => "Pest Control",
       163 => "Rat Reaper",
       164 => "Nymph Maniac",
-      165 => "SimiuS",
+      165 => "\$imiu\$",
       166 => "2nd Place Lore- Quiz Night",
       167 => "AC Veteran",
-      168 => "Ain't afraid of no ghost",
-      169 => "Ain't afraid of no ghost!",
+      168 => "Ain't afraid of no ghost!",
+      169 => "Ain't afraid of no ghost",
       170 => "Ain't afraid of no ghost..mwahaha!",
       171 => "Ankle Biter",
       172 => "Annoying Furry Talking Animal",
@@ -718,7 +723,7 @@ module Sinatra
       198 => "Cow Killer",
       199 => "Cowboy",
       200 => "Crystal Lord King",
-      201 => "Cuddly Kitten",
+      201 => "Cuddly Kitten >\^..\^<",
       202 => "Curmudgeon's Friend",
       203 => "Cursed Adventurer",
       204 => "Dagger Master",
@@ -742,7 +747,7 @@ module Sinatra
       222 => "Double Survival Champion",
       223 => "Dude of DOOM!",
       224 => "Ecto Cooler",
-      225 => "Ecto Cooler",
+      225 => "Ecto-Cooler",
       226 => "Envoy Slayer",
       227 => "Escapee Killer",
       228 => "Evil Toothfairy",
@@ -781,7 +786,7 @@ module Sinatra
       261 => "Hungry Hungry Hippo",
       262 => "Husband of Lynnie",
       263 => "Husbands Healer",
-      264 => "I am Big PIMPIN",
+      264 => "I am Big \[\]D \[\] \[\]\\/\[\] \[\]D \[\] \[\]\\\[\]",
       265 => "I liked dying!",
       266 => "Jessica <3",
       267 => "King of all that is Pumpkin",
@@ -804,7 +809,7 @@ module Sinatra
       284 => "Lore Champion - Quiz Night",
       285 => "Lore Champion Quiz Night",
       286 => "Lore Master",
-      287 => "Lore Master - Quiz Night",
+      287 => "{{keepspaces}}Lore Master  Quiz Night",
       288 => "Lore Master - Quiz Night",
       289 => "Lore Master 2nd Place",
       290 => "Lore Master of Staves",
@@ -848,7 +853,7 @@ module Sinatra
       328 => "Pwner of Newbs",
       329 => "Queen of Brats",
       330 => "Queens Crafter",
-      331 => "Queens Crafter",
+      331 => "Queen's Crafter",
       332 => "Queen's Pack Rat",
       333 => "Queen's Packrat",
       334 => "Queen's Tinker",
@@ -915,7 +920,7 @@ module Sinatra
       395 => "Wabbit Bait",
       396 => "Wabbit Killer",
       397 => "Wandering Fool",
-      398 => "Wardens Assistant",
+      398 => "Warden's Assistant",
       399 => "Wardens Thug",
       400 => "Wimp",
       401 => "Wolfpack Crafter",
@@ -981,11 +986,11 @@ module Sinatra
       463 => "Arena Rat",
       464 => "Scrapper",
       465 => "Champion of Stone",
-      466 => "Fashion King",
-      467 => "Fashion King",
-      468 => "Champion of Stone",
-      469 => "Champion of Stone",
-      470 => "Fashion King",
+      466 => "Champion of Sickles",
+      467 => "Champion of the Wild",
+      468 => "Champion of the Hive",
+      469 => "Champion of Assassins",
+      470 => "Immortal Champion",
       471 => "Ruuk Ally",
       472 => "Seeker of Asheron",
       473 => "Seeker of Torgluuk",
@@ -1059,7 +1064,7 @@ module Sinatra
       543 => "Harvester Harvester Harvester",
       544 => "Pumpkin Throne Usurper",
       545 => "Death Knight",
-      546 => "NullTitle",
+      546 => "",
       547 => "Tracker Guardian",
       548 => "Dojiro Sangi's Savior",
       549 => "Master of the Hunt",
@@ -1216,8 +1221,8 @@ module Sinatra
       708 => "Assistant's Assistant",
       709 => "Arcanum Adventurer",
       710 => "Gear Knight Defender",
-      711 => "Ripper",
-      712 => "Acid Spitter",
+      711 => "Soldier of the Queen",
+      712 => "Spitter of the Queen",
       713 => "Bloodstone Hunter",
       714 => "Guiding Light",
       715 => "Clouded Soul",
@@ -1356,7 +1361,7 @@ module Sinatra
       857 => "Present Protector",
       858 => "Holly Jolly Helper",
       859 => "Loss Prevention",
-      860 => "Christmas Courier",
+      860 => "Gift Gopher",
       861 => "Holiday Hero",
       862 => "Crown Of the Deru",
       863 => "Viridian Dreamer",
@@ -1390,7 +1395,7 @@ module Sinatra
       891 => "Illuminated",
       892 => "Transcended",
       893 => "Cosmic Conscious",
-      894 => "Last Man Standing",
+      894 => "Last Man Standing"
     }
 
     @@properties = {

@@ -180,7 +180,28 @@ get "/allegiances/:server/:allegiance" do |server, allegiance|
   erb :characters
 end
 
+get "/titles/:title_id/?" do
+  title_id = params[:title_id].to_i
+
+  if title_id.to_s != params[:title_id]
+    status 400
+    return "Invalid title number"
+  end
+
+  not_found unless title_id.between?(0, 894)
+
+  @title = title(title_id)
+  @characters = Title
+    .filter(title_id: title_id)
+    .association_join(:character)
+    .select(:server, :name)
+
+  erb :title
+end
+
 get "/titles/?" do
+  @titles = titles
+
   erb :titles
 end
 

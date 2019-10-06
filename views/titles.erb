@@ -1,3 +1,7 @@
 <h2>Titles</h2>
 
-TODO
+<ul class="listing">
+  <% @titles.each do |id,title| %>
+    <li><a href="/titles/<%= id %>"><%= title %></a></li>
+  <% end %>
+</ul>

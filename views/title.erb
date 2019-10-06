@@ -1,0 +1,22 @@
+<h2>Charcters with the title '<%= @title %>'</h2>
+
+<% if @characters.count == 0 %>
+  <div class="listing">No characters have this title.</div>
+<% else %>
+  <table class="listing">
+    <thead>
+      <tr>
+        <th>Server</th>
+        <th>Character</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @characters.each do |character| %>
+        <tr>
+          <td><a href="/<%= character[:server] %>"><%= character[:server] %></a></td>
+          <td><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:name] %></a></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
