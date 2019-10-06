@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 export default function (selector, server, character, options = {}) {
-  // d3.json("/" + server + "/" + character + "/chain").then(data => {
+  d3.json("/" + server + "/" + character + "/chain").then(data => {
     const width = options.width || 600;
     const height = options.height || 400;
 
@@ -106,11 +106,11 @@ export default function (selector, server, character, options = {}) {
       zoom.transform,
       d3.zoomIdentity.translate(width / 2, height / 2).scale(1.25).translate(-zoomY, -zoomX)
     );
-  // }).catch(error => {
-  //   try {
-  //     d3.select(selector)["_groups"][0][0].innerHTML = "<div class=\"message\">" + error + "</div>";
-  //   } catch (error) {
-  //     // Nothing
-  //   }
-  // });
-}
+  }).catch(error => {
+    try {
+      d3.select(selector)["_groups"][0][0].innerHTML = "<div class=\"message\">" + error + "</div>";
+    } catch (error) {
+      // Nothing
+    }
+  });
+};
