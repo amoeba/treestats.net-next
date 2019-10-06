@@ -27,6 +27,16 @@ module Sinatra
         "Unknown"
       end
     end
+
+    def get_society(properties)
+      society_ids = properties.filter { |k, p| SOCIETY.keys.include?(p[:id]) }
+
+      if society_ids.length != 1
+        return nil
+      end
+
+      society_ids.first[1]
+    end
   end
 
   helpers SocietyHelper

@@ -34,6 +34,12 @@ module Sinatra
     def mastery(type, value)
       MASTERY[type][value]
     end
+
+    def get_mastery(properties, type)
+      return nil unless properties[type]
+
+      mastery(MASTERY[type], properties[type][:value])
+    end
   end
 
   helpers MasteryHelper
