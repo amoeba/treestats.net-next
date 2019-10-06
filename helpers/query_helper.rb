@@ -49,7 +49,10 @@ module Sinatra
         FROM populations
         GROUP BY
           date(created_at),
-          server_id;
+          server_id
+        ORDER BY
+          id,
+          date;
       QUERY
 
       database.fetch(query).to_a
