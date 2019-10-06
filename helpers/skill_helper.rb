@@ -133,10 +133,10 @@ module Sinatra
     ]
 
     TRAINING_ID = {
-      :unusable => 0,
-      :untrained => 1,
-      :trained => 2,
-      :specialized => 3,
+      unusable: 0,
+      untrained: 1,
+      trained: 2,
+      specialized: 3,
     }
 
     def skill_key(id)

@@ -14,17 +14,17 @@ module Sinatra
 
     def society_rank(standing)
       if standing < 101
-        return "Initiate"
+        "Initiate"
       elsif standing < 301
-        return "Adept"
+        "Adept"
       elsif standing < 601
-        return "Knight"
+        "Knight"
       elsif standing < 1001
-        return "Lord"
+        "Lord"
       elsif standing == 1001
-        return "Master"
+        "Master"
       else
-        return "Unknown"
+        "Unknown"
       end
     end
   end
