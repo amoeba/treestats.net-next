@@ -22,13 +22,8 @@ get "/" do
 
   @top_monarchs = Character
     .filter(patron_id: nil)
-    .select(:server,
-            :name,
-            :allegiance_name,
-            :followers,
-            :rank,
-            :heritage_id,
-            :gender_id)
+    .select(:server, :name, :allegiance_name, :followers, :rank, :heritage_id,
+      :gender_id)
 
   erb :index
 end
