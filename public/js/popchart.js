@@ -145,7 +145,7 @@ function _o(e,n){var t=e._x1-e._x0;return t?(3*(e._y1-e._y0)/t-n)/2:n}// Accordi
 // "you can express cubic Hermite interpolation in terms of cubic Bézier curves
 // with respect to the four values p0, p0 + m0 / 3, p1 - m1 / 3, p1".
 function ho(e,t,n){var a=e._x0,i=e._y0,o=e._x1,l=e._y1,r=(o-a)/3;e._context.bezierCurveTo(a+r,i+r*t,o-r,l-r*n,o,l)}function yo(e){this._context=e}function mo(e){this._context=e}function fo(e,t){void 0===t&&(t={});// Config
-var n=600|t.width,i=300|t.width,l={top:20,right:60,bottom:30,left:40},r=new Map;r.set(0,"Frostfell"),r.set(1,"WintersEbb");// Date formatting utility function
+var n=600|t.width,i=300|t.width,l={top:20,right:80,bottom:20,left:40},r=new Map;r.set(0,"Frostfell"),r.set(1,"WintersEbb");// Date formatting utility function
 var s=Wr("%Y/%m/%d");console.log("about to call d3.json..."),ta("/populations.json").then(function(t){console.log(t);var d=t.map(function(e){return{server:e.id,date:s(e.date),count:e.count}}),c=o(d,function(e){return e.server});// Re-format data group-wise
 console.log(c);// Scales
 var p=io().domain(a(d,function(e){return e.date})).range([l.left,n-l.right]),_=Na().domain([0,u(d,function(e){return e.count})]).nice().range([i-l.bottom,l.top]),g=Ua().domain(Array.from(c.keys())).range(ld),h=Ve(e),y=h.append("svg").attr("viewBox",[0,0,n,i]);y.append("g").call(function(e){return e.attr("transform","translate(0,"+(i-l.bottom)+")").call(w(p).ticks(n/80).tickSizeOuter(0))}),y.append("g").call(function(e){return e.attr("transform","translate("+l.left+",0)").call(v(_)).call(function(e){return e.select(".tick:last-of-type text").clone().attr("x",3).attr("text-anchor","start").attr("font-weight","bold").text("Players")})});// Lines

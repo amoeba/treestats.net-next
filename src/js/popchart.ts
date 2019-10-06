@@ -7,7 +7,7 @@ export default function (selector, options = {}) {
   // Config
   const width = options.width | 600;
   const height = options.width | 300
-  const margin = ({ top: 20, right: 60, bottom: 30, left: 40 })
+  const margin = ({ top: 20, right: 80, bottom: 20, left: 40 })
 
   // Server ID -> Name mapping
   const serverNames = new Map();
