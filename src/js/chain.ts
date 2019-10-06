@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 export default function (selector, server, character, options = {}) {
-  d3.json("/" + server + "/" + character + "/chain").then(data => {
+  d3.json("/" + server + "/" + character + "/chain.json").then(data => {
     const width = options.width || 600;
     const height = options.height || 400;
 
