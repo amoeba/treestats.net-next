@@ -1,4 +1,6 @@
-<h2>Charcters with the title '<%= @title %>'</h2>
+<h2>Title: <%= @title %></h2>
+
+<%= erb :_page_controls %>
 
 <% if @characters.count == 0 %>
   <div class="listing">No characters have this title.</div>
@@ -20,3 +22,5 @@
     </tbody>
   </table>
 <% end %>
+
+<%= erb :_page_controls %>

@@ -44,13 +44,16 @@ get "/search/?" do
   @prev = {query: @query, page: @page - 1}
   @next = {query: @query, page: @page + 1}
 
-  @characters = Character
+  query = Character
     .where(Sequel.lit("lower(name) LIKE ?", "%#{@query.downcase}%"))
-    .limit(limit)
     .offset(offset)
     .select(:name, :server)
     .order(:name)
     .exclude(level: nil)
+
+  @count = query.count
+  @more = @count > @page * limit
+  @characters = query.limit(limit)
 
   erb :search
 end
@@ -67,14 +70,16 @@ get "/characters/?" do
   @prev = {page: @page - 1}
   @next = {page: @page + 1}
 
-  @characters = Character
-    .limit(limit)
+  query = Character
     .offset(offset)
     .select(:server, :name)
     .order(:updated_at)
     .exclude(level: nil)
 
-  @count = @characters.count
+  @count = query.count
+  @more = @count > @page * limit
+  @characters = query
+    .limit(limit)
 
   erb :characters
 end
@@ -112,19 +117,18 @@ get "/allegiances/?" do
   @prev = {page: @page - 1}
   @next = {page: @page + 1}
 
-  params[:page] = @page
-  params[:offset] = offset
-  params[:limit] = limit
-
-  @allegiances = Character
-    .distinct
+  query = Character
     .select(:server, :allegiance_name)
+    .distinct
     .order(:allegiance_name)
-    .limit(limit)
     .offset(offset)
     .exclude(allegiance_name: nil)
 
-  not_found if @allegiances.nil?
+  @count = query.count
+  @more = @count > @page * limit
+  @allegiances = query.limit(limit)
+
+  not_found if @count <= 0
 
   erb :allegiances
 end
@@ -137,21 +141,23 @@ get "/allegiances/:server/?" do |server|
   @prev = {page: @page - 1}
   @next = {page: @page + 1}
 
-  params[:page] = @page
-  params[:offset] = offset
-  params[:limit] = limit
-
-  @characters = Character
-    .distinct
+  query = Character
     .select(:server, :allegiance_name)
-    .where(server: server)
+    .distinct
+    .filter(server: server)
     .order(:allegiance_name)
-    .limit(limit)
     .offset(offset)
+    .exclude(allegiance_name: nil)
 
-  not_found if @characters.nil?
+  @count = query.count
 
-  erb :characters
+  not_found if @count <= 0
+
+  @more = @count > @page * limit
+  @allegiances = query
+    .limit(limit)
+
+  erb :allegiances
 end
 
 get "/allegiances/:server/:allegiance/?" do |server, allegiance|
@@ -162,20 +168,20 @@ get "/allegiances/:server/:allegiance/?" do |server, allegiance|
   @prev = {page: @page - 1}
   @next = {page: @page + 1}
 
-  params[:page] = @page
-  params[:offset] = offset
-  params[:limit] = limit
-
   @header = "Allegiance: #{allegiance} (#{server})"
-  @characters = Character
+  query = Character
     .select(:server, :name)
     .where(server: server, allegiance_name: allegiance)
     .order(:name)
-    .limit(limit)
     .offset(offset)
     .exclude(level: nil)
 
-  not_found if @characters.nil?
+  @count = query.count
+
+  not_found if @count <= 0
+
+  @more = @count > @page * limit
+  @characters = query.limit(limit)
 
   erb :characters
 end
@@ -190,11 +196,23 @@ get "/titles/:title_id/?" do
 
   not_found unless title_id.between?(0, 894)
 
+  @page = get_page(params)
+  limit = 1
+  offset = (@page - 1) * limit
+
+  @prev = {page: @page - 1}
+  @next = {page: @page + 1}
+
   @title = title(title_id)
-  @characters = Title
+  query = Title
     .filter(title_id: title_id)
     .association_join(:character)
     .select(:server, :name)
+    .offset(offset)
+
+  @count = query.count
+  @more = @count > @page * limit
+  @characters = query.limit(limit)
 
   erb :title
 end
@@ -234,13 +252,20 @@ get "/:server/?" do
   @next = {page: @page + 1}
 
   @header = @server
-  @characters = Character
+  query = Character
     .filter(server: params[:server])
     .select(:server, :name)
     .order(:updated_at)
     .offset(offset)
-    .limit(limit)
     .exclude(level: nil)
+
+  @count = query.count
+  @more = @count > @page * limit
+
+  not_found if @count <= 0
+
+  @characters = query
+    .limit(limit)
 
   erb :characters
 end
