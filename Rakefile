@@ -470,7 +470,10 @@ namespace :db do
         mana_base: 100
       ).save
 
-      Tree.new(4)
+      Tree.new(2, "TWO_LEVELS")
+      Tree.new(3, "THREE_LEVELS")
+      Tree.new(4, "FOUR_LEVELS")
+      Tree.new(5, "FIVE_LEVELS")
 
       # Seed Populations
       Population.new(

@@ -1,15 +1,16 @@
 require "securerandom"
 
 class Tree
-  def initialize(depth, size = 2)
+  def initialize(depth, allegiance_name = "ALLEGIANCE", size = 2)
     @depth = depth
+    @allegiance_name = allegiance_name
     @size = size
 
     build
   end
 
   def build(parent = nil, level = 0)
-    return if level > @depth
+    return if level >= @depth
 
     char = Character.new(
       server: "WintersEbb",
@@ -17,6 +18,7 @@ class Tree
       heritage_id: 0,
       gender_id: 0,
       rank: 1,
+      allegiance_name: @allegiance_name,
       patron_id: parent,
       level: 275,
       current_title: 1,
