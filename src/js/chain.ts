@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 export default function (selector, server, character, options = {}) {
-  d3.json("/" + server + "/" + character + "/chain").then(data => {
+  // d3.json("/" + server + "/" + character + "/chain").then(data => {
     const width = options.width || 600;
     const height = options.height || 400;
 
@@ -29,15 +29,10 @@ export default function (selector, server, character, options = {}) {
 
     d3.select(window)
       .on("resize", function () {
-        console.log("resize triggered");
-
         chart.attr("width", chart.node().getBoundingClientRect().width);
         chart.attr("height", chart.node().getBoundingClientRect().height);
 
         svg.attr("viewBox", [0, 0, chart.node().getBoundingClientRect().width, chart.node().getBoundingClientRect().height])
-      },
-      {
-        passive: true
       });
 
     const zoom = d3.zoom()
@@ -111,11 +106,11 @@ export default function (selector, server, character, options = {}) {
       zoom.transform,
       d3.zoomIdentity.translate(width / 2, height / 2).scale(1.25).translate(-zoomY, -zoomX)
     );
-  }).catch(error => {
-    try {
-      d3.select(selector)["_groups"][0][0].innerHTML = "<div class=\"message\">" + error + "</div>";
-    } catch (error) {
-      // Nothing
-    }
-  });
+  // }).catch(error => {
+  //   try {
+  //     d3.select(selector)["_groups"][0][0].innerHTML = "<div class=\"message\">" + error + "</div>";
+  //   } catch (error) {
+  //     // Nothing
+  //   }
+  // });
 }

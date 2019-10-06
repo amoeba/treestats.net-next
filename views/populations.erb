@@ -1,11 +1,11 @@
 <h2>Populations</h2>
 
-<%= @populations %>
-
-<div id="#chart"></div>
+<p>Maximum players online by day for each server.</p>
+<div id="chart"></div>
 
 <script src="/js/popchart.js"></script>
 <script>
-  console.log("hi")
-  popchart("#chart")
+  (function() {
+    popchart("#chart")
+  })();
 </script>

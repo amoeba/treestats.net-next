@@ -43,9 +43,9 @@ module Sinatra
     def populations
       query = <<-QUERY
         SELECT
-         server_id,
-         max(count) as max,
-         strftime('%Y/%m/%d', created_at) as day
+         server_id as id,
+         max(count) as count,
+         strftime('%Y/%m/%d', created_at) as date
         FROM populations
         GROUP BY
           strftime('%Y/%m/%d', created_at),

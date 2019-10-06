@@ -123,6 +123,10 @@ nav ul li a:hover {
   padding: 3rem;
 }
 
+#chart {
+  font-size: 7pt;
+}
+
 /* Controls */
 .controls {
   margin-bottom: 1rem;

@@ -174,6 +174,12 @@ get "/titles/?" do
   erb :titles
 end
 
+get "/populations.json" do
+  content_type :json
+
+  populations.to_json
+end
+
 get "/populations/?" do
   @populations = populations
 
