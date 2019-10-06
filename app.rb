@@ -22,6 +22,7 @@ get "/" do
 
   @top_monarchs = Character
     .filter(patron_id: nil)
+    .exclude(allegiance_name: nil)
     .select(:server, :name, :allegiance_name, :followers, :rank, :heritage_id,
       :gender_id)
 
