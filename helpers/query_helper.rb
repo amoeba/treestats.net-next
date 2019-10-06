@@ -45,10 +45,10 @@ module Sinatra
         SELECT
          server_id as id,
          max(count) as count,
-         strftime('%Y/%m/%d', created_at) as date
+         date(created_at) as date
         FROM populations
         GROUP BY
-          strftime('%Y/%m/%d', created_at),
+          date(created_at),
           server_id;
       QUERY
 
