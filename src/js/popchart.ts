@@ -1,8 +1,6 @@
 import * as d3 from "d3";
 import { group } from "d3-array";
 
-
-
 export default function (selector, options = {}) {
   // Config
   const width = options.width | 600;
@@ -15,7 +13,7 @@ export default function (selector, options = {}) {
   serverNames.set(1, "WintersEbb")
 
   // Date formatting utility function
-  const formatDate = d3.timeParse("%Y/%m/%d")
+  const formatDate = d3.timeParse("%Y-%m-%d")
 
   console.log("about to call d3.json...");
   d3.json("/populations.json").then(json => {
