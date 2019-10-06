@@ -27,7 +27,7 @@ get "/" do
             :allegiance_name,
             :followers,
             :rank,
-            :race_id,
+            :heritage_id,
             :gender_id)
 
   erb :index
@@ -299,16 +299,16 @@ get "/:server/:name/?" do
 
   @skills = {
     specialized: @character.skills
-      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:specialized] }
+      .filter { |s| s.training_id == Sinatra::SkillHelper::TRAINING_ID[:specialized] }
       .sort_by { |s| skill_name(s[:skill_id]) },
     trained: @character.skills
-      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:trained] }
+      .filter { |s| s.training_id == Sinatra::SkillHelper::TRAINING_ID[:trained] }
       .sort_by { |s| skill_name(s[:skill_id]) },
     untrained: @character.skills
-      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:untrained] }
+      .filter { |s| s.training_id == Sinatra::SkillHelper::TRAINING_ID[:untrained] }
       .sort_by { |s| skill_name(s[:skill_id]) },
     unusable: @character.skills
-      .filter { |s| s.training_id == Sinatra::EnumHelper::TRAINING[:unusable] }
+      .filter { |s| s.training_id == Sinatra::SkillHelper::TRAINING_ID[:unusable] }
       .sort_by { |s| skill_name(s[:skill_id]) },
   }
 

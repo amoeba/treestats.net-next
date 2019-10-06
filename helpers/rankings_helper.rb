@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "./enum_helper"
+# require_relative "./enum_helper"
 
 module Sinatra
   module RankingsHelper
-    extend EnumHelper
-
     # All enabled rankings and which method we use to call them. A 404 results
     # if the ranking isn't in this list.
     RANKINGS = {

@@ -25,7 +25,7 @@ module Sinatra
     def get_mastery(properties, type)
       return nil unless properties[type]
 
-      mastery(Sinatra::EnumHelper::MASTERY[type], properties[type][:value])
+      mastery(Sinatra::MasteryHelper::MASTERY[type], properties[type][:value])
     end
 
     def get_society(properties)

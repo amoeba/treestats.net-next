@@ -6,7 +6,7 @@ class Property < Sequel::Model
   many_to_one :character
 
   def to_json(options)
-    prop = Sinatra::EnumHelper.property(property_id)
+    prop = Sinatra::PropertyHelper.property(property_id)
 
     result = {
       name: prop[:name],

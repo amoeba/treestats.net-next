@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../helpers/enum_helper"
+require_relative "../helpers/heritage_helper"
+require_relative "../helpers/gender_helper"
 
 class Character < Sequel::Model
   plugin :update_or_create
@@ -24,8 +25,8 @@ class Character < Sequel::Model
     char = {
       server: server,
       name: name,
-      gender: Sinatra::EnumHelper.gender(gender_id),
-      race: Sinatra::EnumHelper.race(race_id),
+      gender: Sinatra::GenderHelper.gender_name(gender_id),
+      heritage: Sinatra::HeritageHelper.heritage_name(heritage_id),
       rank: rank,
     }
 

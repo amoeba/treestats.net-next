@@ -7,7 +7,7 @@ Sequel.migration do
       # Constraints
       unique [:server, :name]
       constraint(:gender_constraint, gender_id: 0..1)
-      constraint(:race_constraint, race_id: 0..10)
+      constraint(:heritage_constraint, heritage_id: 0..10)
       constraint(:rank_constraint, rank: 1..10)
 
       # Columns
@@ -16,7 +16,7 @@ Sequel.migration do
       String :account_name
       FalseClass :archived, default: false
 
-      Integer :race_id, null: false
+      Integer :heritage_id, null: false
       Integer :gender_id, null: false
       Integer :level
       Integer :current_title

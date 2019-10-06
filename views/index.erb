@@ -53,7 +53,7 @@
         <% @top_monarchs.each do |monarch| %>
           <tr>
             <td><a href="/<%= monarch[:server] %>"><%= monarch[:server] %></a></td>
-            <td><a href="/<%= monarch[:server] %>/<%= monarch[:name] %>%"><%= rank(monarch[:race_id], monarch[:gender_id], monarch[:rank]) %> <%= monarch[:name] %></td>
+            <td><a href="/<%= monarch[:server] %>/<%= monarch[:name] %>"><%= rank(monarch[:heritage_id], monarch[:gender_id], monarch[:rank]) %> <%= monarch[:name] %></td>
             <td><%= monarch[:allegiance_name] %></td>
             <td><%= monarch[:followers] %></td>
           </tr>

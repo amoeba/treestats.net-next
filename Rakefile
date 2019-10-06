@@ -58,19 +58,19 @@ namespace :db do
           puts "#{data["s"]}/#{data["n"]}"
 
           # Skip if needed
-          race_id = ImportHelper.race_id(data["r"])
+          heritage_id = ImportHelper.heritage_id(data["r"])
           gender_id = ImportHelper.gender_id(data["g"])
 
-          # Skip on nil race
-          if race_id.nil? || gender_id.nil?
-            puts "NIL RACE/GENDER: #{data}"
+          # Skip on nil heritage
+          if heritage_id.nil? || gender_id.nil?
+            puts "NIL HERITAGE/GENDER: #{data}"
             next
           end
 
           char = Character.update_or_create(server: data["s"], name: data["n"]) { |char|
             char.server = data["s"]
             char.name = data["n"]
-            char.race_id = race_id
+            char.heritage_id = heritage_id
             char.gender_id = gender_id
 
             rank = data["rn"]
@@ -132,9 +132,9 @@ namespace :db do
 
             if data["m"]
               monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
-                if m.race_id.nil?
-                  race_id = ImportHelper.race_id(data["m"]["race"])
-                  m.race_id = race_id.nil? ? 0 : race_id
+                if m.heritage_id.nil?
+                  heritage_id = ImportHelper.heritage_id(data["m"]["race"])
+                  m.heritage_id = heritage_id.nil? ? 0 : heritage_id
                 end
 
                 if m.gender_id.nil?
@@ -168,9 +168,9 @@ namespace :db do
 
             if data["p"]
               patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
-                if p.race_id.nil?
-                  race_id = ImportHelper.race_id(data["p"]["race"])
-                  p.race_id = race_id.nil? ? 0 : race_id
+                if p.heritage_id.nil?
+                  heritage_id = ImportHelper.heritage_id(data["p"]["race"])
+                  p.heritage_id = heritage_id.nil? ? 0 : heritage_id
                 end
 
                 if p.gender_id.nil?
@@ -270,14 +270,14 @@ namespace :db do
           if data["p"]
             patron = Character[server: data["s"], name: data["p"]["name"]]
 
-            # race_id = ImportHelper::race_id(data["m"]["race"])
+            # heritage_id = ImportHelper::heritage_id(data["m"]["race"])
             # gender_id = ImportHelper::gender_id(data["m"]["gender"])
             # rank = data["m"]["rank"]
             # followers = data["m"]["followers"]
 
             next unless !patron.nil?
 
-            puts "#{patron.race_id}/#{data["p"]["race"]}"
+            puts "#{patron.heritage_id}/#{data["p"]["race"]}"
           end
         end
       end
@@ -296,7 +296,7 @@ namespace :db do
       kolthar = Character.new(
         server: "WintersEbb",
         name: "Kolthar",
-        race_id: 0,
+        heritage_id: 0,
         gender_id: 0,
         level: 275,
         current_title: 1,
@@ -354,7 +354,7 @@ namespace :db do
       kolth = Character.new(
         server: "WintersEbb",
         name: "Kolth",
-        race_id: 0,
+        heritage_id: 0,
         gender_id: 0,
         rank: 1,
         level: 126,
@@ -404,7 +404,7 @@ namespace :db do
       Character.new(
         server: "WintersEbb",
         name: "Kol'thar",
-        race_id: 0,
+        heritage_id: 0,
         gender_id: 0,
         rank: 1,
         level: 50,
@@ -440,7 +440,7 @@ namespace :db do
       Character.new(
         server: "WintersEbb",
         name: "Someone",
-        race_id: 0,
+        heritage_id: 0,
         gender_id: 0,
         rank: 1,
         level: 50,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../helpers/enum_helper"
+require_relative "../helpers/skill_helper"
 
 class Skill < Sequel::Model
   plugin :json_serializer
@@ -9,8 +9,8 @@ class Skill < Sequel::Model
 
   def to_json(options)
     {
-      name: Sinatra::EnumHelper.skill_name(skill_id),
-      training: Sinatra::EnumHelper.training(training_id),
+      name: Sinatra::SkillHelper.skill_name(skill_id),
+      training: Sinatra::SkillHelper.training(training_id),
       base: 300,
     }.to_json
   end

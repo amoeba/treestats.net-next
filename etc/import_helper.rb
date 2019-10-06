@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportHelper
-  RACE_ID = {
+  HERITAGE_ID = {
     "Aluvian" => 0,
     "Gharu'ndim" => 1,
     "Sho" => 2,
@@ -41,10 +41,10 @@ module ImportHelper
   }
 
   # Return nil when nil or Olthoi so importer can skip
-  def self.race_id(name)
-    return nil unless RACE_ID.key?(name)
+  def self.heritage_id(name)
+    return nil unless HERITAGE_ID.key?(name)
 
-    RACE_ID[name]
+    HERITAGE_ID[name]
   end
 
   GENDER_ID = {

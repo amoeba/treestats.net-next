@@ -141,14 +141,14 @@
     </div>
     <div class="box active padded divided">
       <div>
-        <div class="larger"><%= rank(@character.race_id, @character.gender_id, @character.rank) %> <%= @character.name %></div>
+        <div class="larger"><%= rank(@character.heritage_id, @character.gender_id, @character.rank) %> <%= @character.name %></div>
         <div><a href="/allegiances/<%= @character[:server] %>/<%= @character[:allegiance_name] %>"><%= @character[:allegiance_name] %></a></div>
         <div>Followers: <%= @character[:followers] %> | Rank: <%= @character[:rank] %></div>
       </div>
       <div>
         <h4>Monarch</h4>
         <% if @character.monarch %>
-          <div><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= rank(@character.monarch[:race_id], @character.monarch[:gender_id], @character.monarch[:rank]) %> <%= @character.monarch[:name] %></a></div>
+          <div><a href="/<%= @character.monarch[:server] %>/<%= @character.monarch[:name] %>"><%= rank(@character.monarch[:heritage_id], @character.monarch[:gender_id], @character.monarch[:rank]) %> <%= @character.monarch[:name] %></a></div>
           <div>Followers: <%= @character.monarch[:followers] %></div>
         <% else %>
           No monarch
@@ -157,7 +157,7 @@
       <div>
         <h4>Patron</h4>
         <% if @character.patron %>
-          <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= rank(@character.patron[:race_id], @character.patron[:gender_id], @character.patron[:rank]) %> <%= @character.patron[:name] %></a>
+          <a href="/<%= @character.patron[:server] %>/<%= @character.patron[:name] %>"><%= rank(@character.patron[:heritage_id], @character.patron[:gender_id], @character.patron[:rank]) %> <%= @character.patron[:name] %></a>
         <% else %>
           No patron
         <% end%>
@@ -169,7 +169,7 @@
         <% end %>
         <ul class="vassals">
           <% @character.vassals.each do |vassal| %>
-          <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= rank(vassal[:race_id], vassal[:gender_id], vassal[:rank]) %> <%= vassal[:name] %></a></li>
+          <li><a href="/<%= vassal[:server] %>/<%= vassal[:name] %>"><%= rank(vassal[:heritage_id], vassal[:gender_id], vassal[:rank]) %> <%= vassal[:name] %></a></li>
           <% end %>
         </ul>
       </div>
@@ -221,7 +221,7 @@
 
       <% if @properties[:society] %>
         <div>
-          <div>You are a member of the <%= @properties[:society][:name] %> (Rank <%= @properties[:society][:value] %>)</div>
+          <div>You are a member of the <%= @properties[:society][:name] %> (Rank <%= society_rank(@properties[:society][:value]) %>)</div>
         </div>
       <% end %>
     </div>

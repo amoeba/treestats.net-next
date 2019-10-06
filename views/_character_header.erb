@@ -1,7 +1,7 @@
 <div class="character-header">
   <div class="character-header-left">
-    <div class="character-header-name"><%= rank(@character.race_id, @character.gender_id, @character.rank) %> <%= @character[:name] %></div>
-    <div class="character-header-description"><%= gender(@character[:gender_id]) %> <%= race(@character[:race_id]) %> <%= title(@character[:current_title]) %></div>
+    <div class="character-header-name"><%= rank(@character.heritage_id, @character.gender_id, @character.rank) %> <%= @character[:name] %></div>
+    <div class="character-header-description"><%= gender_name(@character[:gender_id]) %> <%= heritage_name(@character[:heritage_id]) %> <%= title(@character[:current_title]) %></div>
     <div class="twocol">
       <div>Luminance:</div>
       <div><%= with_commas(@character[:luminance_earned].to_i) %></div>
