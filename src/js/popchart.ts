@@ -9,8 +9,15 @@ export default function (selector, options = {}) {
 
   // Server ID -> Name mapping
   const serverNames = new Map();
-  serverNames.set(0, "Frostfell")
-  serverNames.set(1, "WintersEbb")
+  serverNames.set(0, "Darktide")
+  serverNames.set(1, "Frostfell")
+  serverNames.set(2, "Harvestgain")
+  serverNames.set(3, "Leafcull")
+  serverNames.set(4, "Morningthaw")
+  serverNames.set(5, "Thistledown")
+  serverNames.set(6, "Solclaim")
+  serverNames.set(7, "Verdantine")
+  serverNames.set(8, "WintersEbb")
 
   // Date formatting utility function
   const formatDate = d3.timeParse("%Y-%m-%d")

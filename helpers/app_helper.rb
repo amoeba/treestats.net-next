@@ -2,6 +2,13 @@
 
 module Sinatra
   module AppHelper
+    SERVERS = %w{Darktide Frostfell Harvestgain Leafcull Morningthaw Thistledown
+       Solclaim Verdantine WintersEbb}
+
+    def servers
+      SERVERS
+    end
+
     def get_page(params)
       return 1 unless params.is_a?(Hash)
       return 1 if params[:page].nil?
