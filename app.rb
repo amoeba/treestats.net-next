@@ -54,6 +54,12 @@ get "/search/?" do
   erb :search
 end
 
+get "/servers.json" do
+  content_type :json
+
+  servers.to_json
+end
+
 get "/servers/?" do
   erb :servers
 end
@@ -84,7 +90,7 @@ get "/rankings/?" do
   erb :rankings
 end
 
-get "/rankings/:ranking/?" do
+get "/rankings/:ranking/?" do |ranking|
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -97,10 +103,8 @@ get "/rankings/:ranking/?" do
   params[:limit] = limit
 
   @characters = get_ranking(params)
-  @value_col = value_col(params[:ranking].to_sym)
-  @ranking_name = params[:ranking].split("_").map { |w| w.capitalize }.join(" ")
-
-  not_found if @characters.nil?
+  @value_col = value_col(ranking.to_sym)
+  @ranking_name = ranking.split("_").map { |w| w.capitalize }.join(" ")
 
   erb :ranking
 end
@@ -124,12 +128,12 @@ get "/allegiances/?" do
   @more = @count > @page * limit
   @allegiances = query.limit(limit)
 
-  not_found if @count <= 0
-
   erb :allegiances
 end
 
 get "/allegiances/:server/?" do |server|
+  not_found unless servers.include?(server)
+
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -146,8 +150,6 @@ get "/allegiances/:server/?" do |server|
     .exclude(allegiance_name: nil)
 
   @count = query.count
-
-  not_found if @count <= 0
 
   @more = @count > @page * limit
   @allegiances = query
@@ -174,16 +176,14 @@ get "/allegiances/:server/:allegiance/?" do |server, allegiance|
 
   @count = query.count
 
-  not_found if @count <= 0
-
   @more = @count > @page * limit
   @characters = query.limit(limit)
 
   erb :characters
 end
 
-get "/titles/:title_id/?" do
-  title_id = params[:title_id].to_i
+get "/titles/:title_id/?" do |title_id|
+  title_id = title_id.to_i
 
   if title_id.to_s != params[:title_id]
     status 400
@@ -239,7 +239,9 @@ get "/api/?" do
   erb :api
 end
 
-get "/:server/?" do
+get "/:server/?" do |server|
+  not_found unless servers.include?(server)
+
   @page = get_page(params)
   limit = 25
   offset = (@page - 1) * limit
@@ -247,9 +249,9 @@ get "/:server/?" do
   @prev = {page: @page - 1}
   @next = {page: @page + 1}
 
-  @header = @server
+  @header = server
   query = Character
-    .filter(server: params[:server])
+    .filter(server: server)
     .select(:server, :name)
     .order(:updated_at)
     .offset(offset)
@@ -258,21 +260,18 @@ get "/:server/?" do
   @count = query.count
   @more = @count > @page * limit
 
-  not_found if @count <= 0
-
   @characters = query
     .limit(limit)
 
   erb :characters
 end
 
-get "/:server/:name/chain.json" do
+get "/:server/:name/chain.json" do |server, name|
   content_type :json
 
   # TODO: Validate server name
   # TODO: Write validator for char names
-  name = params[:name].gsub(/[^a-zA-Z'\-\+ ]/, "")
-  server = params[:server]
+  name = name.gsub(/[^a-zA-Z'\-\+ ]/, "")
 
   character = Character
     .filter(server: server, name: name)
@@ -296,11 +295,11 @@ get "/:server/:name/chain.json" do
   chain(ultimate).to_json
 end
 
-get "/:server/:name.json" do
+get "/:server/:name.json" do |server, name|
   content_type :json
 
   @character = Character
-    .filter(name: params[:name], server: params[:server])
+    .filter(name: name, server: server)
     .first
 
   halt(404, "{ \"error\": \"Character not found.\"}") if @character.nil?
@@ -308,9 +307,9 @@ get "/:server/:name.json" do
   @character.to_json
 end
 
-get "/:server/:name/?" do
+get "/:server/:name/?" do |server, name|
   @character = Character
-    .filter(name: params[:name], server: params[:server])
+    .filter(name: name, server: server)
     .first
 
   halt(404, "Character not found.") if @character.nil?
