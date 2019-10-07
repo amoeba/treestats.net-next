@@ -76,7 +76,6 @@ get "/rankings/?" do
 end
 
 get "/rankings/:ranking/?" do |ranking|
-
   query = get_ranking(params)
 
   @page_params = get_page_params(params, query.count)

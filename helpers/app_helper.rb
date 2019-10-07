@@ -2,8 +2,17 @@
 
 module Sinatra
   module AppHelper
-    SERVERS = %w{Darktide Frostfell Harvestgain Leafcull Morningthaw Thistledown
-       Solclaim Verdantine WintersEbb}
+    SERVERS = %w[
+      Darktide
+      Frostfell
+      Harvestgain
+      Leafcull
+      Morningthaw
+      Thistledown
+      Solclaim
+      Verdantine
+      WintersEbb
+    ]
 
     def servers
       SERVERS

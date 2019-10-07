@@ -138,8 +138,6 @@ module Sinatra
     end
 
     def title_ranking(*args)
-      params = args[0]
-
       Title
         .group_and_count(:character_id)
         .order(:count)
