@@ -116,8 +116,6 @@ module Sinatra
 
       query = Character
         .order(ranking)
-        .limit(params[:limit])
-        .offset(params[:offset])
         .exclude({ranking => nil})
 
       if ASCENDING.key?(ranking)
@@ -136,24 +134,18 @@ module Sinatra
         .where(skill_id: skill_id(ranking))
         .order(VALUE_COL[type])
         .reverse
-        .limit(params[:limit])
-        .offset(params[:offset])
         .association_join(:character)
     end
 
     def title_ranking(*args)
       params = args[0]
 
-      q = Title
+      Title
         .group_and_count(:character_id)
         .order(:count)
         .reverse
-        .limit(params[:limit])
-        .offset(params[:offset])
         .association_join(:character)
         .select_append(:server, :name)
-
-      q
     end
 
     def property_ranking(*args)
@@ -165,8 +157,6 @@ module Sinatra
         .where(property_id: property_id(ranking))
         .order(VALUE_COL[type])
         .reverse
-        .limit(params[:limit])
-        .offset(params[:offset])
         .association_join(:character)
     end
   end

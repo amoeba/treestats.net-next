@@ -9,6 +9,7 @@ module Sinatra
       SERVERS
     end
 
+    # Paging stuff
     def get_page(params)
       return 1 unless params.is_a?(Hash)
       return 1 if params[:page].nil?
@@ -17,6 +18,18 @@ module Sinatra
       page = 1 if page <= 0
 
       page
+    end
+
+    # Returns details we need to run a paged query and render page controls
+    def get_page_params(params, count, limit = 25)
+      page = get_page(params)
+
+      {
+        page: page,
+        limit: limit,
+        offset: (page - 1) * limit,
+        more: count > page * limit,
+      }
     end
 
     def to_params(params)

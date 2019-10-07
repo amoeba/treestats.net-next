@@ -1,14 +1,14 @@
 <div class="controls">
-  <% if @page > 1 %>
-    <a href="?<%= to_params(@prev) %>">Prev</a>
+  <% if @page_params[:page] > 1 %>
+    <a href="?page=<%= @page_params[:page] - 1 %>">Prev</a>
   <% else %>
     <span class="disabled">Prev</span>
   <% end %>
 
-  | Page <%= @page %> |
+  | Page <%= @page_params[:page] %> |
 
-  <% if @more %>
-    <a href="?<%= to_params(@next) %>">Next</a>
+  <% if @page_params[:more] %>
+    <a href="?page=<%= @page_params[:page] + 1 %>">Next</a>
   <% else %>
     <span class="disabled">Next</span>
   <% end %>

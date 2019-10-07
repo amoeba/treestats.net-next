@@ -33,23 +33,16 @@ get "/search/?" do
   # Sanitize input first
   @query = params[:query].gsub(/[^a-zA-Z'\-\+ ]/, "")
 
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
-
-  @prev = {query: @query, page: @page - 1}
-  @next = {query: @query, page: @page + 1}
-
   query = Character
     .where(Sequel.lit("lower(name) LIKE ?", "%#{@query.downcase}%"))
-    .offset(offset)
     .select(:name, :server)
     .order(:name)
     .exclude(level: nil)
 
-  @count = query.count
-  @more = @count > @page * limit
-  @characters = query.limit(limit)
+  @page_params = get_page_params(params, query.count)
+  @characters = query
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :search
 end
@@ -65,23 +58,15 @@ get "/servers/?" do
 end
 
 get "/characters/?" do
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
-
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
-
   query = Character
-    .offset(offset)
     .select(:server, :name)
     .order(:updated_at)
     .exclude(level: nil)
 
-  @count = query.count
-  @more = @count > @page * limit
+  @page_params = get_page_params(params, query.count)
   @characters = query
-    .limit(limit)
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :characters
 end
@@ -91,42 +76,30 @@ get "/rankings/?" do
 end
 
 get "/rankings/:ranking/?" do |ranking|
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
 
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
+  query = get_ranking(params)
 
-  params[:page] = @page
-  params[:offset] = offset
-  params[:limit] = limit
-
-  @characters = get_ranking(params)
+  @page_params = get_page_params(params, query.count)
   @value_col = value_col(ranking.to_sym)
   @ranking_name = ranking.split("_").map { |w| w.capitalize }.join(" ")
+  @characters = query
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :ranking
 end
 
 get "/allegiances/?" do
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
-
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
-
   query = Character
     .select(:server, :allegiance_name)
     .distinct
     .order(:allegiance_name)
-    .offset(offset)
     .exclude(allegiance_name: nil)
 
-  @count = query.count
-  @more = @count > @page * limit
-  @allegiances = query.limit(limit)
+  @page_params = get_page_params(params, query.count)
+  @allegiances = query
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :allegiances
 end
@@ -134,50 +107,33 @@ end
 get "/allegiances/:server/?" do |server|
   not_found unless servers.include?(server)
 
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
-
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
-
   query = Character
     .select(:server, :allegiance_name)
     .distinct
     .filter(server: server)
     .order(:allegiance_name)
-    .offset(offset)
     .exclude(allegiance_name: nil)
 
-  @count = query.count
-
-  @more = @count > @page * limit
+  @page_params = get_page_params(params, query.count)
   @allegiances = query
-    .limit(limit)
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :allegiances
 end
 
 get "/allegiances/:server/:allegiance/?" do |server, allegiance|
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
-
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
-
-  @header = "Allegiance: #{allegiance} (#{server})"
   query = Character
     .select(:server, :name)
     .where(server: server, allegiance_name: allegiance)
     .order(:name)
-    .offset(offset)
     .exclude(level: nil)
 
-  @count = query.count
-
-  @more = @count > @page * limit
-  @characters = query.limit(limit)
+  @header = "Allegiance: #{allegiance} (#{server})"
+  @page_params = get_page_params(params, query.count)
+  @characters = query
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :characters
 end
@@ -192,23 +148,16 @@ get "/titles/:title_id/?" do |title_id|
 
   not_found unless title_id.between?(0, 894)
 
-  @page = get_page(params)
-  limit = 1
-  offset = (@page - 1) * limit
-
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
-
   @title = title(title_id)
   query = Title
     .filter(title_id: title_id)
     .association_join(:character)
     .select(:server, :name)
-    .offset(offset)
 
-  @count = query.count
-  @more = @count > @page * limit
-  @characters = query.limit(limit)
+  @page_params = get_page_params(params, query.count)
+  @characters = query
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :title
 end
@@ -242,26 +191,17 @@ end
 get "/:server/?" do |server|
   not_found unless servers.include?(server)
 
-  @page = get_page(params)
-  limit = 25
-  offset = (@page - 1) * limit
-
-  @prev = {page: @page - 1}
-  @next = {page: @page + 1}
-
-  @header = server
   query = Character
     .filter(server: server)
     .select(:server, :name)
     .order(:updated_at)
-    .offset(offset)
     .exclude(level: nil)
 
-  @count = query.count
-  @more = @count > @page * limit
-
+  @header = server
+  @page_params = get_page_params(params, query.count)
   @characters = query
-    .limit(limit)
+    .limit(@page_params[:limit])
+    .offset(@page_params[:offset])
 
   erb :characters
 end
