@@ -49,7 +49,7 @@ export default function (selector, options = {}) {
 
     const color = d3.scaleOrdinal()
       .domain(Array.from(grouped.keys()))
-      .range(d3.schemeCategory10);
+      .range(d3.schemeDark2);
 
     // Axes
     const xAxis = g => g
