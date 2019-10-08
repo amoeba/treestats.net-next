@@ -22,9 +22,7 @@ export default function (selector, options = {}) {
   // Date formatting utility function
   const formatDate = d3.timeParse("%Y-%m-%d")
 
-  console.log("about to call d3.json...");
   d3.json("/populations.json").then(json => {
-    console.log(json)
     let data = json.map(d => {
       return {
         "server": d.id,
@@ -34,9 +32,7 @@ export default function (selector, options = {}) {
     });
 
     // Re-format data group-wise
-    let grouped = group(data, d => d.server);
-
-    console.log(grouped);
+    const grouped = group(data, d => d.server);
 
     // Scales
     const x = d3.scaleUtc()
@@ -47,9 +43,22 @@ export default function (selector, options = {}) {
       .domain([0, d3.max(data, d => d.count)]).nice()
       .range([height - margin.bottom, margin.top])
 
+    // Custom color scheme
+    const scheme = [
+      "red", // Darktide
+      "lightblue", // Frostfell
+      "gold", // Harvestgain
+      "green", // Leafcull
+      "orange", // Morningthaw
+      "lightgreen", // Thistledown
+      "purple", // Solclaim
+      "pink", // Verdantine
+      "slateblue",
+    ];
+
     const color = d3.scaleOrdinal()
       .domain(Array.from(grouped.keys()))
-      .range(d3.schemeDark2);
+      .range(scheme);
 
     // Axes
     const xAxis = g => g
