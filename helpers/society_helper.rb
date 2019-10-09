@@ -29,7 +29,7 @@ module Sinatra
     end
 
     def get_society(properties)
-      society_ids = properties.filter { |k, p| SOCIETY.keys.key?(p[:id]) }
+      society_ids = properties.filter { |k, p| SOCIETY.key?(p[:id]) }
 
       if society_ids.length != 1
         return nil
