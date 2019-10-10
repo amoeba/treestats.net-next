@@ -14,11 +14,11 @@ class App < Sinatra::Base
   set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
 
   # Assets
-  set :sprockets,     Sprockets::Environment.new(root)
-  set :precompile,    [ /\w+\.(?!js|css).+/, /application.(css|js)$/ ]
+  set :sprockets, Sprockets::Environment.new(root)
+  set :precompile, [/\w+\.(?!js|css).+/, /application.(css|js)$/]
   set :assets_prefix, "/assets"
   set :digest_assets, true
-  set(:assets_path)   { File.join public_folder, assets_prefix }
+  set(:assets_path) { File.join public_folder, assets_prefix }
 
   configure do
     sprockets.append_path File.join(root, "assets", "stylesheets")
@@ -29,8 +29,8 @@ class App < Sinatra::Base
 
     Sprockets::Helpers.configure do |config|
       config.environment = sprockets
-      config.prefix      = assets_prefix
-      config.digest      = digest_assets
+      config.prefix = assets_prefix
+      config.digest = digest_assets
       config.public_path = public_folder
     end
   end

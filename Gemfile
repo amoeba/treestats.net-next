@@ -26,7 +26,7 @@ group :test do
   gem "rack-test"
 end
 
-group :development, :test  do
+group :development, :test do
   gem "standard"
 end
 
