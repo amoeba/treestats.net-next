@@ -1,2 +1,106 @@
-var tabs=function(){"use strict";var a="inactive",s=function(s){if(s){var e=-1,i=-1,r=s.parentNode.parentNode.childNodes;for(var c in r)if(t(r[c],"tabbar")){var n=r[c].childNodes;for(var o in n)t(n[o],"tab")&&(e+=1,n[o]==s?(i=e,n[o].classList.remove(a),n[o].classList.add("active")):(n[o].classList.add(a),n[o].classList.remove("active")))}if(s.parentNode&&s.parentNode.parentNode){var d=s.parentNode.parentNode.childNodes;for(var c in e=-1,d)t(d[c],"box")&&((e+=1)==i?(d[c].classList.remove(a),d[c].classList.add("active")):(d[c].classList.remove("active"),d[c].classList.add(a)))}}},t=function(a,s){return!(!a||!a.classList)&&a.classList.contains(s)};return function(a){for(var e=a.childNodes,i=0;i<e.length;i++)if(t(e[i],"tabbar"))for(var r=e[i].childNodes,c=0;c<r.length;c++)t(r[c],"tab")&&r[c].addEventListener("click",function(){s(this)},{passive:!0})}}();
-//# sourceMappingURL=tabs.js.map
+// Simple tabbing functionality
+
+const ACTIVE_CLASS = "active";
+const INACTIVE_CLASS = "inactive";
+const TABBAR_CLASS = "tabbar";
+const BOX_CLASS = "box";
+const TAB_CLASS = "tab";
+
+// activate(ele)
+//
+// Called by tab's onclick handler, activates the tab and
+// corresponding content box.
+let activate = function (ele) {
+  if (!ele) {
+    return;
+  }
+
+  let index = -1,
+    clicked_index = -1,
+    children = ele.parentNode.parentNode.childNodes;
+
+  for (let i in children) {
+    if (!has_class(children[i], TABBAR_CLASS)) {
+      continue;
+    }
+
+    let tabs = children[i].childNodes;
+
+    // Tabs
+    for (let tab in tabs) {
+      if (!has_class(tabs[tab], TAB_CLASS)) {
+        continue;
+      }
+
+      index += 1;
+
+      if (tabs[tab] == ele) {
+        clicked_index = index;
+        tabs[tab].classList.remove(INACTIVE_CLASS);
+        tabs[tab].classList.add(ACTIVE_CLASS);
+      } else {
+        tabs[tab].classList.add(INACTIVE_CLASS);
+        tabs[tab].classList.remove(ACTIVE_CLASS);
+      }
+    }
+  }
+
+  // Boxes
+  if (ele.parentNode && ele.parentNode.parentNode) {
+    const children = ele.parentNode.parentNode.childNodes;
+
+    index = -1;
+
+    for (let i in children) {
+      if (!has_class(children[i], BOX_CLASS)) {
+        continue;
+      }
+
+      index += 1;
+
+      if (index == clicked_index) {
+        children[i].classList.remove(INACTIVE_CLASS);
+        children[i].classList.add(ACTIVE_CLASS);
+      } else {
+        children[i].classList.remove(ACTIVE_CLASS);
+        children[i].classList.add(INACTIVE_CLASS);
+      }
+    }
+  }
+}
+
+// has_class(ele, class_name)
+//
+// Determines whether the given element ele has the class
+// name class_name;
+let has_class = function (ele, class_name) {
+  if (ele && ele.classList) {
+    return ele.classList.contains(class_name);
+  } else {
+    return false;
+  }
+}
+
+function tabs(el) {
+  const children = el.childNodes;
+
+  for (let j = 0; j < children.length; j++) {
+    if (!has_class(children[j], TABBAR_CLASS)) {
+      continue;
+    }
+
+    let tabs = children[j].childNodes;
+
+    for (let k = 0; k < tabs.length; k++) {
+      if (!has_class(tabs[k], TAB_CLASS)) {
+        continue;
+      }
+
+      tabs[k].addEventListener("click", function () {
+        activate(this);
+      }, {
+        passive: true
+      });
+    }
+  }
+}
