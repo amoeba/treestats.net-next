@@ -84,11 +84,11 @@ module Sinatra
     }
 
     FORMATTERS_MAP = {
-      :unassigned_xp => :commas,
-      :total_xp => :commas,
-      :deaths => :commas,
-      :followers => :commas,
-      :birth => :identity,
+      unassigned_xp: :commas,
+      total_xp: :commas,
+      deaths: :commas,
+      followers: :commas,
+      birth: :identity,
     }
 
     # Return the value column for each ranking type. If not present in
