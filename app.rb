@@ -2,6 +2,7 @@
 
 require "bundler"
 Bundler.require
+require 'sinatra/asset_pipeline'
 
 # Set up a global DB variable so models can load
 DB = Sequel.connect(ENV["DATABASE_URL"] || "sqlite://db/treestats.db")
@@ -14,29 +15,10 @@ class App < Sinatra::Base
   set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
 
   # Assets
-  set :sprockets, Sprockets::Environment.new(root)
-  set :precompile, [/\w+\.(?!js|css).+/, /application.(css|js)$/]
-  set :assets_prefix, "/assets"
-  set :digest_assets, true
-  set(:assets_path) { File.join public_folder, assets_prefix }
-
-  configure do
-    sprockets.append_path File.join(root, "assets", "stylesheets")
-    sprockets.append_path File.join(root, "assets", "javascripts")
-    sprockets.append_path File.join(root, "assets", "images")
-
-    if production?
-      sprockets.js_compressor = Uglifier.new(harmony: true)
-      sprockets.css_compressor = :scss
-    end
-
-    Sprockets::Helpers.configure do |config|
-      config.environment = sprockets
-      config.prefix = assets_prefix
-      config.digest = digest_assets
-      config.public_path = public_folder
-    end
-  end
+  register Sinatra::AssetPipeline
+  set :assets_precompile, %w(*.js *.scss *.png)
+  set :assets_js_compressor, Uglifier.new(harmony: true)
+  set :assets_css_compressor, :scss
 
   helpers do
     include Sprockets::Helpers

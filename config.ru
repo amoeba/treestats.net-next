@@ -1,6 +1,6 @@
 require "./app"
 
-map App.assets_prefix do
+map "/assets" do
   run App.sprockets
 end
 

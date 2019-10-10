@@ -15,6 +15,7 @@ gem "sprockets-helpers"
 gem "sprockets-sass"
 gem "sass"
 gem "uglifier"
+gem "sinatra-asset-pipeline"
 
 group :development do
   gem "sqlite3"

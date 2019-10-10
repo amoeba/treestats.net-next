@@ -1,18 +1,25 @@
 # frozen_string_literal: true
 
-require "date"
 require "bundler/setup"
-Bundler.require(:default)
+Bundler.require
+require 'sinatra/asset_pipeline/task'
+require './app'
 
+require "date"
 require "./etc/import_helper"
 require "./etc/tree.rb"
 
 task default: :test
 
+# test
 task :test do
   Dir["./test/*_test.rb"].each { |f| load f }
 end
 
+# asssets
+Sinatra::AssetPipeline::Task.define! App
+
+# db
 namespace :db do
   desc "Run migrations"
   task :migrate, [:version] do |t, args|
