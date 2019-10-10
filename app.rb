@@ -106,10 +106,12 @@ class App < Sinatra::Base
 
   get "/rankings/:ranking/?" do |ranking|
     query = get_ranking(params)
+    ranking = ranking.to_sym
 
     @page_params = get_page_params(params, query.count)
-    @value_col = value_col(ranking.to_sym)
-    @ranking_name = ranking.split("_").map { |w| w.capitalize }.join(" ")
+    @value_col = value_col(ranking)
+    @formatter = formatter(ranking)
+    @ranking_name = params[:ranking].split("_").map { |w| w.capitalize }.join(" ")
     @characters = query
       .limit(@page_params[:limit])
       .offset(@page_params[:offset])

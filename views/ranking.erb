@@ -15,10 +15,10 @@
     <tr>
       <td><a href="/<%= character[:server] %>"><%= character[:server] %></a></td>
       <td><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:name] %></a></td>
-      <td><%= character[@value_col] %></td>
     </tr>
   <% end %>
   </tbody>
 </table>
+        <td><%= @formatter.call(character[@value_col]) %></td>
 
 <%= erb :_page_controls %>

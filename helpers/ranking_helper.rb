@@ -4,6 +4,8 @@
 
 module Sinatra
   module RankingHelper
+    extend AppHelper
+
     # All enabled rankings and which method we use to call them. A 404 results
     # if the ranking isn't in this list.
     RANKINGS = {
@@ -78,6 +80,19 @@ module Sinatra
       property: :value,
     }
 
+    FORMATTERS = {
+      identity: lambda { |x| x },
+      commas: lambda { |x| with_commas(x.to_i) },
+    }
+
+    FORMATTERS_MAP = {
+      :unassigned_xp => :commas,
+      :total_xp => :commas,
+      :deaths => :commas,
+      :followers => :commas,
+      :birth => :identity,
+    }
+
     # Return the value column for each ranking type. If not present in
     # VALUE_COL, assume the value column is the same as the ranking itself.
     def value_col(ranking)
@@ -86,6 +101,14 @@ module Sinatra
       return ranking unless VALUE_COL[type]
 
       VALUE_COL[type]
+    end
+
+    def formatter(ranking)
+      if FORMATTERS_MAP.key?(ranking)
+        FORMATTERS[FORMATTERS_MAP[ranking]]
+      else
+        FORMATTERS[:identity]
+      end
     end
 
     def get_ranking(params)
