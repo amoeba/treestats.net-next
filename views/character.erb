@@ -12,7 +12,7 @@
   <div id="chain" data-server="<%= @character.server %>" data-character="<%= @character.name %>"><span>Loading...</span></div>
 </div>
 
-<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="<%= javascript_path("d3.v5.min") %>"></script>
 <script src="<%= javascript_path("chain") %>"></script>
 <script src="<%= javascript_path("tabs") %>"></script>
 <script>
