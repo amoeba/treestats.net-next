@@ -1,3 +1,6 @@
+/* Variables */
+$gray: #CCC;
+
 /* General styles */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -80,7 +83,7 @@ nav ul li a:hover {
 
 #search input {
   border: none;
-  box-shadow: #CCC 0 0 0 1px,1px 1px 1px 0 #CCC;
+  box-shadow: $gray 0 0 0 1px,1px 1px 1px 0 $gray;
   padding: 0.25rem 0.5rem;
   border-radius: 3px;
 }
@@ -193,7 +196,7 @@ table.listing th {
 }
 
 .tab.inactive {
-  background-color: #CCC;
+  background-color: $gray;
   color: black;
 }
 
