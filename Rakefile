@@ -2,8 +2,8 @@
 
 require "bundler/setup"
 Bundler.require
-require 'sinatra/asset_pipeline/task'
-require './app'
+require "sinatra/asset_pipeline/task"
+require "./app"
 
 require "date"
 require "./etc/import_helper"
