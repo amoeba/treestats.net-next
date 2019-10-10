@@ -27,6 +27,7 @@ class App < Sinatra::Base
 
     if production?
       sprockets.js_compressor = Uglifier.new(harmony: true)
+      sprockets.css_compressor = :scss
     end
 
     Sprockets::Helpers.configure do |config|
@@ -39,6 +40,7 @@ class App < Sinatra::Base
 
   helpers do
     include Sprockets::Helpers
+
     include Sinatra::AppHelper
     include Sinatra::GenderHelper
     include Sinatra::HeritageHelper
