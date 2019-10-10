@@ -1,11 +1,94 @@
-const chain = (selector, server, character, options = {}) => {
-  const width = options.width || 600;
-  const height = options.height || 400;
+/** chain.js
+ *
+ *  Fairly custom d3.hierarchy implementation of a cluster diagram.
+ *
+ *
+ */
 
-  d3.json("/" + server + "/" + character + "/chain.json").then(data => {
+
+/**
+ * attachMaximizeHandler
+ *
+ * Attaches an onclick handler to `selector` which toggles a CSS class
+ * (.zoomed) on and off in order to provide fullscreen viewing of the chain.
+ *
+ * @param {string} selector - The CSS selector to use to find the
+ * minimize/maximize button.
+ */
+const attachMaximizeHandler = function(selector) {
+  const toggle_class = "toggle";
+  const zoom_class = "zoomed";
+  const toggles = document.querySelectorAll(selector);
+
+  // Sanity check
+  if (!toggles || !toggles.length || toggles.length !== 1) {
+    return;
+  }
+
+  const toggle = toggles[0];
+
+  toggle.onclick = function (e) {
+    const currentClasses = toggle.parentElement.className;
+
+    if (!(typeof currentClasses === "string")) {
+      return;
+    }
+
+    if (!toggle.parentElement) {
+      return;
+    }
+
+    if (currentClasses.indexOf(zoom_class) >= 0) {
+      toggle.parentElement.className = toggle_class;
+      toggle.innerHTML = "Maximize";
+
+      // Trigger chart to resize
+      window.dispatchEvent(new Event("resize"));
+    } else {
+      toggle.parentElement.className = toggle_class + " " + zoom_class;
+      toggle.innerHTML = "Minimize";
+
+      // Scroll to top
+      if (window && window.scrollTo) {
+        window.scrollTo(0, 0);
+      }
+
+      // Trigger chart to resize
+      window.dispatchEvent(new Event("resize"));
+    }
+  };
+}
+
+/**
+ * drawChain
+ *
+ * Draws an SVG in `selector` using `d3`.
+ *
+ * @param {string} selector - The CSS selector to use to find the element to
+ * draw the chain on.
+ */
+const drawChain = function (selector) {
+  const targets = document.querySelectorAll(selector);
+
+  if (!targets || !targets.length || targets.length != 1) {
+    return;
+  }
+
+  const target = targets[0];
+
+  if (!target.dataset.server || !target.dataset.name) {
+    return;
+  }
+
+  const server = target.dataset.server;
+  const name = target.dataset.name;
+  const width = 600;
+  const height = 400;
+
+  d3.json("/" + server + "/" + name + "/chain.json").then(data => {
     const tree_data = d3.stratify()
-      .id(d => d.id )
-      .parentId(d => d.patron_id )
+      .id(d => d.id)
+      .parentId(d => d.patron_id)
       (data);
 
     const tree = tree_data => {
@@ -84,7 +167,7 @@ const chain = (selector, server, character, options = {}) => {
       .attr("dy", "0.31em")
       .attr("x", d => d.children ? -6 : 6)
       .attr("text-anchor", d => d.children ? "end" : "start")
-      .attr("style", d => d.data.data.name === character ? "font-weight: bold" : "font-weight: normal")
+      .attr("style", d => d.data.data.name === name ? "font-weight: bold" : "font-weight: normal")
       .text(d => d.data.data.name)
       .clone(true).lower()
       .attr("stroke", "white");
@@ -94,7 +177,7 @@ const chain = (selector, server, character, options = {}) => {
     let zoomY = root.y;
 
     root.each(d => {
-      if (d.data.data.name === character) {
+      if (d.data.data.name === name) {
         zoomX = d.x;
         zoomY = d.y;
       }
@@ -112,3 +195,8 @@ const chain = (selector, server, character, options = {}) => {
     }
   });
 };
+
+(function () {
+  attachMaximizeHandler(".toggle");
+  drawChain("#chain");
+})();

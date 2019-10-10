@@ -9,59 +9,13 @@
 <h4>Chain</h4>
 <div id="chain-container">
   <div class="toggle">Maximize</div>
-  <div id="chain" data-server="<%= @character.server %>" data-character="<%= @character.name %>"><span>Loading...</span></div>
+  <div id="chain" data-server="<%= @character.server %>" data-name="<%= @character.name %>"><span>Loading...</span></div>
 </div>
 
 <script src="<%= javascript_path("d3.v5.min") %>"></script>
 <script src="<%= javascript_path("chain") %>"></script>
 <script src="<%= javascript_path("tabs") %>"></script>
 <script>
-  // Chain
-  const chainEl = document.getElementById("chain");
-
-  if (chainEl) {
-    chain(chainEl, chainEl.dataset.server, chainEl.dataset.character);
-  }
-
-  // Attach click handler for Minimize/Maximize
-  const toggle_class = "toggle";
-  const zoom_class = "zoomed";
-  const toggles = document.getElementsByClassName("toggle");
-
-  if (toggles && toggles.length && toggles.length == 1) {
-    const toggle = toggles[0];
-
-    toggle.onclick = function (e) {
-      const currentClasses = toggle.parentElement.className;
-
-      if (!(typeof currentClasses === "string")) {
-        return;
-      }
-
-      if (!toggle.parentElement) {
-        return;
-      }
-
-      if (currentClasses.indexOf(zoom_class) >= 0) {
-        toggle.parentElement.className = toggle_class;
-        toggle.innerHTML = "Maximize";
-
-        // Trigger chart to resize
-        window.dispatchEvent(new Event("resize"));
-      } else {
-        toggle.parentElement.className = toggle_class + " " + zoom_class;
-        toggle.innerHTML = "Minimize";
-
-        // Scroll to top
-        if (window && window.scrollTo) {
-          window.scrollTo(0, 0);
-        }
-
-        // Trigger chart to resize
-        window.dispatchEvent(new Event("resize"));
-      }
-    };
-  }
 
   // Tabs
   const containers = document.getElementsByClassName("tabcontainer");
