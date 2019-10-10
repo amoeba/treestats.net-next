@@ -1,0 +1,18 @@
+{
+  "install": "bundle install",
+  "start": "bundle exec rackup",
+  "watch": {
+    "install": {
+      "include": [
+        "^Gemfile$"
+      ]
+    },
+    "restart": {
+      "include": [
+        "\\.rb$"
+      ]
+    }
+  }
+}
+
+
