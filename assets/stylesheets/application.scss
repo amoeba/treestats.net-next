@@ -138,6 +138,22 @@ nav ul li a:hover {
   color: blue;
 }
 
+/* Dashboard */
+.dashboards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dashboard {
+  margin: 0 1.5rem 1.5rem 0;
+  overflow: scroll;
+}
+
+.dashboard table {
+  display: inline-table;
+  table-layout: fixed;
+}
+
 /* Listings */
 .listing {
   margin-bottom: 1.5rem;
