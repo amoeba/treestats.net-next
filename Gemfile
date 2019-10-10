@@ -9,9 +9,12 @@ gem "sinatra"
 gem "sinatra-sequel", git: "https://github.com/amoeba/sinatra-sequel"
 gem "sequel-rake"
 
-group :production do
-  gem "pg"
-end
+# Asset management
+gem "sprockets"
+gem "sprockets-helpers"
+gem "sprockets-sass"
+gem "sass"
+gem "uglifier"
 
 group :development do
   gem "sqlite3"
@@ -23,4 +26,10 @@ group :test do
   gem "rack-test"
 end
 
-gem "standard", group: [:development, :test]
+group :development, :test  do
+  gem "standard"
+end
+
+group :production do
+  gem "pg"
+end

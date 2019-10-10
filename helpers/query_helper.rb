@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Sinatra
-  module RankingsHelper
+  module QueryHelper
     def ultimate_patron(id)
       patron_query = <<-QUERY
         WITH RECURSIVE
@@ -15,7 +15,7 @@ module Sinatra
         WHERE characters.id IN (select * from children) AND patron_id IS NULL;
       QUERY
 
-      patron_result = database.fetch(patron_query).to_a
+      patron_result = DB.fetch(patron_query).to_a
 
       if patron_result.length <= 0
         raise Exception("TODO")
@@ -37,7 +37,7 @@ module Sinatra
         WHERE characters.id IN (select * from children);
       QUERY
 
-      database.fetch(query).to_a
+      DB.fetch(query).to_a
     end
 
     def populations
@@ -55,9 +55,9 @@ module Sinatra
           date;
       QUERY
 
-      database.fetch(query).to_a
+      DB.fetch(query).to_a
     end
   end
 
-  helpers RankingsHelper
+  helpers QueryHelper
 end

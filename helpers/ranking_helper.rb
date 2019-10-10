@@ -3,7 +3,7 @@
 # require_relative "./enum_helper"
 
 module Sinatra
-  module RankingsHelper
+  module RankingHelper
     # All enabled rankings and which method we use to call them. A 404 results
     # if the ranking isn't in this list.
     RANKINGS = {
@@ -159,5 +159,5 @@ module Sinatra
     end
   end
 
-  helpers RankingsHelper
+  helpers RankingHelper
 end

@@ -1,11 +1,11 @@
-function chain(selector, server, character, options = {}) {
-  d3.json("/" + server + "/" + character + "/chain.json").then(data => {
-    const width = options.width || 600;
-    const height = options.height || 400;
+const chain = (selector, server, character, options = {}) => {
+  const width = options.width || 600;
+  const height = options.height || 400;
 
+  d3.json("/" + server + "/" + character + "/chain.json").then(data => {
     const tree_data = d3.stratify()
-      .id(function (d) { return d.id; })
-      .parentId(function (d) { return d.patron_id; })
+      .id(d => d.id )
+      .parentId(d => d.patron_id )
       (data);
 
     const tree = tree_data => {
@@ -26,7 +26,7 @@ function chain(selector, server, character, options = {}) {
     }
 
     d3.select(window)
-      .on("resize", function () {
+      .on("resize", () => {
         chart.attr("width", chart.node().getBoundingClientRect().width);
         chart.attr("height", chart.node().getBoundingClientRect().height);
 
@@ -35,7 +35,7 @@ function chain(selector, server, character, options = {}) {
 
     const zoom = d3.zoom()
       .scaleExtent([0.1, 5])
-      .on("zoom", function () {
+      .on("zoom", () => {
         g.attr("transform", d3.event.transform);
       });
 
@@ -63,10 +63,10 @@ function chain(selector, server, character, options = {}) {
       .attr("transform", d => `translate(${d.y},${d.x})`);
 
     node.append("svg:a")
-      .attr("xlink:href", function (d) {
+      .attr("xlink:href", d => {
         return ["/", server, "/", d.data.data.name].join("");
       })
-      .attr("aria-label", function (d) {
+      .attr("aria-label", d => {
         return d.data.data.name;
       })
       .append("circle")
@@ -74,10 +74,10 @@ function chain(selector, server, character, options = {}) {
       .attr("r", 2.5);
 
     node.append("svg:a")
-      .attr("xlink:href", function (d) {
+      .attr("xlink:href", d => {
         return ["/", server, "/", d.data.data.name].join("");
       })
-      .attr("aria-label", function (d) {
+      .attr("aria-label", d => {
         return d.data.data.name;
       })
       .append("text")

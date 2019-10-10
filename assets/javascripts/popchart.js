@@ -88,7 +88,7 @@ function popchart(selector, options = {}) {
       .x(d => x(d.date))
       .y(d => y(d.count))
 
-    const servers = color.domain().map(function (key) {
+    const servers = color.domain().map((key) => {
       return {
         name: key,
         values: grouped.get(key)
@@ -106,24 +106,24 @@ function popchart(selector, options = {}) {
       .attr("stroke-width", 1)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .style("stroke", function (d) { return color(d.name); })
-      .attr("d", function (d) { return line(d.values); })
+      .style("stroke", d => { return color(d.name); })
+      .attr("d", d => { return line(d.values); })
 
     // Server: {Count} text
     server.append("text")
-      .datum(function (d) {
+      .datum(d => {
         return {
           name: d.name,
           value: d.values[d.values.length - 1]
         };
       })
-      .attr("transform", function (d) {
+      .attr("transform", d => {
         return "translate(" + x(d.value.date) + "," + y(d.value.count) + ")";
       })
       .attr("x", 3)
       .attr("dy", ".35em")
       .style("font-family", "inherit")
-      .text(function (d) {
+      .text(d => {
         return serverNames.get(d.name) + ": " + d.value.count;
       });
   })

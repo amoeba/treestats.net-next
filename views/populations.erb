@@ -3,9 +3,9 @@
 <p>Maximum players online by day for each server.</p>
 <div id="chart"></div>
 
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="https://d3js.org/d3-array.v2.min.js"></script>
-<script src="/js/popchart.js"></script>
+<script src="<%= javascript_path("d3.v5.min") %>"></script>
+<script src="<%= javascript_path("d3-array.v2.min") %>"></script>
+<script src="<%= javascript_path("popchart") %>"></script>
 <script>
   (function() {
     popchart("#chart")
