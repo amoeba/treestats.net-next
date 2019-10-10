@@ -25,7 +25,9 @@ class App < Sinatra::Base
     sprockets.append_path File.join(root, "assets", "javascripts")
     sprockets.append_path File.join(root, "assets", "images")
 
-    sprockets.js_compressor = Uglifier.new(harmony: true)
+    if production?
+      sprockets.js_compressor = Uglifier.new(harmony: true)
+    end
 
     Sprockets::Helpers.configure do |config|
       config.environment = sprockets
