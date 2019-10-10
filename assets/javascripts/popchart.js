@@ -1,25 +1,52 @@
-function popchart(selector, options = {}) {
-  // Config
-  const width = options.width | 600;
-  const height = options.width | 300
-  const margin = ({ top: 20, right: 80, bottom: 20, left: 40 })
+/**
+ * popchart.js
+ *
+ * Minimal multi-line chart to plot server population counts over time.
+ */
 
-  // Server ID -> Name mapping
-  const serverNames = new Map();
-  serverNames.set(0, "Darktide")
-  serverNames.set(1, "Frostfell")
-  serverNames.set(2, "Harvestgain")
-  serverNames.set(3, "Leafcull")
-  serverNames.set(4, "Morningthaw")
-  serverNames.set(5, "Thistledown")
-  serverNames.set(6, "Solclaim")
-  serverNames.set(7, "Verdantine")
-  serverNames.set(8, "WintersEbb")
+// Globals
+const url = "/populations.json";
+const width = 600;
+const height = 300
+const margin = ({ top: 20, right: 80, bottom: 20, left: 40 })
 
-  // Date formatting utility function
-  const formatDate = d3.timeParse("%Y-%m-%d")
+// Server ID -> Name mapping
+const serverNames = new Map();
+serverNames.set(0, "Darktide")
+serverNames.set(1, "Frostfell")
+serverNames.set(2, "Harvestgain")
+serverNames.set(3, "Leafcull")
+serverNames.set(4, "Morningthaw")
+serverNames.set(5, "Thistledown")
+serverNames.set(6, "Solclaim")
+serverNames.set(7, "Verdantine")
+serverNames.set(8, "WintersEbb")
 
-  d3.json("/populations.json").then(json => {
+// Date formatting utility function
+const formatDate = d3.timeParse("%Y-%m-%d")
+
+// Custom color scheme
+const colorScheme = [
+  "red", // Darktide
+  "lightblue", // Frostfell
+  "gold", // Harvestgain
+  "green", // Leafcull
+  "orange", // Morningthaw
+  "lightgreen", // Thistledown
+  "purple", // Solclaim
+  "pink", // Verdantine
+  "slateblue",
+];
+
+/**
+ * popchart
+ *
+ * @param {*} selector - CSS selector to use to find the element to draw the
+ * chart into.
+ */
+const popchart = function (selector) {
+  d3.json(url).then(json => {
+    // Tidy up data
     let data = json.map(d => {
       return {
         "server": d.id,
@@ -40,22 +67,9 @@ function popchart(selector, options = {}) {
       .domain([0, d3.max(data, d => d.count)]).nice()
       .range([height - margin.bottom, margin.top])
 
-    // Custom color scheme
-    const scheme = [
-      "red", // Darktide
-      "lightblue", // Frostfell
-      "gold", // Harvestgain
-      "green", // Leafcull
-      "orange", // Morningthaw
-      "lightgreen", // Thistledown
-      "purple", // Solclaim
-      "pink", // Verdantine
-      "slateblue",
-    ];
-
     const color = d3.scaleOrdinal()
       .domain(Array.from(grouped.keys()))
-      .range(scheme);
+      .range(colorScheme);
 
     // Axes
     const xAxis = g => g
@@ -127,4 +141,8 @@ function popchart(selector, options = {}) {
         return serverNames.get(d.name) + ": " + d.value.count;
       });
   })
-}
+};
+
+(function() {
+  popchart("#chart")
+})();

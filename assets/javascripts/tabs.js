@@ -1,40 +1,51 @@
-// Simple tabbing functionality
+/**
+ * tabs.js
+ *
+ * Fairly custom tabbing functionality. Uses click handlers and CSS classes
+ * defined elsewhere to toggle visibility on elements on the page to simulate
+ * a tab-like functionality.
+ */
 
+// Globals
 const ACTIVE_CLASS = "active";
 const INACTIVE_CLASS = "inactive";
 const TABBAR_CLASS = "tabbar";
 const BOX_CLASS = "box";
 const TAB_CLASS = "tab";
 
-// activate(ele)
-//
-// Called by tab's onclick handler, activates the tab and
-// corresponding content box.
-let activate = function (ele) {
-  if (!ele) {
+/**
+ * activate
+ *
+ * Called by tab's onclick handler, activates the tab and
+ * corresponding content box.
+ *
+ * @param (*) ele - The element to activate tabs on
+ */
+const activate = function (el) {
+  if (!el) {
     return;
   }
 
   let index = -1,
     clicked_index = -1,
-    children = ele.parentNode.parentNode.childNodes;
+    children = el.parentNode.parentNode.childNodes;
 
   for (let i in children) {
-    if (!has_class(children[i], TABBAR_CLASS)) {
+    if (!hasClass(children[i], TABBAR_CLASS)) {
       continue;
     }
 
     let tabs = children[i].childNodes;
 
-    // Tabs
+    // Hide or show tabs
     for (let tab in tabs) {
-      if (!has_class(tabs[tab], TAB_CLASS)) {
+      if (!hasClass(tabs[tab], TAB_CLASS)) {
         continue;
       }
 
       index += 1;
 
-      if (tabs[tab] == ele) {
+      if (tabs[tab] == el) {
         clicked_index = index;
         tabs[tab].classList.remove(INACTIVE_CLASS);
         tabs[tab].classList.add(ACTIVE_CLASS);
@@ -45,14 +56,14 @@ let activate = function (ele) {
     }
   }
 
-  // Boxes
-  if (ele.parentNode && ele.parentNode.parentNode) {
-    const children = ele.parentNode.parentNode.childNodes;
+  // Hide or show boxes
+  if (el.parentNode && el.parentNode.parentNode) {
+    const children = el.parentNode.parentNode.childNodes;
 
     index = -1;
 
     for (let i in children) {
-      if (!has_class(children[i], BOX_CLASS)) {
+      if (!hasClass(children[i], BOX_CLASS)) {
         continue;
       }
 
@@ -67,32 +78,40 @@ let activate = function (ele) {
       }
     }
   }
-}
+};
 
-// has_class(ele, class_name)
-//
-// Determines whether the given element ele has the class
-// name class_name;
-let has_class = function (ele, class_name) {
-  if (ele && ele.classList) {
-    return ele.classList.contains(class_name);
+/**
+ * hasClass
+ *
+ * Determines whether the given element ele has the class `name`.
+ */
+const hasClass = function (el, name) {
+  if (el && el.classList) {
+    return el.classList.contains(name);
   } else {
     return false;
   }
 }
 
-function tabs(el) {
+/**
+ * enableTabs
+ *
+ * Sets onclick handlers appropriate on the target element.
+ *
+ * @param {*} el - The element to enable tabs on
+ */
+const enableTabs = function (el) {
   const children = el.childNodes;
 
   for (let j = 0; j < children.length; j++) {
-    if (!has_class(children[j], TABBAR_CLASS)) {
+    if (!hasClass(children[j], TABBAR_CLASS)) {
       continue;
     }
 
     let tabs = children[j].childNodes;
 
     for (let k = 0; k < tabs.length; k++) {
-      if (!has_class(tabs[k], TAB_CLASS)) {
+      if (!hasClass(tabs[k], TAB_CLASS)) {
         continue;
       }
 
@@ -103,4 +122,21 @@ function tabs(el) {
       });
     }
   }
-}
+};
+
+/**
+ * tabs
+ *
+ * @param {*} selector - CSS selector to use to set up tabs on elements on the
+ * page.
+ */
+const tabs = function (selector) {
+  document.querySelectorAll(selector)
+    .forEach(function(el) {
+      enableTabs(el);
+    });
+};
+
+(function () {
+  tabs(".tabcontainer");
+})();
