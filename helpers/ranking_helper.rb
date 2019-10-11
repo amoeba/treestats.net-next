@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "./app_helper"
+
 module Sinatra
   module RankingHelper
     extend AppHelper
