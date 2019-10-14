@@ -28,7 +28,8 @@ namespace :db do
     end
   end
 
-  task :import do
+  task :import, [:path] do |t, args|
+
     desc "Import data from JSON files"
 
     require "sequel"
@@ -43,7 +44,7 @@ namespace :db do
       require_relative "models/property"
       require_relative "models/account"
 
-      files = Dir.glob("data/*.json")
+      files = Dir.glob("#{File.expand_path(args[:path])}/*.json")
 
       if files.length <= 0
         raise("No files found at path #{args[:path]}.")
