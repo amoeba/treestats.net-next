@@ -10,6 +10,8 @@ module Sinatra
     def gender_name(id)
       GENDER[id]
     end
+
+    module_function :gender_name
   end
 
   helpers GenderHelper

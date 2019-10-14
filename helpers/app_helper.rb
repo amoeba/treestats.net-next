@@ -18,6 +18,12 @@ module Sinatra
       SERVERS
     end
 
+    def server_name(id)
+      SERVERS[id]
+    end
+
+    module_function :server_name
+
     # Paging stuff
     def get_page(params)
       return 1 unless params.is_a?(Hash)

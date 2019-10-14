@@ -26,7 +26,7 @@ class Character < Sequel::Model
       server: server,
       name: name,
       gender: Sinatra::GenderHelper.gender_name(gender_id),
-      heritage: Sinatra::HeritageHelper.heritage_name(heritage_id),
+      heritage: Sinatra::HeritageHelper::heritage_name(heritage_id),
       rank: rank,
     }
 

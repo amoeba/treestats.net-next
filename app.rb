@@ -204,6 +204,12 @@ class App < Sinatra::Base
     populations.to_json
   end
 
+  get "/populations-latest.json" do
+    content_type :json
+
+    populations_latest.to_json
+  end
+
   get "/populations/?" do
     @populations = populations
 

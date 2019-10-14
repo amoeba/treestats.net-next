@@ -19,6 +19,8 @@ module Sinatra
     def heritage_name(id)
       HERITAGE[id]
     end
+
+    module_function :heritage_name
   end
 
   helpers HeritageHelper

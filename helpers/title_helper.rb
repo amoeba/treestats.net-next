@@ -881,6 +881,8 @@ module Sinatra
       TITLE[id]
     end
 
+    module_function :title
+
     def titles
       TITLE
     end

@@ -87,6 +87,8 @@ module Sinatra
       PROPERTY[id]
     end
 
+    module_function :property
+
     def property_id(key)
       PROPERTY.select { |key, value| value[:key] == key }.keys.first
     end

@@ -147,13 +147,19 @@ module Sinatra
       SKILL[id]
     end
 
+    module_function :skill_name
+
     def skill_id(key)
       SKILL_ID[key]
     end
 
+    module_function :skill_id
+
     def training(id)
       TRAINING[id]
     end
+
+    module_function :training
   end
 
   helpers SkillHelper

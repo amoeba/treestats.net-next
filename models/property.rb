@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../helpers/property_helper"
+
 class Property < Sequel::Model
   plugin :json_serializer
 

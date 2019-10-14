@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../helpers/skill_helper"
+
 module Sinatra
   module QueryHelper
     def ultimate_patron(id)
@@ -56,6 +58,39 @@ module Sinatra
       QUERY
 
       DB.fetch(query).to_a
+    end
+
+    def populations_latest
+      query = <<-QUERY
+        SELECT
+          latest.server_id as id,
+          populations.created_at as date,
+          populations.count
+        FROM
+          (
+            SELECT
+              server_id,
+              max(created_at) as max_date
+            FROM populations
+            GROUP BY
+              server_id
+          ) AS latest
+        INNER JOIN populations
+        ON
+          latest.server_id = populations.server_id
+        AND
+          latest.max_date = populations.created_at;
+      QUERY
+
+      counts = DB.fetch(query).to_a
+
+      counts.map do |count|
+        {
+          name: Sinatra::AppHelper::server_name(count[:id]),
+          date: count[:date].utc.iso8601,
+          count: count[:count],
+        }
+      end
     end
   end
 
