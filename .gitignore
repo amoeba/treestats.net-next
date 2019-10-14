@@ -1,3 +1,4 @@
 db/treestats.db
 .sass-cache
 node_modules/**
+db/treestats.db-journal

@@ -51,11 +51,7 @@ namespace :db do
       end
 
       files.each do |file|
-        contents = File.read(file)
-
-        # Pass one: Add in basic character information
-        # Pass two will link monarchs and patrons together
-        contents.split("\n").each do |line|
+        File.read(file).split("\n").each do |line|
           data = JSON.parse(line)
 
           puts "#{data["s"]}/#{data["n"]}"
@@ -70,7 +66,7 @@ namespace :db do
             next
           end
 
-          char = Character.update_or_create(server: data["s"], name: data["n"]) { |char|
+          char = Character.update_or_create(server: data["s"], name: data["n"]) do |char|
             char.server = data["s"]
             char.name = data["n"]
             char.heritage_id = heritage_id
@@ -134,7 +130,8 @@ namespace :db do
             end
 
             if data["m"]
-              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
+              puts "  monarch #{data['m']['name']}"
+              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) do |m|
                 if m.heritage_id.nil?
                   heritage_id = ImportHelper.heritage_id(data["m"]["race"])
                   m.heritage_id = heritage_id.nil? ? 0 : heritage_id
@@ -164,13 +161,14 @@ namespace :db do
                 if m.updated_at.nil?
                   m.updated_at = DateTime.now.to_time.utc
                 end
-              }
+              end
 
               char.monarch_id = monarch.id
             end
 
             if data["p"]
-              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
+              puts "  patron #{data['p']['name']}"
+              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) do |p|
                 if p.heritage_id.nil?
                   heritage_id = ImportHelper.heritage_id(data["p"]["race"])
                   p.heritage_id = heritage_id.nil? ? 0 : heritage_id
@@ -196,11 +194,11 @@ namespace :db do
                 if p.updated_at.nil?
                   p.updated_at = DateTime.now.to_time.utc
                 end
-              }
+              end
 
               char.patron_id = patron.id
             end
-          }
+          end
 
           if data["acc"]
             account = Account.update_or_create(name: data["acc"]) { |a|
@@ -239,48 +237,6 @@ namespace :db do
               property_id: k.to_i,
               value: v.to_i
             ).save
-          end
-        end
-      end
-    end
-  end
-
-  task :import_allegiance do
-    desc "Import allegiance from JSON files. Run this after running import task"
-
-    require "sequel"
-    require "json"
-
-    db_uri = ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
-    Sequel.connect(db_uri) do |db|
-      require_relative "models/character"
-      require_relative "models/skill"
-      require_relative "models/title"
-      require_relative "models/property"
-
-      files = Dir.glob("data/*.json")
-
-      if files.length <= 0
-        raise("No files found at path #{args[:path]}.")
-      end
-
-      files.each do |file|
-        contents = File.read(file)
-
-        contents.split("\n").each do |line|
-          data = JSON.parse(line)
-
-          if data["p"]
-            patron = Character[server: data["s"], name: data["p"]["name"]]
-
-            # heritage_id = ImportHelper::heritage_id(data["m"]["race"])
-            # gender_id = ImportHelper::gender_id(data["m"]["gender"])
-            # rank = data["m"]["rank"]
-            # followers = data["m"]["followers"]
-
-            next unless !patron.nil?
-
-            puts "#{patron.heritage_id}/#{data["p"]["race"]}"
           end
         end
       end
