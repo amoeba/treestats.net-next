@@ -86,7 +86,7 @@ module Sinatra
 
       counts.map do |count|
         {
-          name: Sinatra::AppHelper::server_name(count[:id]),
+          name: Sinatra::AppHelper.server_name(count[:id]),
           date: count[:date].utc.iso8601,
           count: count[:count],
         }
