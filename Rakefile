@@ -2,8 +2,6 @@
 
 require "bundler/setup"
 Bundler.require
-require "sinatra/asset_pipeline/task"
-require "./app"
 
 require "date"
 require "./etc/import_helper"
@@ -15,9 +13,6 @@ task default: :test
 task :test do
   Dir["./test/*_test.rb"].each { |f| load f }
 end
-
-# asssets
-Sinatra::AssetPipeline::Task.define! App
 
 # db
 namespace :db do
