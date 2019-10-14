@@ -4,7 +4,7 @@ class AppTest < MiniTest::Test
   include Rack::Test::Methods
 
   def app
-    Sinatra::Application
+    App
   end
 
   def test_hello_world
