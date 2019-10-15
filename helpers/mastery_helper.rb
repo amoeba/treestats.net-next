@@ -9,7 +9,7 @@ module Sinatra
     }
 
     MASTERY = {
-      MASTERY_TYPE[:melee] => {
+      melee: {
         1 => "Unarmed",
         2 => "Swords",
         3 => "Axes",
@@ -19,12 +19,12 @@ module Sinatra
         9 => "Crossbows",
         11 => "Two-Handed",
       },
-      MASTERY_TYPE[:ranged] => {
+      ranged: {
         8 => "Bows",
         10 => "Thrown Weapons",
         12 => "Magical Spells",
       },
-      MASTERY_TYPE[:summoning] => {
+      summoning: {
         1 => "Primalist",
         2 => "Necromancer",
         3 => "Naturalist",
@@ -38,7 +38,7 @@ module Sinatra
     def get_mastery(properties, type)
       return nil unless properties[type]
 
-      mastery(MASTERY[type], properties[type][:value])
+      mastery(type, properties[type][:value])
     end
   end
 
