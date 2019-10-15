@@ -127,77 +127,77 @@ namespace :db do
               char.luminance_total = data["lt"]
               char.luminance_earned = data["lx"]
             end
-
-            if data["m"]
-              puts "  monarch #{data["m"]["name"]}"
-              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
-                if m.heritage_id.nil?
-                  heritage_id = ImportHelper.heritage_id(data["m"]["race"])
-                  m.heritage_id = heritage_id.nil? ? 0 : heritage_id
-                end
-
-                if m.gender_id.nil?
-                  gender_id = ImportHelper.gender_id(data["m"]["gender"])
-                  m.gender_id = gender_id.nil? ? 0 : gender_id
-                end
-
-                rank = data["m"]["rank"]
-
-                m.rank = if rank.nil? || rank.zero?
-                  1
-                else
-                  rank
-                end
-
-                if m.followers.nil?
-                  m.followers = data["m"]["followers"]
-                end
-
-                if m.created_at.nil?
-                  m.created_at = DateTime.now.to_time.utc
-                end
-
-                if m.updated_at.nil?
-                  m.updated_at = DateTime.now.to_time.utc
-                end
-              }
-
-              char.monarch_id = monarch.id
-            end
-
-            if data["p"]
-              puts "  patron #{data["p"]["name"]}"
-              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
-                if p.heritage_id.nil?
-                  heritage_id = ImportHelper.heritage_id(data["p"]["race"])
-                  p.heritage_id = heritage_id.nil? ? 0 : heritage_id
-                end
-
-                if p.gender_id.nil?
-                  gender_id = ImportHelper.gender_id(data["p"]["gender"])
-                  p.gender_id = gender_id.nil? ? 0 : gender_id
-                end
-
-                rank = data["p"]["rank"]
-
-                p.rank = if rank.nil? || rank.zero?
-                  1
-                else
-                  rank
-                end
-
-                if p.created_at.nil?
-                  p.created_at = DateTime.now.to_time.utc
-                end
-
-                if p.updated_at.nil?
-                  p.updated_at = DateTime.now.to_time.utc
-                end
-              }
-
-              char.patron_id = patron.id
-            end
           }
+
+          if data["m"]
+            puts "  monarch #{data["m"]["name"]}"
+            monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
+              if m.heritage_id.nil?
+                heritage_id = ImportHelper.heritage_id(data["m"]["race"])
+                m.heritage_id = heritage_id.nil? ? 0 : heritage_id
+              end
+
+              if m.gender_id.nil?
+                gender_id = ImportHelper.gender_id(data["m"]["gender"])
+                m.gender_id = gender_id.nil? ? 0 : gender_id
+              end
+
+              rank = data["m"]["rank"]
+
+              m.rank = if rank.nil? || rank.zero?
+                1
+              else
+                rank
+              end
+
+              if m.followers.nil?
+                m.followers = data["m"]["followers"]
+              end
+
+              if m.created_at.nil?
+                m.created_at = DateTime.now.to_time.utc
+              end
+
+              if m.updated_at.nil?
+                m.updated_at = DateTime.now.to_time.utc
+              end
+            }
+
+            char.update(monarch_id: monarch.id)
+          end
+
+          if data["p"]
+            puts "  patron #{data["p"]["name"]}"
+            patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
+              if p.heritage_id.nil?
+                heritage_id = ImportHelper.heritage_id(data["p"]["race"])
+                p.heritage_id = heritage_id.nil? ? 0 : heritage_id
+              end
+
+              if p.gender_id.nil?
+                gender_id = ImportHelper.gender_id(data["p"]["gender"])
+                p.gender_id = gender_id.nil? ? 0 : gender_id
+              end
+
+              rank = data["p"]["rank"]
+
+              p.rank = if rank.nil? || rank.zero?
+                1
+              else
+                rank
+              end
+
+              if p.created_at.nil?
+                p.created_at = DateTime.now.to_time.utc
+              end
+
+              if p.updated_at.nil?
+                p.updated_at = DateTime.now.to_time.utc
+              end
+            }
+
+            char.update(patron_id: patron.id)
+          end
 
           if data["acc"]
             account = Account.update_or_create(name: data["acc"]) { |a|
