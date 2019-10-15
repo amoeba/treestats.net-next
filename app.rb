@@ -4,18 +4,19 @@ require "bundler"
 Bundler.require
 require "sinatra/asset_pipeline"
 
-# Set up a global DB variable so models can load
 DB = Sequel.connect(ENV["DATABASE_URL"] || "sqlite://db/treestats.db")
 
-Dir[__dir__ + "/models/*"].each { |f| require f }
-Dir[__dir__ + "/helpers/*"].each { |f| require f }
-
 class App < Sinatra::Base
+  register Sinatra::AssetPipeline
+
   # Database
   set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
 
+  # Models and Helpers
+  Dir[__dir__ + "/models/*"].each { |f| require f }
+  Dir[__dir__ + "/helpers/*"].each { |f| require f }
+
   # Assets
-  register Sinatra::AssetPipeline
   set :assets_precompile, %w[*.js *.scss *.png]
   set :assets_js_compressor, Uglifier.new(harmony: true)
   set :assets_css_compressor, :scss
