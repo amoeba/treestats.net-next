@@ -29,7 +29,6 @@ namespace :db do
   end
 
   task :import, [:path] do |t, args|
-
     desc "Import data from JSON files"
 
     require "sequel"
@@ -66,7 +65,7 @@ namespace :db do
             next
           end
 
-          char = Character.update_or_create(server: data["s"], name: data["n"]) do |char|
+          char = Character.update_or_create(server: data["s"], name: data["n"]) { |char|
             char.server = data["s"]
             char.name = data["n"]
             char.heritage_id = heritage_id
@@ -130,8 +129,8 @@ namespace :db do
             end
 
             if data["m"]
-              puts "  monarch #{data['m']['name']}"
-              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) do |m|
+              puts "  monarch #{data["m"]["name"]}"
+              monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
                 if m.heritage_id.nil?
                   heritage_id = ImportHelper.heritage_id(data["m"]["race"])
                   m.heritage_id = heritage_id.nil? ? 0 : heritage_id
@@ -161,14 +160,14 @@ namespace :db do
                 if m.updated_at.nil?
                   m.updated_at = DateTime.now.to_time.utc
                 end
-              end
+              }
 
               char.monarch_id = monarch.id
             end
 
             if data["p"]
-              puts "  patron #{data['p']['name']}"
-              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) do |p|
+              puts "  patron #{data["p"]["name"]}"
+              patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
                 if p.heritage_id.nil?
                   heritage_id = ImportHelper.heritage_id(data["p"]["race"])
                   p.heritage_id = heritage_id.nil? ? 0 : heritage_id
@@ -194,11 +193,11 @@ namespace :db do
                 if p.updated_at.nil?
                   p.updated_at = DateTime.now.to_time.utc
                 end
-              end
+              }
 
               char.patron_id = patron.id
             end
-          end
+          }
 
           if data["acc"]
             account = Account.update_or_create(name: data["acc"]) { |a|
