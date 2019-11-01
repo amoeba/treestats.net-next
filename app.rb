@@ -37,6 +37,11 @@ class App < Sinatra::Base
     include Sinatra::TitleHelper
   end
 
+  configure :production do
+    require "skylight/sinatra"
+    Skylight.start!
+  end
+
   # Routes
   get "/" do
     @recent = Character
