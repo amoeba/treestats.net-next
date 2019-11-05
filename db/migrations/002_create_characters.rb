@@ -4,6 +4,11 @@ Sequel.migration do
       primary_key :id
       foreign_key :account_id, :accounts
 
+      # Indices
+      index [:server, :name]
+      index :allegiance_name
+      index :account_name
+
       # Constraints
       unique [:server, :name]
       constraint(:gender_constraint, gender_id: 0..1)

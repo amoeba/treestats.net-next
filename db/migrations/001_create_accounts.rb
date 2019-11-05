@@ -3,6 +3,9 @@ Sequel.migration do
     create_table(:accounts) do
       primary_key :id
 
+      # Indices
+      index :name
+
       String :name, null: false
     end
   end

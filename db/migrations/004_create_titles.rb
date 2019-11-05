@@ -4,6 +4,10 @@ Sequel.migration do
       primary_key :id
       foreign_key :character_id, :characters
 
+      # Indices
+      index :title_id
+      index :character_id
+
       Integer :title_id, null: false
     end
   end
