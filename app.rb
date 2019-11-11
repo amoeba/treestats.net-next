@@ -296,6 +296,12 @@ class App < Sinatra::Base
 
     halt(404, "Character not found.") if @character.nil?
 
+    @og = {
+      title: "#{name} of #{server}",
+      description: "TreeStats character profile for #{name} of #{server}.",
+      url: "http://treestats-next.herokuapp.com/#{server}/#{name}"
+    }
+
     # Return early if this is a stub character
     return erb :character if @character[:strength_base].nil?
 

@@ -6,6 +6,9 @@
     <meta name="Description" content="Character tracking for Turbine's Asheron's Call">
     <link href="/favicon.ico" rel="shortcut icon" />
     <link rel="stylesheet" href="<%= stylesheet_path("application") %>" />
+    <% if @og %><meta property="og:title" content="<%= @og[:title] %>" />
+    <meta property="og:description" content="<%= @og[:description] %>" />
+    <meta property="og:url" content="<%= @og[:url] %>" /><% end %>
   </head>
   <body>
     <nav>
