@@ -323,6 +323,8 @@ class App < Sinatra::Base
     @titles = @character.titles.sort_by { |t| t.title_id }
     @properties = get_properties(@character.properties)
 
+    # Extend opengraph description
+    @og[:description] = "#{@og[:description].chomp(".")}, a level #{@character[:level]} #{heritage_name(@character[:heritage_id])} #{title(@character[:current_title])}."
     erb :character
   end
 end
