@@ -4,7 +4,7 @@ source "https://rubygems.org"
 ruby "2.6.4"
 
 gem "rake"
-gem "rack"
+gem "rack", ">= 2.0.8"
 gem "sinatra"
 gem "sinatra-sequel", git: "https://github.com/amoeba/sinatra-sequel"
 gem "sequel-rake"
