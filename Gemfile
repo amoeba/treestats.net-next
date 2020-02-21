@@ -35,3 +35,13 @@ group :production do
   gem "pg"
   gem "skylight"
 end
+
+# Ensure this is required down low
+gem "rack-mini-profiler"
+
+# For memory profiling
+gem "memory_profiler"
+
+# For call-stack profiling flamegraphs
+gem "flamegraph"
+gem "stackprof"

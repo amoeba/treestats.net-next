@@ -8,6 +8,7 @@ DB = Sequel.connect(ENV["DATABASE_URL"] || "sqlite://db/treestats.db")
 
 class App < Sinatra::Base
   register Sinatra::AssetPipeline
+  use Rack::MiniProfiler
 
   # Database
   set :database, ENV["DATABASE_URL"] || "sqlite://db/treestats.db"
