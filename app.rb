@@ -61,6 +61,7 @@ class App < Sinatra::Base
       .exclude(allegiance_name: nil)
       .select(:server, :name, :allegiance_name, :followers, :rank, :heritage_id,
         :gender_id)
+      .limit(10)
 
     erb :index
   end
