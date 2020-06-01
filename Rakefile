@@ -43,6 +43,7 @@ namespace :db do
       require_relative "models/property"
       require_relative "models/account"
 
+      print(args[:path])
       files = Dir.glob("#{File.expand_path(args[:path])}/*.json")
 
       if files.length <= 0
@@ -52,8 +53,6 @@ namespace :db do
       files.each do |file|
         File.read(file).split("\n").each do |line|
           data = JSON.parse(line)
-
-          puts "#{data["s"]}/#{data["n"]}"
 
           # Skip if needed
           heritage_id = ImportHelper.heritage_id(data["r"])
@@ -130,7 +129,6 @@ namespace :db do
           }
 
           if data["m"]
-            puts "  monarch #{data["m"]["name"]}"
             monarch = Character.update_or_create(server: data["s"], name: data["m"]["name"]) { |m|
               if m.heritage_id.nil?
                 heritage_id = ImportHelper.heritage_id(data["m"]["race"])
@@ -167,7 +165,6 @@ namespace :db do
           end
 
           if data["p"]
-            puts "  patron #{data["p"]["name"]}"
             patron = Character.update_or_create(server: data["s"], name: data["p"]["name"]) { |p|
               if p.heritage_id.nil?
                 heritage_id = ImportHelper.heritage_id(data["p"]["race"])
