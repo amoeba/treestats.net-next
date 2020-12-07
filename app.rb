@@ -94,20 +94,6 @@ class App < Sinatra::Base
     erb :servers
   end
 
-  get "/characters/?" do
-    query = Character
-      .select(:server, :name)
-      .order(:updated_at)
-      .exclude(level: nil)
-
-    @page_params = get_page_params(params, query.count)
-    @characters = query
-      .limit(@page_params[:limit])
-      .offset(@page_params[:offset])
-
-    erb :characters
-  end
-
   get "/rankings/?" do
     erb :rankings
   end
