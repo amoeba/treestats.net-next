@@ -3,12 +3,13 @@
 source "https://rubygems.org"
 ruby "3.0.0"
 
+# Base app
 gem "rake"
 gem "rack", ">= 2.0.8"
 gem "sinatra"
 gem "sinatra-sequel", git: "https://github.com/amoeba/sinatra-sequel"
 gem "sequel-rake"
-gem "puma"
+gem "sqlite3"
 
 # Asset management
 gem "sprockets"
@@ -19,7 +20,6 @@ gem "uglifier"
 gem "sinatra-asset-pipeline"
 
 group :development do
-  gem "sqlite3"
   gem "pry"
 end
 
