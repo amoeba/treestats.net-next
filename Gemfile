@@ -10,7 +10,6 @@ gem "puma"
 gem "sinatra"
 gem "sinatra-sequel", git: "https://github.com/amoeba/sinatra-sequel"
 gem "sequel-rake"
-gem "sqlite3"
 
 # Asset management
 gem "sprockets"
@@ -21,7 +20,7 @@ gem "uglifier"
 gem "sinatra-asset-pipeline"
 
 group :development do
-
+  gem "sqlite3"
   gem "pry"
 end
 
@@ -35,6 +34,7 @@ group :development, :test do
 end
 
 group :production do
+  gem "pg"
   gem "skylight"
 end
 
