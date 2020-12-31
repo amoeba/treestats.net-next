@@ -218,6 +218,10 @@ class App < Sinatra::Base
     erb :api
   end
 
+  get "/get_started/?" do
+    erb :get_started
+  end
+
   get "/:server/?" do |server|
     not_found unless servers.include?(server)
 

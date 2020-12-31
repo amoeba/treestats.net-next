@@ -12,16 +12,29 @@
   </head>
   <body>
     <nav>
-      <h1><a href="/">TS</a></h1>
-      <ul>
-        <li><a href="/servers">Servers</a></li>
-        <li><a href="/allegiances">Allegiances</a></li>
-        <li><a href="/rankings">Rankings</a></li>
-        <li><a href="/titles">Titles</a></li>
-        <li><a href="/populations">Populations</a></li>
-        <li><a href="/api">API</a></li>
-        <li><a href="/download">Download</a></li>
-      </ul>
+      <h1><a href="/">🌳 treestats</a></h1>
+      <div class="burger">
+        <button>
+          <svg viewBox="0 0 100 80" width="30" height="30">
+            <rect width="100" height="20" rx="5"></rect>
+            <rect y="30" width="100" height="20" rx="5"></rect>
+            <rect y="60" width="100" height="20" rx="5"></rect>
+          </svg>
+        </button>
+      </div>
+      <div class="navitems">
+        <ul>
+          <li><a href="/servers">Servers</a></li>
+          <li><a href="/allegiances">Allegiances</a></li>
+          <li><a href="/rankings">Rankings</a></li>
+          <li><a href="/titles">Titles</a></li>
+          <li><a href="/populations">Populations</a></li>
+        </ul>
+        <ul>
+          <li><a href="/api">API</a></li>
+          <li><a href="/get_started">Get Started</a></li>
+        </ul>
+      </div>
     </nav>
     <main>
       <form id="search" action="/search">
@@ -30,5 +43,9 @@
 
       <%= yield %>
     </main>
+    <footer>
+      This is a footer
+    </footer>
+    <script src="<%= javascript_path("treestats") %>"></script>
   </body>
 </html>

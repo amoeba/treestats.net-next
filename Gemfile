@@ -5,7 +5,8 @@ ruby "3.0.0"
 
 # Base app
 gem "rake"
-gem "rack", ">= 2.0.8"
+gem "rack"
+gem "puma"
 gem "sinatra"
 gem "sinatra-sequel", git: "https://github.com/amoeba/sinatra-sequel"
 gem "sequel-rake"
@@ -20,6 +21,7 @@ gem "uglifier"
 gem "sinatra-asset-pipeline"
 
 group :development do
+
   gem "pry"
 end
 

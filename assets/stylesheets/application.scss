@@ -1,5 +1,10 @@
 /* Variables */
-$gray: #CCC;
+$gray: #ccc;
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
 
 /* General styles */
 body {
@@ -7,7 +12,7 @@ body {
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
   font-size: 16px;
-  padding: 0.5rem;
+  padding: 0;
   max-width: 948px;
   margin: 0 auto;
 }
@@ -32,14 +37,64 @@ input {
   font-size: inherit;
 }
 
+nav,
+main,
+footer {
+  padding: 0.25rem 0.5rem;
+}
+
 nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 nav h1 {
-  font-size: 200%;
+  font-size: 2rem;
+  line-height: 2rem;
+}
+
+nav .burger {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+nav .burger button {
+  align-self: flex-end;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+}
+
+.navitems {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 2.7rem;
+  padding: 0.25rem 0.5rem;
+  visibility: hidden;
+  opacity: 0;
+  border-radius: 0px 0px 0px 3px;
+  background: white;
+}
+
+nav .navitems.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+nav .navitems > :first-child {
+  border-bottom: 1px solid $gray;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  text-align: right;
+  line-height: 1.5rem;
 }
 
 nav a,
@@ -48,25 +103,57 @@ nav a:visited {
   color: black;
 }
 
-nav ul {
-  list-style-type: none;
-  margin: 0 0 0 0.5rem;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-nav ul li {
-  display: inline-block;
-  margin: 0.25rem 1rem 0.25rem 0;
-  font-weight: bold;
-  text-align: end;
-  box-sizing: border-box;
-}
-
 nav ul li a:hover {
-  border-bottom: 1px solid red;
+  color: blue;
+}
+
+/* Responsive stuff */
+@media (min-width: 750px) {
+  nav .burger {
+    display: none;
+  }
+
+  nav .navitems {
+    position: relative;
+    display: flex;
+    flex-grow: 1;
+    align-items: flex-end;
+    visibility: visible;
+    opacity: 1;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav .navitems > :first-child {
+    border: none;
+  }
+
+  nav ul {
+    flex-grow: 1;
+    display: flex;
+  }
+
+  nav ul.rightnav {
+    justify-content: flex-end;
+  }
+
+  nav ul li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav ul li.right {
+    align-self: flex-end
+  }
+
+  nav ul li a {
+    padding: 0.25rem 0.5rem;
+  }
+
+  #search {
+    width: 10rem;
+  }
 }
 
 /* Special elements */
@@ -74,13 +161,15 @@ nav ul li a:hover {
   margin: 0.5rem 0;
   text-align: right;
   align-self: flex-end;
+  width: 100%;
 }
 
 #search input {
   border: none;
-  box-shadow: $gray 0 0 0 1px,1px 1px 1px 0 $gray;
+  box-shadow: $gray 0 0 0 1px, 1px 1px 1px 0 $gray;
   padding: 0.25rem 0.5rem;
   border-radius: 3px;
+  width: 100%;
 }
 
 /* Specific stuff */
