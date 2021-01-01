@@ -18,4 +18,10 @@ class AppHelperTest < MiniTest::Test
     assert_equal(to_params({a: 1, b: "foo"}), "a=1&b=foo")
     assert_equal(to_params({a: 1, b: "foo bar"}), "a=1&b=foo+bar")
   end
+
+  def test_get_account_fields
+    # assert_equal([:name, :server], get_account_fields(nil))
+    # assert_equal([:name, :server], get_account_fields({:foo => :bar}))
+    assert_equal([:name, :server, :level], get_account_fields({:fields => "level"}))
+  end
 end

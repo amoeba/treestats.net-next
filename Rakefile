@@ -251,6 +251,7 @@ namespace :db do
       kolthar = Character.new(
         server: "WintersEbb",
         name: "Kolthar",
+        account_name: "Kolth",
         heritage_id: 0,
         gender_id: 0,
         level: 275,
@@ -460,6 +461,11 @@ namespace :db do
           server_id: i,
           count: rand(500),
           created_at: "2016-10-05 02:02:52.893375"
+        ).save
+
+        # Accounts
+        Account.new(
+          name: "Kolth"
         ).save
       end
     end

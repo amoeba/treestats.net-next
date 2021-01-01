@@ -1,0 +1,28 @@
+Account <%= @account %>... <%= @name %>
+
+<h2><%= @header || "Characters" %></h2>
+
+<%= erb :_page_controls %>
+
+<% if @characters.empty? %>
+  <div class="listing">No characters to show.</div>
+<% else %>
+  <table class="listing">
+    <thead>
+      <tr>
+        <th>Server</th>
+        <th>Character</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @characters.each do |character| %>
+        <tr>
+          <td><a href="/<%= character[:server] %>"><%= character[:server] %></a></td>
+          <td><a href="/<%= character[:server] %>/<%= character[:name] %>"><%= character[:name] %></a></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= erb :_page_controls %>

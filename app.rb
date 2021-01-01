@@ -3,8 +3,12 @@
 require "bundler"
 Bundler.require
 require "sinatra/asset_pipeline"
+require "logger"
 
-DB = Sequel.connect(ENV["DATABASE_URL"] || "sqlite://db/treestats.db")
+DB = Sequel.connect(
+  ENV["DATABASE_URL"] || "sqlite://db/treestats.db",
+  loggers: [Logger.new($stdout)]
+)
 
 class App < Sinatra::Base
   register Sinatra::AssetPipeline
@@ -190,6 +194,31 @@ class App < Sinatra::Base
     @titles = titles
 
     erb :titles
+  end
+
+
+  get "/accounts/:name/?" do |name|
+    @name = name
+
+    @account = Account
+      .filter(name: name)
+      .first
+
+    not_found unless @account
+
+    # Handle props or use defaults
+    cols = get_account_fields(params)
+
+    query = Character
+      .filter(account_name: @account.name)
+      .select(*cols)
+
+    @page_params = get_page_params(params, query.count)
+    @characters = query
+      .limit(@page_params[:limit])
+      .offset(@page_params[:offset])
+
+    erb :account
   end
 
   get "/populations.json" do

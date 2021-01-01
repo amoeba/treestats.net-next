@@ -47,6 +47,27 @@ module Sinatra
       }
     end
 
+    def get_account_fields(params)
+      default = [
+        :name,
+        :server
+      ]
+
+      return default unless params &&
+        params.has_key?(:fields) &&
+        params[:fields].is_a?(String)
+
+      # Filter input to just fields actually on the model
+      input = params[:fields].split(",").map { |f| f.to_sym }
+      filtered = default + input.select { |i| Character.columns.include?(i) }
+
+      if input.length != filtered.length
+        puts "FILTERED"
+      end
+
+      return filtered.uniq
+    end
+
     def to_params(params)
       return "" unless params.is_a?(Hash)
 
