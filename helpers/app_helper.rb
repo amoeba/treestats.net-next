@@ -61,10 +61,6 @@ module Sinatra
       input = params[:fields].split(",").map { |f| f.to_sym }
       filtered = default + input.select { |i| Character.columns.include?(i) }
 
-      if input.length != filtered.length
-        puts "FILTERED"
-      end
-
       return filtered.uniq
     end
 
