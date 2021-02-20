@@ -10,6 +10,7 @@ gem "puma"
 gem "sinatra"
 gem "sinatra-sequel", git: "https://github.com/amoeba/sinatra-sequel"
 gem "sequel-rake"
+gem "json"
 
 # Asset management
 gem "sprockets"

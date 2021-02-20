@@ -40,6 +40,7 @@ class App < Sinatra::Base
     include Sinatra::SkillHelper
     include Sinatra::SocietyHelper
     include Sinatra::TitleHelper
+    include Sinatra::UploadHelper
   end
 
   configure :production do
@@ -68,6 +69,22 @@ class App < Sinatra::Base
       .limit(10)
 
     erb :index
+  end
+
+  post "/" do
+    begin
+      json = JSON.parse(request.body.read)
+    rescue JSON::ParseError
+      throw UploadException
+    end
+
+    begin
+      upload = Upload.new(json).process
+    rescue
+      throw UploadException
+    end
+
+    return true
   end
 
   get "/search/?" do
