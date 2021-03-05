@@ -79,7 +79,7 @@ class App < Sinatra::Base
     end
 
     begin
-      upload = Upload.new(json).process
+      Upload.new(json).process
     rescue
       throw UploadException
     end
