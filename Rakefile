@@ -5,7 +5,7 @@ Bundler.require
 
 require "date"
 require "./etc/import_helper"
-require "./etc/tree.rb"
+require "./etc/tree"
 
 task default: :test
 

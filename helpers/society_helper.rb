@@ -5,7 +5,7 @@ module Sinatra
     SOCIETY = {
       287 => "Celestial Hand",
       288 => "Eldrytch Web",
-      289 => "Radiant Blood",
+      289 => "Radiant Blood"
     }
 
     def society_name(id)

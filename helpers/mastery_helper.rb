@@ -5,7 +5,7 @@ module Sinatra
     MASTERY_TYPE = {
       melee: 354,
       ranged: 355,
-      summoning: 362,
+      summoning: 362
     }
 
     MASTERY = {
@@ -17,18 +17,18 @@ module Sinatra
         6 => "Daggers",
         7 => "Staves",
         9 => "Crossbows",
-        11 => "Two-Handed",
+        11 => "Two-Handed"
       },
       ranged: {
         8 => "Bows",
         10 => "Thrown Weapons",
-        12 => "Magical Spells",
+        12 => "Magical Spells"
       },
       summoning: {
         1 => "Primalist",
         2 => "Necromancer",
-        3 => "Naturalist",
-      },
+        3 => "Naturalist"
+      }
     }
 
     def mastery(type, value)

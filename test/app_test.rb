@@ -16,15 +16,15 @@ class AppTest < MiniTest::Test
     post "/"
     assert !last_response.ok?
 
-    post("/", JSON.generate(:server => "Foo", :name => "Bar"))
+    post("/", JSON.generate(server: "Foo", name: "Bar"))
     assert !last_response.ok?
 
     post("/", JSON.generate(
-      :server => "Foo",
-      :name => "Bar",
-      :rank => 1,
-      :gender_id => 0,
-      :heritage_id => 0
+      server: "Foo",
+      name: "Bar",
+      rank: 1,
+      gender_id: 0,
+      heritage_id: 0
     ))
 
     assert last_response.ok?

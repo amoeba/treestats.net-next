@@ -64,12 +64,12 @@ module Sinatra
       unassigned_xp: :character,
       total_xp: :character,
       titles: :title,
-      times_enlightened: :property,
+      times_enlightened: :property
     }
 
     # Default is descending, these rankings should be ascending
     ASCENDING = {
-      birth: true,
+      birth: true
     }
 
     # Which database column to pull each ranking type's value from. If not
@@ -77,12 +77,12 @@ module Sinatra
     VALUE_COL = {
       skill: :base,
       title: :count,
-      property: :value,
+      property: :value
     }
 
     FORMATTERS = {
       identity: lambda { |x| x },
-      commas: lambda { |x| with_commas(x.to_i) },
+      commas: lambda { |x| with_commas(x.to_i) }
     }
 
     FORMATTERS_MAP = {
@@ -90,7 +90,7 @@ module Sinatra
       total_xp: :commas,
       deaths: :commas,
       followers: :commas,
-      birth: :identity,
+      birth: :identity
     }
 
     # Return the value column for each ranking type. If not present in
@@ -142,9 +142,9 @@ module Sinatra
         .exclude({ranking => nil})
 
       if ASCENDING.key?(ranking)
-        return query
+        query
       else
-        return query.reverse
+        query.reverse
       end
     end
 

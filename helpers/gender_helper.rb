@@ -4,7 +4,7 @@ module Sinatra
   module GenderHelper
     GENDER = [
       "Male",
-      "Female",
+      "Female"
     ]
 
     def gender_name(id)

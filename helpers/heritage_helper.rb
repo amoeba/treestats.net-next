@@ -13,7 +13,7 @@ module Sinatra
       "Lugian",
       "Empyrean",
       "Penumbraen",
-      "Undead",
+      "Undead"
     ]
 
     def heritage_name(id)

@@ -22,6 +22,6 @@ class AppHelperTest < MiniTest::Test
   def test_get_account_fields
     # assert_equal([:name, :server], get_account_fields(nil))
     # assert_equal([:name, :server], get_account_fields({:foo => :bar}))
-    assert_equal([:name, :server, :level], get_account_fields({:fields => "level"}))
+    assert_equal([:name, :server, :level], get_account_fields({fields: "level"}))
   end
 end

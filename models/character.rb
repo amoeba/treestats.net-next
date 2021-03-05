@@ -27,7 +27,7 @@ class Character < Sequel::Model
       name: name,
       gender: Sinatra::GenderHelper.gender_name(gender_id),
       heritage: Sinatra::HeritageHelper.heritage_name(heritage_id),
-      rank: rank,
+      rank: rank
     }
 
     return char.to_json unless level
@@ -44,13 +44,13 @@ class Character < Sequel::Model
 
     if monarch
       char[:monarch] = {
-        name: monarch.name,
+        name: monarch.name
       }
     end
 
     if patron
       char[:patron] = {
-        name: patron.name,
+        name: patron.name
       }
     end
 
@@ -64,40 +64,40 @@ class Character < Sequel::Model
     char[:attributes] = {
       strength: {
         creation: strength_creation,
-        base: strength_base,
+        base: strength_base
       },
       endurance: {
         creation: endurance_creation,
-        base: endurance_base,
+        base: endurance_base
       },
       coordination: {
         creation: coordination_creation,
-        base: coordination_base,
+        base: coordination_base
       },
       quickness: {
         creation: quickness_creation,
-        base: quickness_base,
+        base: quickness_base
       },
       focus: {
         creation: focus_creation,
-        base: focus_base,
+        base: focus_base
       },
       self: {
         creation: self_creation,
-        base: self_base,
-      },
+        base: self_base
+      }
     }
 
     char[:vitals] = {
       health: {
-        base: health_base,
+        base: health_base
       },
       stamina: {
-        base: stamina_base,
+        base: stamina_base
       },
       mana: {
-        base: mana_base,
-      },
+        base: mana_base
+      }
     }
 
     char[:skills] = skills

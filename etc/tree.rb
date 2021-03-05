@@ -14,7 +14,7 @@ class Tree
 
     char = Character.new(
       server: "WintersEbb",
-      name: SecureRandom.alphanumeric.gsub(/[^a-zA-Z'\-\+ ]/, ""),
+      name: SecureRandom.alphanumeric.gsub(/[^a-zA-Z'\-+ ]/, ""),
       heritage_id: 0,
       gender_id: 0,
       rank: 1,

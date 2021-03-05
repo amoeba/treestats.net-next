@@ -874,7 +874,7 @@ module Sinatra
       891 => "Illuminated",
       892 => "Transcended",
       893 => "Cosmic Conscious",
-      894 => "Last Man Standing",
+      894 => "Last Man Standing"
     }
 
     def title(id)

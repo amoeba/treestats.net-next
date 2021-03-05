@@ -78,7 +78,7 @@ module Sinatra
 
       354 => {type: :mastery, key: :melee, name: "Melee"},
       355 => {type: :mastery, key: :ranged, name: "Ranged"},
-      362 => {type: :mastery, key: :summoning, name: "Summoning"},
+      362 => {type: :mastery, key: :summoning, name: "Summoning"}
     }
 
     def property(id)
@@ -102,8 +102,8 @@ module Sinatra
           prop[:key],
           prop.merge({
             id: p[:property_id],
-            value: p[:value],
-          }),
+            value: p[:value]
+          })
         ]
       }
 
@@ -115,7 +115,7 @@ module Sinatra
         masteries: {
           melee: get_mastery(properties, :melee),
           ranged: get_mastery(properties, :ranged),
-          summoning: get_mastery(properties, :summoning),
+          summoning: get_mastery(properties, :summoning)
         },
 
         housing_purchase_date: get_property(properties, :housing_purchase_date),
@@ -124,7 +124,7 @@ module Sinatra
         aetheria_slots: get_property(properties, :aetheria_slots),
         times_enlightened: get_property(properties, :times_enlightened),
 
-        society: get_society(properties),
+        society: get_society(properties)
       }
     end
 

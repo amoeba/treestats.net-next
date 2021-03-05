@@ -13,7 +13,7 @@ class Property < Sequel::Model
     result = {
       name: prop[:name],
       type: prop[:type],
-      value: value,
+      value: value
     }
 
     result.to_json

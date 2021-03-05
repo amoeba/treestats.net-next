@@ -89,7 +89,7 @@ class App < Sinatra::Base
 
   get "/search/?" do
     # Sanitize input first
-    @query = params[:query].gsub(/[^a-zA-Z'\-\+ ]/, "")
+    @query = params[:query].gsub(/[^a-zA-Z'\-+ ]/, "")
 
     query = Character
       .where(Sequel.lit("lower(name) LIKE ?", "%#{@query.downcase}%"))
@@ -213,7 +213,6 @@ class App < Sinatra::Base
     erb :titles
   end
 
-
   get "/accounts/:name/?" do |name|
     @name = name
 
@@ -291,7 +290,7 @@ class App < Sinatra::Base
 
     # TODO: Validate server name
     # TODO: Write validator for char names
-    name = name.gsub(/[^a-zA-Z'\-\+ ]/, "")
+    name = name.gsub(/[^a-zA-Z'\-+ ]/, "")
 
     character = Character
       .filter(server: server, name: name)
@@ -303,9 +302,9 @@ class App < Sinatra::Base
           {
             status: 404,
             title: "Character not found.",
-            description: "The character #{server}/#{name} could not be found.",
-          },
-        ],
+            description: "The character #{server}/#{name} could not be found."
+          }
+        ]
       }
 
       halt(404, JSON.pretty_generate(message))
@@ -355,7 +354,7 @@ class App < Sinatra::Base
         .sort_by { |s| skill_name(s[:skill_id]) },
       unusable: @character.skills
         .filter { |s| s.training_id == Sinatra::SkillHelper::TRAINING_ID[:unusable] }
-        .sort_by { |s| skill_name(s[:skill_id]) },
+        .sort_by { |s| skill_name(s[:skill_id]) }
     }
 
     @titles = @character.titles.sort_by { |t| t.title_id }

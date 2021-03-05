@@ -11,7 +11,7 @@ class Skill < Sequel::Model
     {
       name: Sinatra::SkillHelper.skill_name(skill_id),
       training: Sinatra::SkillHelper.training(training_id),
-      base: base,
+      base: base
     }.to_json
   end
 end

@@ -40,7 +40,7 @@ module Sinatra
       "summoning",
       "void_magic",
       "war_magic",
-      "weapon_tinkering",
+      "weapon_tinkering"
     ]
 
     SKILL = [
@@ -81,7 +81,7 @@ module Sinatra
       "Summoning",
       "Void Magic",
       "War Magic",
-      "Weapon Tinkering",
+      "Weapon Tinkering"
     ]
 
     SKILL_ID = {
@@ -122,21 +122,21 @@ module Sinatra
       summoning: 34,
       void_magic: 35,
       war_magic: 36,
-      weapon_tinkering: 37,
+      weapon_tinkering: 37
     }
 
     TRAINING = [
       "Unusable",
       "Untrained",
       "Trained",
-      "Specialized",
+      "Specialized"
     ]
 
     TRAINING_ID = {
       unusable: 0,
       untrained: 1,
       trained: 2,
-      specialized: 3,
+      specialized: 3
     }
 
     def skill_key(id)

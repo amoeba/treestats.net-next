@@ -43,7 +43,7 @@ module Sinatra
         page: page,
         limit: limit,
         offset: (page - 1) * limit,
-        more: count > page * limit,
+        more: count > page * limit
       }
     end
 
@@ -53,15 +53,13 @@ module Sinatra
         :server
       ]
 
-      return default unless params &&
-        params.has_key?(:fields) &&
-        params[:fields].is_a?(String)
+      return default unless params&.has_key?(:fields) && params[:fields].is_a?(String)
 
       # Filter input to just fields actually on the model
       input = params[:fields].split(",").map { |f| f.to_sym }
       filtered = default + input.select { |i| Character.columns.include?(i) }
 
-      return filtered.uniq
+      filtered.uniq
     end
 
     def to_params(params)

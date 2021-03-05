@@ -88,7 +88,7 @@ module Sinatra
         {
           name: Sinatra::AppHelper.server_name(count[:id]),
           date: count[:date].utc.iso8601,
-          count: count[:count],
+          count: count[:count]
         }
       end
     end

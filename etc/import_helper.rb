@@ -37,7 +37,7 @@ module ImportHelper
     7 => 7,
     8 => 8,
     9 => 9,
-    10 => 10,
+    10 => 10
   }
 
   # Return nil when nil or Olthoi so importer can skip
@@ -55,7 +55,7 @@ module ImportHelper
     "2" => 1,
     0 => 0,
     1 => 0,
-    2 => 1,
+    2 => 1
   }
 
   def self.gender_id(name)
@@ -102,7 +102,7 @@ module ImportHelper
     "summoning" => 34,
     "void_magic" => 35,
     "war_magic" => 36,
-    "weapon_tinkering" => 37,
+    "weapon_tinkering" => 37
   }
 
   def self.skill_id(name)
@@ -113,7 +113,7 @@ module ImportHelper
     "Unusable" => 0,
     "Untrained" => 1,
     "Trained" => 2,
-    "Specialized" => 3,
+    "Specialized" => 3
   }
   def self.training_id(name)
     TRAINING[name]
