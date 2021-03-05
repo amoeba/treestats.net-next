@@ -2,12 +2,13 @@
 
 require "bundler/setup"
 Bundler.require
+require "standard/rake"
 
 require "date"
 require "./etc/import_helper"
 require "./etc/tree"
 
-task default: :test
+task default: [:test, "standard:fix"]
 
 # test
 task :test do
