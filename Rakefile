@@ -287,9 +287,9 @@ namespace :db do
 
       (1..20).each do |i|
         Skill.new(character_id: kolthar.id,
-                  skill_id: i,
-                  training_id: (0..3).to_a.sample,
-                  base: 100).save
+          skill_id: i,
+          training_id: (0..3).to_a.sample,
+          base: 100).save
       end
 
       (1..10).each do |i|
@@ -346,9 +346,9 @@ namespace :db do
 
       (1..20).each do |i|
         Skill.new(character_id: kolth.id,
-                  skill_id: i,
-                  training_id: (0..3).to_a.sample,
-                  base: 100).save
+          skill_id: i,
+          training_id: (0..3).to_a.sample,
+          base: 100).save
       end
 
       (1..10).each do |i|
