@@ -29,6 +29,7 @@ namespace :db do
     end
   end
 
+  desc "Import data from JSON"
   task :import, [:path] do |t, args|
     desc "Import data from JSON files"
 
@@ -240,6 +241,7 @@ namespace :db do
     end
   end
 
+  desc "Seed the database with fake data"
   task :seed do
     require "sequel"
 
