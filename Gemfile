@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "3.0.0"
+ruby "3.1.0"
 
 # Base app
 gem "rake"
@@ -20,8 +20,10 @@ gem "sass"
 gem "uglifier"
 gem "sinatra-asset-pipeline"
 
+# Database
+gem "sqlite3"
+
 group :development do
-  gem "sqlite3"
   gem "pry"
 end
 
@@ -35,7 +37,6 @@ group :development, :test do
 end
 
 group :production do
-  gem "pg"
   gem "skylight"
 end
 
