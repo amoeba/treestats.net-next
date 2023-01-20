@@ -17,6 +17,6 @@
     }
   ],
   "devDependencies": {
-    "vendor-copy": "^2.0.0"
+    "vendor-copy": "^2.0.1"
   }
 }
